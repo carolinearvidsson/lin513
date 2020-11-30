@@ -28,7 +28,7 @@ class NgramN():
     '''
     def __init__(self):
 
-        self.ngram_models = pickle.load(open('ngram_models', 'rb'))
+        self.ngram_models = pickle.load(open('data/ngram_models', 'rb'))
         self.uni, self.bi, self.tri = self.ngram_models.values()
     
     def ngram_probs(self, word_object):
