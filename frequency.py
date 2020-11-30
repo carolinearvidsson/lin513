@@ -22,7 +22,7 @@ class Frequency:
             return self.__parse_external_corpus(word)
         else:
             return [math.log(self.frequencies[word])]
-                        
+
     def __parse_external_corpus(self, word):
         '''Takes a word (str) as input and returns 
         the logarithm of its absolute frequency (int)
