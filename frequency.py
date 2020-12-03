@@ -19,15 +19,17 @@ class Frequency:
     def get_absfrequency(self, wordobj):
         word = wordobj.token.lower()
         if word not in self.frequencies:
-            return self.__parse_external_corpus(word)
+            absolute_freq = self.__parse_external_corpus(word)
         else:
-            return [math.log(self.frequencies[word])]
+            absolute_freq = self.frequencies[word]
+        return [math.log(absolute_freq)]
 
     def __parse_external_corpus(self, word):
         '''Takes a word (str) as input and returns 
         the logarithm of its absolute frequency (int)
         if the word exists in the frequency data.
         '''
+        smooth = 0.5
         for filename in self.filenames:
             with open(filename, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
@@ -37,8 +39,7 @@ class Frequency:
                         freqdata = regex.match(line).group().split('\t')
                         absolute_freq = int(freqdata[1])
                         self.frequencies[freqdata[0]] = absolute_freq
-                        return [math.log(absolute_freq)]
+                        return smooth + absolute_freq
         
-        self.not_in_freq_data.append(word)
-        print('frequency not available: ', self.not_in_freq_data)
-        return ['n/a'] #PROBLEM frekvens finns inte i datan
+        self.not_in_freq_data.append('frequency not available for word: ', word)
+        return smooth

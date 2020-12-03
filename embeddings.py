@@ -43,18 +43,19 @@ class Embeddings:
       if n_clusters != 1 and n_clusters < len(linkage_matrix):
         score = silhouette_score(squareform(pdist_matrix), flat, metric='precomputed')
         sample_scores = silhouette_samples(squareform(pdist_matrix), flat, metric='precomputed')
-        print(sample_scores)
         if score > max_score:
-          max_score, best_clusters = score, flat
+          max_score, best_clusters, best_samples = score, flat, sample_scores
     try:
       print('max silhouette all: ', max_score)
       print('optimal n_clusters: ', (max(best_clusters)))
+      print('best samples: ', best_samples)
+      print('linkage:\n', linkage_matrix)
     except:
       print('1 cluster')
 
   def __generate_clusters(self):
     for e, wordtype in enumerate(self.types_embeddings):
-      if e < 6:
+      if e < 2:
         pdist_matrix = pdist(self.types_embeddings[wordtype], metric='cosine')
         self.pdist_matrices[wordtype] = pdist_matrix
         linkage_matrix = linkage(pdist_matrix, method='complete', metric='cosine')
@@ -115,5 +116,5 @@ class Embeddings:
 
 
 if __name__ == "__main__":
-  ws = WS(['lcp_single_train.tsv'])
+  ws = WS(['data/lcp_single_train.tsv'])
   Embeddings(ws)
