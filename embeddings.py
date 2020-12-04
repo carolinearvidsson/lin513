@@ -33,7 +33,7 @@ class Embeddings:
     self.__check_existing_file()
 
   def get_token_embedding(self, wobj):
-    return [self.tokenID_embeddings[wobj.id]]
+    return self.tokenID_embeddings[wobj.id].tolist()
 
   def __get_best_clustering(self, pdist_matrix, linkage_matrix):
     max_score = 0
@@ -48,7 +48,7 @@ class Embeddings:
     try:
       print('max silhouette all: ', max_score)
       print('optimal n_clusters: ', (max(best_clusters)))
-      print('best samples: ', best_samples)
+      print('best clusters: ', best_clusters)
       print('linkage:\n', linkage_matrix)
     except:
       print('1 cluster')
@@ -74,7 +74,7 @@ class Embeddings:
     if path.exists(self.embeddingfile):
       self.types_embeddings, self.tokenID_embeddings = pickle.load(open(self.embeddingfile, "rb"))
       print('Embeddings are available in pickle format at path: ' + self.embeddingfile)
-      self.__generate_clusters()
+      #self.__generate_clusters()
     else:
       self.tokenID_embeddings = {} # Holds specific target token IDs as keys and their token embeddings as values
       self.types_embeddings = {} # Holds wordtypes of target tokens as keys and all their embeddings (not just in target context) as values
