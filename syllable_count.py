@@ -29,8 +29,8 @@ class SyllCount():
 
         return [syll_count]
 
-if __name__ == "__main__":
-    ws = WS(['homemade_test.tsv'])
-    s = SyllCount()
-    for word in ws.single_word:
-        s.get_syll_count(word)
+# if __name__ == "__main__":
+#     ws = WS(['homemade_test.tsv'])
+#     s = SyllCount()
+#     for word in ws.single_word:
+#         s.get_syll_count(word)
