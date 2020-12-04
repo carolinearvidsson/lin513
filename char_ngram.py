@@ -5,16 +5,15 @@ from nltk.lm.models import Lidstone
 from nltk.lm.preprocessing import pad_both_ends
 from nltk.lm.preprocessing import padded_everygram_pipeline as pep
 from nltk.corpus import brown
-from wordspace import WS
 
 
 class NgramN():
-    '''Represents a ngram-probability model. Trains on the brown corpus 
-    to calculate uni- and bigram probabilities of given tokens from the 
-    CompLex corpus.
+    '''Represents a character ngram-probability calculator. Utilizes 
+    ngram-models previously trained on the Brown corpus.
     
     Attributes:
-        ngram_models = a dict object containing separate uni-, bi- and trigram models trained on the Brown corpus.
+        ngram_models: a dict object containing separate uni-, bi- and trigram 
+                      models trained on the Brown corpus.
         uni: a language model object containing unigram probabilities.
         bi: a language model object containing bigram probabilities.
         tri: a language model object containing trigram probabilities.
@@ -25,7 +24,8 @@ class NgramN():
         self.uni, self.bi, self.tri = self.ngram_models.values()
     
     def ngram_probs(self, word_object):
-        '''Return uni, bi and trigram probabilities for a given token.
+        '''Return list containing uni, bi and trigram probabilities 
+        for a given token.
         
         Arguments:
             word_object: a Word object'''
