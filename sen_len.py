@@ -32,8 +32,13 @@ class SenLen():
         #self.get_sen_len()
     
     def get_sen_len(self, wordobject):
-        '''Get length of sentence up to and including the token. Only count 
-        lexical PoS/content words (tagset in upenn_content_tags).'''
+        '''Get length of sentence up to (not including) token. 
+        Return two values: all_sen_len counts all words preceeding token,
+        lex_sen_len counts only lexical/content words.
+        
+        Arguments:
+            wordobject: 
+        '''
         sen_id = wordobject.id
         sentence = self.tagged_sentences[sen_id]
         all_sen_len = sentence[1]
