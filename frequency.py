@@ -14,7 +14,6 @@ class Frequency:
     def __init__(self, files):
         self.filenames = glob.glob(files)
         self.frequencies = {}
-        self.not_in_freq_data = []
 
     def get_absfrequency(self, wordobj):
         word = wordobj.token.lower()
@@ -40,6 +39,5 @@ class Frequency:
                         absolute_freq = int(freqdata[1])
                         self.frequencies[freqdata[0]] = absolute_freq
                         return smooth + absolute_freq
-        
-        self.not_in_freq_data.append('frequency not available for word: ', word)
+
         return smooth

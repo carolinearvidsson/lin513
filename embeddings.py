@@ -30,10 +30,19 @@ class Embeddings:
     self.embeddingfile = '/Users/carolinearvidsson/Desktop/embeddings_train_201124'
     self.target_not_retrieved = []
     self.pdist_matrices = {}
+    self.average_embedding = []
     self.__check_existing_file()
 
+  def __get_average_embedding(self):
+    all_target_embeddings = [self.tokenID_embeddings[token] for token in\
+      self.tokenID_embeddings if self.tokenID_embeddings[token] != 'n/a']
+    self.average_embedding = np.mean(np.array(all_target_embeddings), axis=0)
+
   def get_token_embedding(self, wobj):
-    return self.tokenID_embeddings[wobj.id].tolist()
+    embedding = self.tokenID_embeddings[wobj.id]
+    if embedding == 'n/a':
+      embedding = self.average_embedding
+    return embedding.tolist()
 
   def __get_best_clustering(self, pdist_matrix, linkage_matrix):
     max_score = 0
@@ -42,9 +51,8 @@ class Embeddings:
       n_clusters = max(flat)
       if n_clusters != 1 and n_clusters < len(linkage_matrix):
         score = silhouette_score(squareform(pdist_matrix), flat, metric='precomputed')
-        sample_scores = silhouette_samples(squareform(pdist_matrix), flat, metric='precomputed')
         if score > max_score:
-          max_score, best_clusters, best_samples = score, flat, sample_scores
+          max_score, best_clusters = score, flat
     try:
       print('max silhouette all: ', max_score)
       print('optimal n_clusters: ', (max(best_clusters)))
@@ -74,6 +82,7 @@ class Embeddings:
     if path.exists(self.embeddingfile):
       self.types_embeddings, self.tokenID_embeddings = pickle.load(open(self.embeddingfile, "rb"))
       print('Embeddings are available in pickle format at path: ' + self.embeddingfile)
+      self.__get_average_embedding()
       #self.__generate_clusters()
     else:
       self.tokenID_embeddings = {} # Holds specific target token IDs as keys and their token embeddings as values
