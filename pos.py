@@ -37,7 +37,7 @@ class PosTagger:
             except:
                 high_pos_tag = max(self.tag_counter, key=self.tag_counter.get)
                 high_token_sent_index = max(self.token_index_counter, key=self.token_index_counter.get) 
-                self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), high_token_sent_index, high_pos_tag]    
+                self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), high_token_sent_index, high_pos_tag] #här blir det fel!!!!   
 
     def __create_tag_ids(self, pos_tag):
         self.pos_id.setdefault(pos_tag, len(self.pos_id))
