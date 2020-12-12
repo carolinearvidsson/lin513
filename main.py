@@ -12,8 +12,7 @@ if __name__ == "__main__":
     train_data = ['data/homemade_train.tsv']
     ws = WS(train_data)
     freqdata = '/Users/carolinearvidsson/googlebooks-eng-all-1gram-20090715-*.txt'
-    pos = PosTagger(ws)
-    fclsses = (pos, SenLen(PosTagger(pos)), DomainSpecificity(ws), Frequency(freqdata), Embeddings(ws))
+    fclsses = (SenLen(), DomainSpecificity(ws), Frequency(freqdata), Embeddings(ws))
     m = FeatureMatrix(freqdata, fclsses)
     for wordobj in ws.single_word:
         m.populate_matrix(wordobj)

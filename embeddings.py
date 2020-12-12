@@ -1,7 +1,5 @@
 #Requires installment of bert-embedding: pip install bert-embedding
-#Save embeddings in a file on computer
-# How about having two classes inside embeddings class? One that generates embeddings and saves them into a file
-# and one that reads the files and gets the embedding features?
+#Saves embeddings in a file on computer
 #One sentence at a time takes 7m59.681s. Check time for list of sentences
 #Make sure the setup method works before getting train embeddings
 #Hur ska jag prioritera? Antingen kommer alla parwise distance matrices finnas lagrade i minnet, eller så tar man fram dem när 
@@ -27,25 +25,25 @@ class Embeddings:
   def __init__(self, ws):
     self.ws = ws
     self.all_target_types = set([word_object.token for word_object in self.ws.single_word])
-    self.embeddingfile = '/Users/carolinearvidsson/Desktop/embeddings_train_201124'
+    self.embfile = '/Users/carolinearvidsson/Desktop/homemade_embeddings_test_201210'
     self.target_not_retrieved = []
     self.pdist_matrices = {}
     self.average_embedding = []
     self.__check_existing_file()
 
-  def __get_average_embedding(self):
-    all_target_embeddings = [self.tokenID_embeddings[token] for token in\
-      self.tokenID_embeddings if self.tokenID_embeddings[token] != 'n/a']
-    self.average_embedding = np.mean(np.array(all_target_embeddings), axis=0)
-
   def get_token_embedding(self, wobj):
-    embedding = self.tokenID_embeddings[wobj.id]
+    embedding = self.tID[wobj.id]
     if embedding == 'n/a':
       embedding = self.average_embedding
     return embedding.tolist()
 
+  def __get_average_embedding(self):
+    all_target_embeddings = [self.tID[token] for token in\
+      self.tID if self.tID[token] != 'n/a']
+    self.average_embedding = np.mean(np.array(all_target_embeddings), axis=0)
+
   def __get_best_clustering(self, pdist_matrix, linkage_matrix):
-    max_score = 0
+    max_score = -1
     for threshold in np.arange(0.0, 1.0, 0.01):
       flat = fcluster(linkage_matrix, t=threshold, criterion='distance')
       n_clusters = max(flat)
@@ -62,12 +60,14 @@ class Embeddings:
       print('1 cluster')
 
   def __generate_clusters(self):
-    for e, wordtype in enumerate(self.types_embeddings):
+    #FIXA
+    for e, wtype in enumerate(self.types_emb):
       if e < 2:
-        pdist_matrix = pdist(self.types_embeddings[wordtype], metric='cosine')
-        self.pdist_matrices[wordtype] = pdist_matrix
+        embeddings = list(set(self.types_emb[wtype]))
+        pdist_matrix = pdist(self.types_emb[wtype], metric='cosine')
+        self.pdist_matrices[wtype] = pdist_matrix
         linkage_matrix = linkage(pdist_matrix, method='complete', metric='cosine')
-        fig = pyplot.figure(num=wordtype, figsize=(13,5))
+        fig = pyplot.figure(num=wtype, figsize=(13,5))
         dn = dendrogram(linkage_matrix)
         pyplot.show()
         best_clusters = self.__get_best_clustering(pdist_matrix, linkage_matrix)
@@ -79,51 +79,55 @@ class Embeddings:
     If file already exists, the dicts are loaded into 
     their respective variables.
     '''
-    if path.exists(self.embeddingfile):
-      self.types_embeddings, self.tokenID_embeddings = pickle.load(open(self.embeddingfile, "rb"))
-      print('Embeddings are available in pickle format at path: ' + self.embeddingfile)
+    if path.exists(self.embfile):
+      self.types_emb, self.tID = pickle.load(open(self.embfile, "rb"))
+      print('Embeddings are available in pickle format at path: ' + self.embfile)
       self.__get_average_embedding()
       #self.__generate_clusters()
     else:
-      self.tokenID_embeddings = {} # Holds specific target token IDs as keys and their token embeddings as values
-      self.types_embeddings = {} # Holds wordtypes of target tokens as keys and all their embeddings (not just in target context) as values
+      self.tID = {} # Holds specific target token IDs as keys and their token embeddings as values
+      self.types_emb = {} # Holds target word types as keys and all their embeddings (not just in target context) as values
       self.__setup()
-      print('Embeddings have been created and are available in pickle format at path: ' + self.embeddingfile)
+      print('Embeddings have been created and are available in pickle format at path: ' + self.embfile)
       print(self.target_not_retrieved)
 
   def __setup(self):
     self.bert = BertEmbedding(max_seq_length=200)
+    self.wnl = WordNetLemmatizer()
     for wobj in self.ws.single_word:
       sentence, token, tokenID = wobj.sentence, wobj.token.lower(), wobj.id
       print('Getting embeddings for sentence ' + tokenID + '...')
       self.__populate_embedding_dicts(tokenID, \
         self.__get_embeddings(sentence.split('\n'), token, tokenID)
                                         )
-    pickle.dump([self.types_embeddings, self.tokenID_embeddings], open(self.embeddingfile, 'wb'))
-
-  def __get_embeddings(self, sentence, token, tokenID):
-    '''Returns tokenized sentence, tokens embeddings and target token embedding.'''
-    result = self.bert(sentence)
-    tokens, tokens_embeddings = result[0][0], result[0][1] #result[1][0] skulle visa andra meningen tokeniserad. Fixa så modellen läser in mer än en mening i taget.
-    try:
-      token_embedding = tokens_embeddings[tokens.index(token)]
-    except ValueError:
-      self.target_not_retrieved.append(token + ' is not in sentence ' + tokenID)
-      token_embedding = 'n/a'
-    return tokens, tokens_embeddings, token_embedding
+    pickle.dump([self.types_emb, self.tID], open(self.embfile, 'wb'))
 
   def __populate_embedding_dicts(self, tokenID, __get_embeddings):
     ''''Populates the embedding dicts.'''
-    tokens, tokens_embeddings, token_embedding = __get_embeddings
-    self.tokenID_embeddings[tokenID] = token_embedding
-    lemmatizer = WordNetLemmatizer()
-    for wordtype in self.all_target_types:
-      if wordtype in tokens:
-        type_indices = [i for i, token in enumerate(tokens) if token == wordtype]
-        for index in type_indices:
-          self.types_embeddings.setdefault(lemmatizer.lemmatize(wordtype), []).append(tokens_embeddings[index])
+    tokens, sen_emb, token_embedding = __get_embeddings
+    self.tID[tokenID] = token_embedding
 
+    for wtype in self.all_target_types:
+      if wtype in tokens:
+        type_indices = [i for i, token in enumerate(tokens) if token == wtype]
+        wtype = self.wnl.lemmatize(wtype)
+        for index in type_indices:
+            if wtype in self.types_emb and \
+              any((sen_emb[index] == x).all() for x in self.types_emb[wtype]): continue
+            self.types_emb.setdefault(wtype, []).append(sen_emb[index])
+            self.types_emb[wtype] = list(dict.fromkeys(self.types_emb[wtype]))
+
+  def __get_embeddings(self, sentence, token, tID):
+    '''Returns tokenized sentence, tokens embeddings and target token embedding.'''
+    result = self.bert(sentence)
+    tokens, sen_emb = result[0][0], result[0][1]
+    try:
+      token_embedding = sen_emb[tokens.index(token)]
+    except ValueError:
+      self.target_not_retrieved.append(token + ' is not in sentence ' + tID)
+      token_embedding = 'n/a'
+    return tokens, sen_emb, token_embedding
 
 if __name__ == "__main__":
-  ws = WS(['data/lcp_single_train.tsv'])
+  ws = WS(['data/homemade_test.tsv'])
   Embeddings(ws)
