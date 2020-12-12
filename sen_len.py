@@ -1,3 +1,5 @@
+#OBSOLETE
+
 from wordspace import WS
 import nltk
 #nltk.download('averaged_perceptron_tagger')
