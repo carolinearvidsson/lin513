@@ -1,6 +1,6 @@
 from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-#from features import FeatureMatrix
+from scipy.stats import pearsonr, spearmanr
 
 import pickle
 
@@ -47,7 +47,13 @@ class MultiLinear():
 
     def __predict(self, regr, test_matrix, test_compl):
         complexities_predictions = regr.predict(test_matrix)
+        r_value = pearsonr(test_compl, complexities_predictions)
+        rho = spearmanr(test_compl, complexities_predictions)
         mae = mean_absolute_error(test_compl, complexities_predictions)
-        return mae
+        mse = mean_squared_error(test_compl, complexities_predictions)
+        r_2 = r2_score(test_compl, complexities_predictions)
+        print('Pearson\'s r = ', r_value, '\nSpearman\'s rho = ', rho,
+              '\nMAE = ', mae, '\nMSE = ', mse, '\nr2 = ', r_2 )
+        
 
 
