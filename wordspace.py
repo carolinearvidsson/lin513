@@ -10,9 +10,8 @@ class WS:
     and multiple-word (2) tokens from the CompLex corpus.
 
     Attributes:
-        single_word: dictionary listing single-word Word-objects. Key is 
-        unique ID-number of token, value is Word object containing subcorpus 
-        token appears in, sentence, token and complexity value.
+        single_word: set listing single-word Word-objects. Attributes are ID-number of entry, 
+        subcorpus token appears in, sentence, token and complexity value.
         
         multiple_word: dictionary listing multiple-word Word-objects. Key is 
         unique ID-number of token, value is Word object containing subcorpus 
@@ -61,13 +60,13 @@ class WS:
         occurring types in the sentence data, divided by subcorpus.
         
         Arguments:
-            row: string object is a full sentence from the corpus. 
+            row: string object is a full entry from the corpus. 
         '''
+        sentence = set(nltk.word_tokenize(row[2].lower()))
         if row[1] not in self.corpus_types:
-            self.corpus_types[row[1]] = set(nltk.word_tokenize(row[2].lower()))
+            self.corpus_types[row[1]] = sentence
         else:
-            for word in nltk.word_tokenize(row[2].lower()):
-                self.corpus_types[row[1]].add(word)
+            self.corpus_types[row[1]].update(sentence)
 
 
 

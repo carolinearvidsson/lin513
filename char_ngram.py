@@ -8,8 +8,8 @@ from nltk.corpus import brown
 
 
 class NgramN():
-    '''Represents a character ngram-probability calculator. Utilizes 
-    ngram-models previously trained on the Brown corpus.
+    '''Is a character ngram-probability calculator. Utilizes 
+    ngram-models previously trained on the Brown corpus (see, xxx.py).
     
     Attributes:
         ngram_models: a dict object containing separate uni-, bi- and trigram 
@@ -24,8 +24,8 @@ class NgramN():
         self.uni, self.bi, self.tri = self.ngram_models.values()
     
     def ngram_probs(self, word_object):
-        '''Return list containing uni, bi and trigram probabilities 
-        for a given token.
+        '''Return list containing uni, bi and trigram probabilities, 
+        in logspace, for a given token.
         
         Arguments:
             word_object: a Word object'''
@@ -53,13 +53,13 @@ class NgramN():
         Arguments:
             token: a word string.
         '''
-        token = list(pad_both_ends(token, n=2))
+        token = list(pad_both_ends(token, n=2)) # add (1) start and end symbols
         bi_prob_val = 0
         for index, char in enumerate(token):
-            if index == 0: #beginning of word
+            if index == 0: # if beginning of word, skip as to avoid index error
                 continue
             else:
-                bi_prob_val += self.bi.logscore(char, [token[index-1]])
+                bi_prob_val += self.bi.logscore(char, [token[index-1]]) # get probability of present character, given previous character, add to total
         return bi_prob_val
 
     def __tri_prob(self, token):
@@ -68,12 +68,12 @@ class NgramN():
         Arguments:
             token: a word string.
         '''
-        token = list(pad_both_ends(token, n=3))
+        token = list(pad_both_ends(token, n=3)) # add (2) start and end symbols
         tri_prob_val = 0
         for index, char in enumerate(token):
-            if index < 2 :
+            if index < 2 : # if first or second character of word, skip as to avoid index error
                 continue
             else:
-                tri_prob_val += self.tri.logscore(char, [token[index-2],
-                                                         token[index-1]])
+                tri_prob_val += self.tri.logscore(char, [token[index-2], # get probability of present character, given previous two characters, add to total
+                                                         token[index-1]]) 
         return tri_prob_val

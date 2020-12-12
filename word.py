@@ -4,12 +4,12 @@ class Word:
     '''Represents a token (single or multiple words) from the CompLex corpus.
     
     Attributes:
-        (idn: identity number of entry.) # just nu borttaget 
-        subcorpus: domain token is taken from (bible, biomed or europarl).
+        id: identity number of entry.
+        subcorpus: domain sentence is from (bible, biomed or europarl).
         sentence: sentence in which the token appears.
-        token: a single word or two words.
+        token: a single word or two words (Multi Word Expression).
         complexity: the perceived complexity of token in context by manual 
-        annotators (normalized as 0–1, based on a 1–5 Likert scale).
+                    annotators (normalized as 0–1, based on a 1–5 Likert scale).
     '''
 
     def __init__(self, entry):
