@@ -1,7 +1,3 @@
-#We should try to make as few iterations through the corpuses as possible, maybe in main? 
-#Implement corpus for checking domain specificity
-#ws.corpus types är helt tom
-#from wordspace import WS
 from nltk import word_tokenize
 
 class DomainSpecificity:

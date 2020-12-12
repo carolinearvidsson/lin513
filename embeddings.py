@@ -39,13 +39,18 @@ class Embeddings:
 
   def __get_best_clustering(self, pdist_matrix, linkage_matrix):
     max_score = -1 # Start at lowest possible silhouette score.
-    for threshold in np.arange(0.0, 1.0, 0.01):
+    for threshold in np.arange(0.0, 1.0, 0.05):
       flat = fcluster(linkage_matrix, t=threshold, criterion='distance')
       n_clusters = max(flat)
       if n_clusters != 1 and n_clusters < len(linkage_matrix):
         score = silhouette_score(squareform(pdist_matrix), flat, metric='precomputed')
         if score > max_score:
           max_score, best_clusters = score, flat
+    
+    if max_score < 0.2:
+      n_clusters = 1
+
+
     try:
       print('max silhouette all: ', max_score)
       print('optimal n_clusters: ', (max(best_clusters)))
@@ -56,16 +61,17 @@ class Embeddings:
 
   def __generate_clusters(self):
     #FIXA
-    for e, wtype in enumerate(self.types_emb):
-      if e < 2:
-        embeddings = list(set(self.types_emb[wtype]))
-        pdist_matrix = pdist(self.types_emb[wtype], metric='cosine')
+    for e, wtype in enumerate(self.lemma_embs):
+      if e < 10:
+        pdist_matrix = pdist(self.lemma_embs[wtype], metric='cosine')
         self.pdist_matrices[wtype] = pdist_matrix
         linkage_matrix = linkage(pdist_matrix, method='complete', metric='cosine')
         fig = pyplot.figure(num=wtype, figsize=(13,5))
         dn = dendrogram(linkage_matrix)
         pyplot.show()
+        print(wtype)
         best_clusters = self.__get_best_clustering(pdist_matrix, linkage_matrix)
+
 
   def __check_existing_file(self):
     '''Checks if the pickle file containing the embedding dicts
@@ -75,10 +81,10 @@ class Embeddings:
     their respective variables.
     '''
     if path.exists(self.embfile):
-      self.types_emb, self.tID_emb = pickle.load(open(self.embfile, "rb"))
+      self.lemma_embs, self.tID_emb = pickle.load(open(self.embfile, "rb"))
       print('Embeddings are available in pickle format at path: ' + self.embfile)
       self.__get_average_embedding()
-      #self.__generate_clusters()
+      self.__generate_clusters()
     else:
       self.__setup()
       print('Embeddings have been created and are available \
@@ -86,9 +92,10 @@ class Embeddings:
       print('Embeddings not available:', self.target_not_retrieved)
 
   def __get_average_embedding(self):
-    all_target_embeddings = [self.tID_emb[token] for token in\
+    all_target_embeddings = [self.tID_emb[token] for token in \
       self.tID_emb if self.tID_emb[token] != 'n/a']
     self.average_embedding = np.mean(np.array(all_target_embeddings), axis=0)
+
 
   def __setup(self):
     '''Iterates through all sentences in the data in order to 
@@ -97,44 +104,59 @@ class Embeddings:
     they are dumped into the embeddings file (path given in __init__).
     
     Attributes:
-    
+
       self.tID_emb (dict)
         Stores target token ID:s (str) as keys and 
         their embeddings (nparray) as values.
+        This dictionary is utlilized in the get_embeddings
+        method.
     
-      self.types_emb (dict)
-        Stores lemmatized word types of target tokens (str) as keys. 
-        Each value is a list containing embeddings for 
-        all occurences of that lemma's base form and inflections.
+      self.lemma_embs (dict)
+        Stores lemmatized target tokens (str) as keys. 
+        Each value is a list containing all embeddings for 
+        any occurence of the lemma's base forms or inflections.
+        This dictionary will be used for word sense induction.
       
       self.sentences (set)
         Stores sentences (str) that have been parsed.
         Is used to make sure that no embedding duplicates
-        are stored in the self.types_emb dictionary.
+        are stored in the self.lemma_embs dictionary.
     '''
-    self.tID_emb, self.types_emb, self.sentences = {}, {}, set()
+    self.tID_emb, self.lemma_embs, self.sentences = {}, {}, set()
     self.bert = BertEmbedding(max_seq_length=200)
     self.wnl = WordNetLemmatizer()
     for wobj in self.ws.single_word:
       sen, tokn, tID = wobj.sentence, wobj.token.lower(), wobj.id
       print('Getting embeddings for sentence ' + tID + '...')
-      self.__populate_embdicts(self.__get_embddings(sen.split('\n'), tokn, tID))
-    pickle.dump([self.types_emb, self.tID_emb], open(self.embfile, 'wb'))
+      self.__populate_embdicts(self.__get_embddngs(sen.split('\n'), tokn, tID))
+    pickle.dump([self.lemma_embs, self.tID_emb], open(self.embfile, 'wb'))
 
-  def __populate_embdicts(self, __get_embddings):
-    ''''Populates the embedding dicts.
-    
+  def __populate_embdicts(self, __get_embddngs):
+    '''A method that populates the tID_emb dictionary with a sentence's
+    particular target token embedding.
+    Furthermore, it gets each embedding of any target token in the sentence,
+    as long as the sentence has not previously been parsed,
+    and stores it in dictionary lemma_embs.
+
+    For a detailed description of the embedding dictionaries,
+    see documentation for local method: __setup.
+
     Parameters:
-      __get_embddings (funct)
-        Returns the following variables:
-          tokens (list)
-            Tokenized and lowered sentence.
 
-        '''
-    tokens, sen_emb, token_embedding, tID = __get_embddings
+      __get_embddngs (funct)
+        Provides the following variables:
+        tokens (list)
+          A tokenized and lowered sentence.
+        sen_emb (list)
+          Contains the sentence's embeddings (nparrays). 
+        token_embedding (nparray)
+          Embedding for that particular sentence's target token.
+        tID (str)
+          ID number for sentence's target token.
+    '''
+    tokens, sen_emb, token_embedding, tID = __get_embddngs
     self.tID_emb[tID] = token_embedding
 
-    # Do not get embeddings for same sentence twice.
     if ''.join(tokens) not in self.sentences:
       self.sentences.add(''.join(tokens))
       for wtype in self.all_target_types:
@@ -142,9 +164,9 @@ class Embeddings:
           type_indices = [i for i, token in enumerate(tokens) if token == wtype]
           wtype = self.wnl.lemmatize(wtype)
           for index in type_indices:
-            self.types_emb.setdefault(wtype, []).append(sen_emb[index])
+            self.lemma_embs.setdefault(wtype, []).append(sen_emb[index])
 
-  def __get_embddings(self, sentence, token, tID):
+  def __get_embddngs(self, sentence, token, tID):
     '''Returns tokenized sentence, tokens embeddings and target token embedding.'''
     result = self.bert(sentence)
     tokens, sen_emb = result[0][0], result[0][1]
