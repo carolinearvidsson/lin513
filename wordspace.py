@@ -68,8 +68,3 @@ class WS:
         else:
             self.corpus_types[row[1]].update(sentence)
 
-
-
-
-files = ['lcp_single_trial.tsv', 'lcp_multi_trial.tsv']
-
