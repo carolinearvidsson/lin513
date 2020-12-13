@@ -19,10 +19,7 @@ class PosTagger:
     '''
 
     def __init__(self, ws):
-        '''Upon initialization, tag all sentences in given data.
-        
-        Arguments:
-            ws. a WS (WordSpace) object, containing Word objects.'''
+        '''Upon initialization, tag all sentences in given data.'''
         self.tagged_sentences = {}
         self.single_word = ws.single_word
         self.pos_id = {}
@@ -31,8 +28,16 @@ class PosTagger:
         self.__tag_text()
     
     def __tag_text(self):
-        '''Tag sentences in given data.
+        '''Tag sentences using nltk's PoS-tagger which produces a list of tuples 
+        with word and PoS-tag. Assign a unique ID (as int) for specific PoS. 
+        Count i) number of times a token is a particular PoS, ii) number of times 
+        the specific indice where token appears in sentence. 
         
+        Fill tagged_sentences dictionary with key being the specific entry's ID, 
+        and a key as follows [tagged sentence, index where token is found, ID for PoS]
+        In case of error and PoS or index cannot be found (i.e. errors in the 
+        given data), give most common index and PoS.
+
         '''    
         tokenizer = nltk.RegexpTokenizer(r'\w+')
         for entry in self.single_word:
@@ -40,43 +45,39 @@ class PosTagger:
             sentence = tokenizer.tokenize(entry.sentence)
             try:
                 tagged_sent = nltk.pos_tag(sentence)
-                token_sent_index = sentence.index(token)
-                token_pos = tagged_sent[token_sent_index][1]
-                if token_pos not in self.pos_id or token_sent_index not in self.token_index_counter:
-                    self.__create_tag_ids(token_pos, token_sent_index)
-                    #self.tag_counter[token_pos] = 0
-                    #self.token_index_counter[token_sent_index] = 0
-                self.tag_counter[token_pos] += 1
-                self.token_index_counter[token_sent_index] += 1 
-                token_pos_id = self.pos_id[token_pos]
-
-                self.tagged_sentences[entry.id] = [tagged_sent, token_sent_index, token_pos_id]
+                tok_index = sentence.index(token)
+                tok_pos = tagged_sent[tok_index][1]
+                if tok_pos not in self.pos_id: 
+                    self.tag_counter[tok_pos] = 0
+                    self.pos_id.setdefault(tok_pos, len(self.pos_id))
+                if tok_index not in self.token_index_counter:
+                    self.token_index_counter[tok_index] = 0
+                self.tag_counter[tok_pos] += 1
+                self.token_index_counter[tok_index] += 1 
+                tok_pos_id = self.pos_id[tok_pos]
+                self.tagged_sentences[entry.id] = [tagged_sent, tok_index, tok_pos_id]
             except:
-                high_pos_tag = max(self.tag_counter, key=self.tag_counter.get)
-                high_pos_tag_id = self.pos_id[high_pos_tag]
-                high_token_sent_index = max(self.token_index_counter, key=self.token_index_counter.get) 
-                self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), high_token_sent_index, high_pos_tag_id] #här blir det fel!!!!   
-
-    def __create_tag_ids(self, pos_tag, sent_indx):
-        '''Create unique IDs for PoS-tags, store in '''
-        self.pos_id.setdefault(pos_tag, len(self.pos_id))
-        self.tag_counter[pos_tag] = 0
-        self.token_index_counter[sent_indx] = 0
+                max_pos = max(self.tag_counter, key=self.tag_counter.get)
+                max_pos_id = self.pos_id[max_pos]
+                max_tok_index = max(self.token_index_counter, key=self.token_index_counter.get) 
+                self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), max_tok_index, max_pos_id]
     
     def get_pos(self, wordobject):
+        '''Return ID of PoS-tag of the token represented by the Word object.'''
         pos_id = self.tagged_sentences[wordobject.id][2]
         return [pos_id]
     
     def get_sen_len(self, wordobject):
+        #kolla upp adverb och particip taggar
         '''Get length of sentence up to (not including) token. 
         Return two values: all_sen_len includes all words preceeding token,
-        lex_sen_len counts only lexical/content words.
+        lex_sen_len counts only lexical/content words. These are defined as 
         
         Arguments:
             wordobject: 
         '''
 
-        upenn_content_tags = ['CD','JJ', 'JJR', 'JJS', 'NN', 'NNS', 
+        upenn_content_tags = ['JJ', 'JJR', 'JJS', 'NN', 'NNS', 
                               'NNP','NNPS', 'RB', 'RBR', 'UH', 'VB', 
                               'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']
 
