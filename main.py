@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     if mode == 'train':
         train_model = reg.train_linear_model(matrix)
-        pickle.dump(train_model, open(model, 'wb'))
+        pickle.dump([train_model, matrix], open(model, 'wb'))
     elif mode == 'test':
-        pickle.load(model, 'rb')
-        reg.get_value(model, matrix)
+        model, matrix = pickle.load(open(model, 'rb'))
+        reg.predict(model, matrix)

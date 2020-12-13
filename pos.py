@@ -43,9 +43,9 @@ class PosTagger:
                 token_sent_index = sentence.index(token)
                 token_pos = tagged_sent[token_sent_index][1]
                 if token_pos not in self.pos_id or token_sent_index not in self.token_index_counter:
-                    self.__create_tag_ids(token_pos)
-                    self.tag_counter[token_pos] = 0
-                    self.token_index_counter[token_sent_index] = 0
+                    self.__create_tag_ids(token_pos, token_sent_index)
+                    #self.tag_counter[token_pos] = 0
+                    #self.token_index_counter[token_sent_index] = 0
                 self.tag_counter[token_pos] += 1
                 self.token_index_counter[token_sent_index] += 1 
                 token_pos_id = self.pos_id[token_pos]
@@ -57,11 +57,11 @@ class PosTagger:
                 high_token_sent_index = max(self.token_index_counter, key=self.token_index_counter.get) 
                 self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), high_token_sent_index, high_pos_tag_id] #här blir det fel!!!!   
 
-    def __create_tag_ids(self, pos_tag):
+    def __create_tag_ids(self, pos_tag, sent_indx):
         '''Create unique IDs for PoS-tags, store in '''
         self.pos_id.setdefault(pos_tag, len(self.pos_id))
-        self.tag_counter[token_pos] = 0
-        self.token_index_counter[token_sent_index] = 0
+        self.tag_counter[pos_tag] = 0
+        self.token_index_counter[sent_indx] = 0
     
     def get_pos(self, wordobject):
         pos_id = self.tagged_sentences[wordobject.id][2]

@@ -19,7 +19,7 @@ class SyllCount():
                     #print(token, phoneme, syll_count)
         except:
             vowels = ['a','e','o','u','i']
-            print(token, wordobject.id)
+            #print(token, wordobject.id)
             for i, character in enumerate(token):
                 if character in vowels:
                     if i == 0:
@@ -29,7 +29,7 @@ class SyllCount():
                             syll_count += 1
             #print(token, syll_count)
 
-        #eturn [syll_count]
+        return [syll_count]
 
 # if __name__ == "__main__":
 #     ws = WS(['homemade_test.tsv'])

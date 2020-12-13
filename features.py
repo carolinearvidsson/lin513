@@ -4,6 +4,7 @@ class FeatureMatrix:
     '''A feature matrix where rows represent tokens and columns represent its features''' 
 
     def __init__(self, fclasses, ws):
+        self.ws = ws
         self.matrix = []
         self.complexities = []
         self.fclsses = fclasses
@@ -21,7 +22,7 @@ class FeatureMatrix:
         print('metoder: ', self.feature_methods)
 
     def populate_matrix(self):
-        for wordobj in ws.single_word:
+        for wordobj in self.ws.single_word:
             features = [feature for method in self.feature_methods for feature in method(wordobj)]
             self.complexities.append(wordobj.complexity)
             self.matrix.append(features)

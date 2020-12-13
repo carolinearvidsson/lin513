@@ -36,7 +36,7 @@ class Embeddings:
       embedding = self.average_embedding
     return embedding.tolist()
 
-  def get_outliers(self, clusters):
+  def __get_outliers(self, clusters):
     outlier_indices = [clusters.index(obs) for obs in set(clusters) if clusters.count(obs) == 1]
     n_outliers = len(outlier_indices)
     return outlier_indices, n_outliers
@@ -55,7 +55,7 @@ class Embeddings:
       n_clusters = 1
       outlier_indices = None
     else:
-      outlier_indices, n_outliers = self.get_outliers(best_clusters)
+      outlier_indices, n_outliers = self.__get_outliers(best_clusters)
       n_clusters = max(best_clusters) - n_outliers
 
     return n_clusters, outlier_indices
