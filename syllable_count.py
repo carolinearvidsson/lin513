@@ -12,14 +12,11 @@ class SyllCount():
         syll_count = 0
         try:
             phon_token = self.syll_dict[token]
-            #print(phon_token)
             for phoneme in phon_token[0]:
                 if any(char.isdigit() for char in phoneme) == True:
                     syll_count += 1
-                    #print(token, phoneme, syll_count)
         except:
             vowels = ['a','e','o','u','i']
-            #print(token, wordobject.id)
             for i, character in enumerate(token):
                 if character in vowels:
                     if i == 0:
@@ -27,12 +24,5 @@ class SyllCount():
                     else:
                         if token[i-1] not in vowels:
                             syll_count += 1
-            #print(token, syll_count)
 
         return [syll_count]
-
-# if __name__ == "__main__":
-#     ws = WS(['homemade_test.tsv'])
-#     s = SyllCount()
-#     for word in ws.single_word:
-#         s.get_syll_count(word)
