@@ -44,8 +44,8 @@ class PosTagger:
                 token_pos = tagged_sent[token_sent_index][1]
                 if token_pos not in self.pos_id or token_sent_index not in self.token_index_counter:
                     self.__create_tag_ids(token_pos)
-                    # self.tag_counter[token_pos] = 0
-                    # self.token_index_counter[token_sent_index] = 0
+                    self.tag_counter[token_pos] = 0
+                    self.token_index_counter[token_sent_index] = 0
                 self.tag_counter[token_pos] += 1
                 self.token_index_counter[token_sent_index] += 1 
                 token_pos_id = self.pos_id[token_pos]
