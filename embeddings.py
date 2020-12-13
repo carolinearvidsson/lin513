@@ -184,6 +184,6 @@ class Embeddings:
       token_embedding = 'n/a'
     return tokens, sen_emb, token_embedding, tID
 
-if __name__ == "__main__":
-  ws = WS(['data/homemade_train.tsv'])
-  Embeddings(ws)
+#if __name__ == "__main__":
+  #ws = WS('data/homemade_train.tsv')
+ # Embeddings(ws)

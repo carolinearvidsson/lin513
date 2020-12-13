@@ -5,7 +5,7 @@ from features import FeatureMatrix
 from domainspecificity import DomainSpecificity
 from embeddings import Embeddings
 from frequency import Frequency
-from char_ngram import NgramN
+from char_ngram import Ngram
 from pos import PosTagger
 from syllable_count import SyllCount
 from regression import MultiLinear
