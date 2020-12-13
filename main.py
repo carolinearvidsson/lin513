@@ -1,4 +1,5 @@
 import pickle
+import sys
 from wordspace import WS
 from features import FeatureMatrix
 from domainspecificity import DomainSpecificity
@@ -6,17 +7,22 @@ from embeddings import Embeddings
 from frequency import Frequency
 from char_ngram import NgramN
 from pos import PosTagger
+from regression import MultiLinear
 
 if __name__ == "__main__":
-    train_data = ['data/homemade_test.tsv']
-    ws = WS(train_data)
-    freqdata = '/Users/carolinearvidsson/googlebooks-eng-all-1gram-20090715-*.txt'
-    fclsses = (PosTagger(ws), DomainSpecificity(ws), Frequency(freqdata), Embeddings(ws))
-    m = FeatureMatrix(freqdata, fclsses)
-    for wordobj in ws.single_word:
-        m.populate_matrix(wordobj)
-    pickle.dump(m, open('matrix_test', 'wb'))
+    mode = sys.argv[1]
+    model = sys.argv[2]
+    data = sys.argv[3]#['data/homemade_train.tsv']
+    embeddings = sys.argv[4]#'/Users/carolinearvidsson/homemade_embeddings_train_201212'
+    freqdata = sys.argv[5]#'/Users/carolinearvidsson/googlebooks-eng-all-1gram-20090715-*.txt'
 
-    # train = ger modellen. ska avslutas med att man tar train-delen av regression. som ett argument till train okej min träningsfeaturefil ska heta matrix train, om den redan finns så går man visare och tränar modellen
-        
-    # test = ger mean abs error. ska alltid göras parametrar modellen och featurematrix på testdatan
+    ws = WS(data)
+    fclsses = (PosTagger(ws), DomainSpecificity(ws), Frequency(freqdata), Embeddings(ws, embeddings))
+    matrix = FeatureMatrix(fclsses, ws)
+    matrix.populate_matrix()
+
+    if mode == 'train':
+        pickle.dump(matrix, open(model, 'wb'))
+    elif mode == 'test':
+        reg = MultiLinear()
+        reg.get_value(model, matrix)

@@ -17,15 +17,14 @@ from matplotlib import pyplot
 from nltk.stem import WordNetLemmatizer
 from os import path
 from bert_embedding import BertEmbedding
-from wordspace import WS
 
 class Embeddings:
 
 
-  def __init__(self, ws):
+  def __init__(self, ws, embfile):
     self.ws = ws
     self.all_target_types = set([word_object.token for word_object in self.ws.single_word])
-    self.embfile = '/Users/carolinearvidsson/homemade_embeddings_train_201212'
+    self.embfile = embfile 
     self.target_not_retrieved = []
     self.pdist_matrices = {}
     self.average_embedding = []
@@ -37,6 +36,11 @@ class Embeddings:
       embedding = self.average_embedding
     return embedding.tolist()
 
+  def get_outliers(self, clusters):
+    outlier_indices = [clusters.index(obs) for obs in set(clusters) if clusters.count(obs) == 1]
+    n_outliers = len(outlier_indices)
+    return outlier_indices, n_outliers
+
   def __get_best_clustering(self, pdist_matrix, linkage_matrix):
     max_score = -1 # Start at lowest possible silhouette score.
     for threshold in np.arange(0.0, 1.0, 0.05):
@@ -46,18 +50,21 @@ class Embeddings:
         score = silhouette_score(squareform(pdist_matrix), flat, metric='precomputed')
         if score > max_score:
           max_score, best_clusters = score, flat
-    
-    if max_score < 0.2:
+
+    if max_score < 0.25: 
       n_clusters = 1
+      outlier_indices = None
+    else:
+      outlier_indices, n_outliers = self.get_outliers(best_clusters)
+      n_clusters = max(best_clusters) - n_outliers
 
-
-    try:
-      print('max silhouette all: ', max_score)
-      print('optimal n_clusters: ', (max(best_clusters)))
-      print('best clusters: ', best_clusters)
-      print('linkage:\n', linkage_matrix)
-    except:
-      print('1 cluster')
+    return n_clusters, outlier_indices
+    # try:
+    #   print('max silhouette all: ', max_score)
+    #   print('optimal n_clusters: ', (max(best_clusters)))
+    #   print('best clusters: ', best_clusters)
+    # except:
+    #   print('1 cluster')
 
   def __generate_clusters(self):
     #FIXA
@@ -66,11 +73,11 @@ class Embeddings:
         pdist_matrix = pdist(self.lemma_embs[wtype], metric='cosine')
         self.pdist_matrices[wtype] = pdist_matrix
         linkage_matrix = linkage(pdist_matrix, method='complete', metric='cosine')
-        fig = pyplot.figure(num=wtype, figsize=(13,5))
-        dn = dendrogram(linkage_matrix)
-        pyplot.show()
-        print(wtype)
-        best_clusters = self.__get_best_clustering(pdist_matrix, linkage_matrix)
+        #fig = pyplot.figure(num=wtype, figsize=(13,5))
+        #dn = dendrogram(linkage_matrix)
+        #pyplot.show()
+        #print(wtype)
+        score, clusters = self.__get_best_clustering(pdist_matrix, linkage_matrix)
 
 
   def __check_existing_file(self):
@@ -84,7 +91,7 @@ class Embeddings:
       self.lemma_embs, self.tID_emb = pickle.load(open(self.embfile, "rb"))
       print('Embeddings are available in pickle format at path: ' + self.embfile)
       self.__get_average_embedding()
-      self.__generate_clusters()
+      #self.__generate_clusters()
     else:
       self.__setup()
       print('Embeddings have been created and are available \

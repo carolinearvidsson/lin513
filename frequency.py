@@ -1,3 +1,4 @@
+# Caroline Arvidsson
 import glob
 import re
 import math
