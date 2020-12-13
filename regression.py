@@ -39,24 +39,38 @@ class MultiLinear():
     #     print(self.__predict(self.__train_linear_model(train_matrix, train_compl), test_matrix, test_compl))
 
     def train_linear_model(self, train_features):
-        train_matrix = train_features.matrix
+        train_matrices = self.__make_versions(train_features.matrix)
         train_compl = train_features.complexities
-        print(type(train_matrix[5][5]), len(train_compl))
-        regr = linear_model.BayesianRidge()
-        regr.fit(train_matrix, train_compl)
-        return regr
+        print(len(train_compl))
+        models = []
+        for train_matrix in train_matrices:
+            regr = linear_model.BayesianRidge() # Använda en annan? linear_model.Ridge(alpha=0.5)
+            regr.fit(train_matrix, train_compl)
+            models.append(regr)
+        return models
 
-    def predict(self, regr, test_features):
-        test_matrix = test_features.matrix
+    def predict(self, regr_models, test_features):
+        test_matrices = self.__make_versions(test_features.matrix)
         test_compl = test_features.complexities
-        complexities_predictions = regr.predict(test_matrix)
-        r_value = pearsonr(test_compl, complexities_predictions)
-        rho = spearmanr(test_compl, complexities_predictions)
-        mae = mean_absolute_error(test_compl, complexities_predictions)
-        mse = mean_squared_error(test_compl, complexities_predictions)
-        r_2 = r2_score(test_compl, complexities_predictions)
-        print('Pearson\'s r = ', r_value, '\nSpearman\'s rho = ', rho,
-              '\nMAE = ', mae, '\nMSE = ', mse, '\nr2 = ', r_2 )
+        feature_versions = ['all', 'handcrafted', 'clusters + outliers + embeddings', 'handcrafted + clusters + outliers', 'handcrafted + 50 dimensions']
+        for test_matrix, regr, features in zip(test_matrices, regr_models, feature_versions):
+            compl_pred = regr.predict(test_matrix)
+            r_value = pearsonr(test_compl, compl_pred)
+            rho = spearmanr(test_compl, compl_pred)
+            mae = mean_absolute_error(test_compl, compl_pred)
+            mse = mean_squared_error(test_compl, compl_pred)
+            r_2 = r2_score(test_compl, compl_pred)
+            print('Features: ', features, '\nPearson\'s r = ', r_value, '\nSpearman\'s rho = ', rho,
+                '\nMAE = ', mae, '\nMSE = ', mse, '\nr2 = ', r_2 )
+        
+    def __make_versions(self, matrix):
+        matrices = [matrix]
+        matrices.append([row[:9] for row in matrix])
+        matrices.append([row[9:] for row in matrix])
+        matrices.append([row[:11] for row in matrix])
+        matrices.append([row[:11] + row[-50:] for row in matrix])
+
+        return [matrices]
         
 
 
