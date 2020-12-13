@@ -41,7 +41,7 @@ class MultiLinear():
     def train_linear_model(self, train_features):
         train_matrices = self.__make_versions(train_features.matrix)
         train_compl = train_features.complexities
-        print(type(train_matrix[5][5]), len(train_compl))
+        print(len(train_compl))
         models = []
         for train_matrix in train_matrices:
             regr = linear_model.BayesianRidge() # Använda en annan? linear_model.Ridge(alpha=0.5)
@@ -52,14 +52,15 @@ class MultiLinear():
     def predict(self, regr_models, test_features):
         test_matrices = self.__make_versions(test_features.matrix)
         test_compl = test_features.complexities
-        for test_matrix, regr in zip(test_matrices, regr_models):
+        feature_versions = ['all', 'handcrafted', 'clusters + outliers + embeddings', 'handcrafted + clusters + outliers', 'handcrafted + 50 dimensions']
+        for test_matrix, regr, features in zip(test_matrices, regr_models, feature_versions):
             compl_pred = regr.predict(test_matrix)
             r_value = pearsonr(test_compl, compl_pred)
             rho = spearmanr(test_compl, compl_pred)
             mae = mean_absolute_error(test_compl, compl_pred)
             mse = mean_squared_error(test_compl, compl_pred)
             r_2 = r2_score(test_compl, compl_pred)
-            print('Pearson\'s r = ', r_value, '\nSpearman\'s rho = ', rho,
+            print('Features: ', features, '\nPearson\'s r = ', r_value, '\nSpearman\'s rho = ', rho,
                 '\nMAE = ', mae, '\nMSE = ', mse, '\nr2 = ', r_2 )
         
     def __make_versions(self, matrix):
