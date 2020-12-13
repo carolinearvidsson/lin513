@@ -21,9 +21,11 @@ if __name__ == "__main__":
     fclsses = (Ngram(), SyllCount(), PosTagger(ws), DomainSpecificity(ws), Frequency(freqdata), Embeddings(ws, embeddings))
     matrix = FeatureMatrix(fclsses, ws)
     matrix.populate_matrix()
+    reg = MultiLinear()
 
     if mode == 'train':
-        pickle.dump(matrix, open(model, 'wb'))
+        train_model = reg.train_linear_model(matrix)
+        pickle.dump(train_model, open(model, 'wb'))
     elif mode == 'test':
-        reg = MultiLinear()
+        pickle.load(model, 'rb')
         reg.get_value(model, matrix)
