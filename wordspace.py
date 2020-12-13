@@ -26,7 +26,7 @@ class WS:
         self.single_word = set()
         self.multiple_word = {}
         self.corpus_types = {}
-        self.structure_data(files)
+        self.structure_data(file)
     
     def structure_data(self, file):
         '''Structure and extract data from CompLex files.
