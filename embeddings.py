@@ -18,14 +18,16 @@ from nltk.stem import WordNetLemmatizer
 from os import path
 from bert_embedding import BertEmbedding
 
+
 class Embeddings:
 
 
   def __init__(self, ws, embfile):
+    self.wnl = WordNetLemmatizer()
     self.ws = ws
-    self.all_target_types = set([word_object.token for word_object in self.ws.single_word])
+    self.all_target_types = set([wobj.token.lower() for wobj in self.ws.single_word])
     self.embfile = embfile 
-    self.target_not_retrieved = []
+
     self.pdist_matrices = {}
     self.average_embedding = []
     self.__check_existing_file()
@@ -36,79 +38,52 @@ class Embeddings:
       embedding = self.average_embedding
     return embedding.tolist()
 
-  def __get_outliers(self, clusters):
-    outlier_indices = [clusters.index(obs) for obs in set(clusters) if clusters.count(obs) == 1]
-    n_outliers = len(outlier_indices)
-    return outlier_indices, n_outliers
+  def get_n_clusters(self, wobj):
+    try:
+      lemma = self.wnl.lemmatize(wobj.token.lower())
+      return [self.cluster_data[lemma]]
+    except KeyError:
+      all_n_clusters = [self.cluster_data[wtype] for wtype in self.cluster_data]
+      average_n_clusters = sum(all_n_clusters) / len(all_n_clusters)
+      return [average_n_clusters]
 
-  def __get_best_clustering(self, pdist_matrix, linkage_matrix):
-    max_score = -1 # Start at lowest possible silhouette score.
-    for threshold in np.arange(0.0, 1.0, 0.05):
-      flat = fcluster(linkage_matrix, t=threshold, criterion='distance')
-      n_clusters = max(flat)
-      if n_clusters != 1 and n_clusters < len(linkage_matrix):
-        score = silhouette_score(squareform(pdist_matrix), flat, metric='precomputed')
-        if score > max_score:
-          max_score, best_clusters = score, flat
-
-    if max_score < 0.25: 
-      n_clusters = 1
-      outlier_indices = None
-    else:
-      outlier_indices, n_outliers = self.__get_outliers(best_clusters)
-      n_clusters = max(best_clusters) - n_outliers
-
-    return n_clusters, outlier_indices
-    # try:
-    #   print('max silhouette all: ', max_score)
-    #   print('optimal n_clusters: ', (max(best_clusters)))
-    #   print('best clusters: ', best_clusters)
-    # except:
-    #   print('1 cluster')
-
-  def __generate_clusters(self):
-    #FIXA
-    for e, wtype in enumerate(self.lemma_embs):
-      if e < 10:
-        pdist_matrix = pdist(self.lemma_embs[wtype], metric='cosine')
-        self.pdist_matrices[wtype] = pdist_matrix
-        linkage_matrix = linkage(pdist_matrix, method='complete', metric='cosine')
-        #fig = pyplot.figure(num=wtype, figsize=(13,5))
-        #dn = dendrogram(linkage_matrix)
-        #pyplot.show()
-        #print(wtype)
-        score, clusters = self.__get_best_clustering(pdist_matrix, linkage_matrix)
-
+  def is_cluster_outlier(self, wobj):
+    is_outlier = 0
+    embedding = tuple(self.tID_emb[wobj.id])
+    if embedding in self.cluster_outliers: 
+      is_outlier = 1
+    return [is_outlier]
 
   def __check_existing_file(self):
     '''Checks if the pickle file containing the embedding dicts
-    (path given in __init__) already exists. 
+    (path given in __main__) already exists. 
     If file does not exist the retrievement of embeddings is initialized.
     If file already exists, the dicts are loaded into 
     their respective variables.
     '''
     if path.exists(self.embfile):
       self.lemma_embs, self.tID_emb = pickle.load(open(self.embfile, "rb"))
-      print('Embeddings are available in pickle format at path: ' + self.embfile)
+      self.cluster_data, self.cluster_outliers = {}, set()
       self.__get_average_embedding()
-      #self.__generate_clusters()
+      self.__generate_clusters()
+      
     else:
       self.__setup()
       print('Embeddings have been created and are available \
                       in pickle format at path:', self.embfile)
-      print('Embeddings not available:', self.target_not_retrieved)
+      print('Embeddings not available:', self.embeddings_na)
 
   def __get_average_embedding(self):
     all_target_embeddings = [self.tID_emb[token] for token in \
       self.tID_emb if self.tID_emb[token] != 'n/a']
     self.average_embedding = np.mean(np.array(all_target_embeddings), axis=0)
 
-
   def __setup(self):
     '''Iterates through all sentences in the data in order to 
     get BERT embeddings for every target word instance.
-    When all embeddings have been retrieved, 
-    they are dumped into the embeddings file (path given in __init__).
+    When all embeddings have been retrieved, the process
+    of forming clusters for each target word type in
+    the data is initialized.
     
     Attributes:
 
@@ -128,10 +103,17 @@ class Embeddings:
         Stores sentences (str) that have been parsed.
         Is used to make sure that no embedding duplicates
         are stored in the self.lemma_embs dictionary.
+
+      self.embeddings_na (list):
+        Holds the ID:s (str) of tokens that could not be retrieved.
+        This can happen when the sentence is longer than 200
+        tokens and the target token is near the end of sentence.
+        In the training data of 7000+ target tokens, this happened with
+        5 tokens.
     '''
     self.tID_emb, self.lemma_embs, self.sentences = {}, {}, set()
+    self.embeddings_na = []
     self.bert = BertEmbedding(max_seq_length=200)
-    self.wnl = WordNetLemmatizer()
     for wobj in self.ws.single_word:
       sen, tokn, tID = wobj.sentence, wobj.token.lower(), wobj.id
       print('Getting embeddings for sentence ' + tID + '...')
@@ -180,10 +162,52 @@ class Embeddings:
     try:
       token_embedding = sen_emb[tokens.index(token)]
     except ValueError:
-      self.target_not_retrieved.append(token + ' is not in sentence ' + tID)
+      self.embeddings_na.append(token + ' is not in sentence ' + tID)
       token_embedding = 'n/a'
     return tokens, sen_emb, token_embedding, tID
 
-#if __name__ == "__main__":
-  #ws = WS('data/homemade_train.tsv')
- # Embeddings(ws)
+  def __generate_clusters(self):
+    n_clusters = 1
+    for wtype in self.lemma_embs:
+      if len(self.lemma_embs[wtype]) > 1:
+        print(wtype, len(self.lemma_embs[wtype]))
+        pdist_matrix = pdist(self.lemma_embs[wtype], metric='cosine')
+        self.pdist_matrices[wtype] = pdist_matrix
+        linkage_matrix = linkage(pdist_matrix, method='complete', metric='cosine')
+      #fig = pyplot.figure(num=wtype, figsize=(13,5))
+      #dn = dendrogram(linkage_matrix)
+      #pyplot.show()
+      #print(wtype)
+        sil_score, clusters = self.__get_best_clustering(pdist_matrix, linkage_matrix)
+        if sil_score > 0.25:
+          n_outliers, outlier_indices = self.__get_outliers(clusters)
+          n_clusters = max(clusters) - n_outliers
+          for i in outlier_indices:
+            print(len(self.lemma_embs[wtype]))
+            self.cluster_outliers.add(tuple(self.lemma_embs[wtype][i]))
+      self.cluster_data[wtype] = n_clusters
+
+  def __get_best_clustering(self, pdist_matrix, linkage_matrix):
+    max_score = -1 # Start at lowest possible silhouette score.
+    best_clusters = []
+    for threshold in np.arange(0.0, 1.0, 0.05):
+      flat = fcluster(linkage_matrix, t=threshold, criterion='distance')
+      n_clusters = max(flat)
+      if n_clusters != 1 and n_clusters < len(linkage_matrix):
+        score = silhouette_score(squareform(pdist_matrix), flat, metric='precomputed')
+        if score > max_score:
+          max_score, best_clusters = score, flat
+    return max_score, best_clusters
+
+  def __get_outliers(self, clusters):
+    clusters = clusters.tolist()
+    outlier_indices = [clusters.index(obs) for obs in set(clusters) if clusters.count(obs) == 1]
+    n_outliers = len(outlier_indices)
+    return n_outliers, outlier_indices
+
+if __name__ == "__main__":
+  from wordspace import WS
+  ws = WS('data/homemade_train.tsv')
+  em = Embeddings(ws, '/Users/carolinearvidsson/homemade_embeddings_train_201213')
+  for wobj in ws.single_word:
+    print(wobj.token, em.get_n_clusters(wobj), em.is_cluster_outlier(wobj))
