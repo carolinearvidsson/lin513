@@ -7,6 +7,7 @@ from embeddings import Embeddings
 from frequency import Frequency
 from char_ngram import NgramN
 from pos import PosTagger
+from syllable_count import SyllCount
 from regression import MultiLinear
 
 if __name__ == "__main__":
@@ -17,7 +18,7 @@ if __name__ == "__main__":
     freqdata = sys.argv[5]#'/Users/carolinearvidsson/googlebooks-eng-all-1gram-20090715-*.txt'
 
     ws = WS(data)
-    fclsses = (PosTagger(ws), DomainSpecificity(ws), Frequency(freqdata), Embeddings(ws, embeddings))
+    fclsses = (Ngram(), SyllCount(), PosTagger(ws), DomainSpecificity(ws), Frequency(freqdata), Embeddings(ws, embeddings))
     matrix = FeatureMatrix(fclsses, ws)
     matrix.populate_matrix()
 
