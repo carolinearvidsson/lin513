@@ -21,39 +21,39 @@ class WS:
         
     '''
 
-    def __init__(self, files):
+    def __init__(self, file):
 
         self.single_word = set()
         self.multiple_word = {}
         self.corpus_types = {}
         self.structure_data(files)
     
-    def structure_data(self, files):
+    def structure_data(self, file):
         '''Structure and extract data from CompLex files.
         
         Arguments: 
             files: list of names CompLex-files.
         '''
-        for file in files:
-            # try:
-                #PROBLEM(LÖST!!), genfromtext feltolkar vissa rader/kolumner i train-filerna (därav try).
-                #argumentet comments tog bort fallen där ensam '#' gjorde resten av raden till en och samma kolumn. len av dict är nu samma som träningsdatan
-            text = np.genfromtxt(open(file), delimiter='\t', skip_header=1, 
-                                    dtype=None, encoding=None, invalid_raise=False, 
-                                    deletechars="~!@#$%^&*()-=+~\|]}[{';: /?.>,<.", 
-                                    comments='##')
-            for row in text: 
-                
-                self.add_to_corpus(row)
-                
-                
-                # Distinguish between single and multiple word tokens and 
-                # place Word-object in appropriate Lexicon-dictionary.
-                # if ' ' in row[3]:
-                #     self.multiple_word.add(Word(row))   
-                # else:
-                self.single_word.add(Word(row))
-            # except: continue
+    
+        # try:
+            #PROBLEM(LÖST!!), genfromtext feltolkar vissa rader/kolumner i train-filerna (därav try).
+            #argumentet comments tog bort fallen där ensam '#' gjorde resten av raden till en och samma kolumn. len av dict är nu samma som träningsdatan
+        text = np.genfromtxt(open(file), delimiter='\t', skip_header=1, 
+                                dtype=None, encoding=None, invalid_raise=False, 
+                                deletechars="~!@#$%^&*()-=+~\|]}[{';: /?.>,<.", 
+                                comments='##')
+        for row in text: 
+            
+            self.add_to_corpus(row)
+            
+            
+            # Distinguish between single and multiple word tokens and 
+            # place Word-object in appropriate Lexicon-dictionary.
+            # if ' ' in row[3]:
+            #     self.multiple_word.add(Word(row))   
+            # else:
+            self.single_word.add(Word(row))
+        # except: continue
     
     def add_to_corpus(self, row):
         '''Fill dictionary instance attribute corpus_types with all 

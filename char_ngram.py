@@ -7,7 +7,7 @@ from nltk.lm.preprocessing import padded_everygram_pipeline as pep
 from nltk.corpus import brown
 
 
-class NgramN():
+class Ngram():
     '''Is a character ngram-probability calculator. Utilizes 
     ngram-models previously trained on the Brown corpus (see, xxx.py).
     
