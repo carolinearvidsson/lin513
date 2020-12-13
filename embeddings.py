@@ -107,9 +107,10 @@ class Embeddings:
       self.embeddings_na (list):
         Holds the ID:s (str) of tokens that could not be retrieved.
         This can happen when the sentence is longer than 200
-        tokens and the target token is near the end of sentence.
-        In the training data of 7000+ target tokens, this happened with
-        5 tokens.
+        tokens (BERT's max sequence length) and the target token 
+        is near the end of sentence.
+        In the training data of 7000+ target tokens, 
+        this happened with a total of 5 tokens.
     '''
     self.tID_emb, self.lemma_embs, self.sentences = {}, {}, set()
     self.embeddings_na = []
