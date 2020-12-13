@@ -44,15 +44,15 @@ class MultiLinear():
         print(type(train_matrix[5][5]), len(train_compl))
         models = []
         for train_matrix in train_matrices:
-            regr = linear_model.BayesianRidge()
+            regr = linear_model.BayesianRidge() # Använda en annan? linear_model.Ridge(alpha=0.5)
             regr.fit(train_matrix, train_compl)
             models.append(regr)
         return models
 
-    def predict(self, regr, test_features):
+    def predict(self, regr_models, test_features):
         test_matrices = self.__make_versions(test_features.matrix)
         test_compl = test_features.complexities
-        for test_matrix in test_matrices:
+        for test_matrix, regr in zip(test_matrices, regr_models):
             compl_pred = regr.predict(test_matrix)
             r_value = pearsonr(test_compl, compl_pred)
             rho = spearmanr(test_compl, compl_pred)
