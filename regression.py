@@ -5,7 +5,7 @@ from scipy.stats import pearsonr, spearmanr
 import pickle
 
 class MultiLinear():
-        
+    #hej    
     # def get_value(self, train_feature_matrix, test_feature_matrix):
         
     #     train_raw = pickle.load(open(train_feature_matrix, 'rb'))
