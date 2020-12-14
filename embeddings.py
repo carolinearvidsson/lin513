@@ -41,11 +41,13 @@ class Embeddings:
   def get_n_clusters(self, wobj):
     try:
       lemma = self.wnl.lemmatize(wobj.token.lower())
-      return [self.cluster_data[lemma]]
+      all_n_clusters = [self.cluster_data[wtype] for wtype in self.cluster_data]
+      average_n_clusters = sum(all_n_clusters) / len(all_n_clusters)
+      return [int(self.cluster_data[lemma])]
     except KeyError:
       all_n_clusters = [self.cluster_data[wtype] for wtype in self.cluster_data]
       average_n_clusters = sum(all_n_clusters) / len(all_n_clusters)
-      return [average_n_clusters]
+      return [float(average_n_clusters)]
 
   def is_cluster_outlier(self, wobj):
     is_outlier = 0
@@ -57,7 +59,7 @@ class Embeddings:
   def __check_existing_file(self):
     '''Checks if the pickle file containing the embedding dicts
     (path given in __main__) already exists. 
-    If file does not exist the retrievement of embeddings is initialized.
+    If file does not exist, the retrievement of embeddings is initialized.
     If file already exists, the dicts are loaded into 
     their respective variables.
     '''
@@ -204,9 +206,9 @@ class Embeddings:
     n_outliers = len(outlier_indices)
     return n_outliers, outlier_indices
 
-# if __name__ == "__main__":
-#   from wordspace import WS
-#   ws = WS('data/homemade_train.tsv')
-#   em = Embeddings(ws, '/Users/carolinearvidsson/homemade_embeddings_train_201213')
-#   for wobj in ws.single_word:
-#     print(wobj.token, em.get_n_clusters(wobj), em.is_cluster_outlier(wobj))
+if __name__ == "__main__":
+  from wordspace import WS
+  ws = WS('data/homemade_train.tsv')
+  em = Embeddings(ws, '/Users/carolinearvidsson/homemade_embeddings_train_201213')
+  for wobj in ws.single_word:
+    print(wobj.token, em.get_n_clusters(wobj), em.is_cluster_outlier(wobj))
