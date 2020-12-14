@@ -1,5 +1,6 @@
 from wordspace import WS
 import nltk
+import pandas as pd
 nltk.download('averaged_perceptron_tagger')
 
 class PosTagger:
@@ -35,6 +36,9 @@ class PosTagger:
         self.pos_id = {}
         self.tag_counter = {}
         self.token_index_counter= {}
+        self.upenn_content_tags = ['JJ', 'JJR', 'JJS', 'NN', 'NNS', 
+                              'NNP','NNPS', 'RB', 'RBR', 'RBS' 'VB', 
+                              'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']
         self.__tag_text()
     
     def __tag_text(self):
@@ -49,6 +53,16 @@ class PosTagger:
         given data), give most common index and PoS.
 
         '''    
+        self.pos_counter = {'NN': 0, 'JJ':0, 'RB':0, 'VB':0, 'OT':0 }
+        pos = ['NN', 'JJ', 'VB', 'RB', 'OT']
+        
+        dummy_matrix = pd.get_dummies(pos, drop_first=True)
+        self.dummy_vars = {}
+        for i, part in zip(range(5), pos):
+            self.dummy_vars[part] = list(dummy_matrix.loc[i])
+        
+        self.average_index, n = 0, 0
+        
         tokenizer = nltk.RegexpTokenizer(r'\w+')
         for entry in self.single_word:
             token = entry.token
@@ -57,28 +71,53 @@ class PosTagger:
                 tagged_sent = nltk.pos_tag(sentence)
                 tok_index = sentence.index(token)
                 tok_pos = tagged_sent[tok_index][1]
-                if tok_pos not in self.pos_id: 
-                    self.tag_counter[tok_pos] = 0
-                    self.pos_id.setdefault(tok_pos, len(self.pos_id))
+                if tok_pos in self.upenn_content_tags:
+                    self.pos_counter[tok_pos[:2]] += 1
+                else:
+                    tok_pos = 'OT'
+                    self.pos_counter[tok_pos] += 1
                 if tok_index not in self.token_index_counter:
                     self.token_index_counter[tok_index] = 0
-                self.tag_counter[tok_pos] += 1
                 self.token_index_counter[tok_index] += 1 
-                tok_pos_id = self.pos_id[tok_pos]
-                self.tagged_sentences[entry.id] = [tagged_sent, tok_index, tok_pos_id]
+                self.tagged_sentences[entry.id] = [tagged_sent, tok_index, tok_pos[:2]]
+                self.average_index += tok_index
+                n += 1
             except:
-                max_pos = max(self.tag_counter, key=self.tag_counter.get)
-                max_pos_id = self.pos_id[max_pos]
-                max_tok_index = max(self.token_index_counter, key=self.token_index_counter.get) 
-                self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), max_tok_index, max_pos_id]
+                self.tagged_sentences[entry.id] = None
+        self.average_index = round(self.average_index / n)
+
+        # tokenizer = nltk.RegexpTokenizer(r'\w+')
+        # for entry in self.single_word:
+        #     token = entry.token
+        #     sentence = tokenizer.tokenize(entry.sentence)
+        #     try:
+        #         tagged_sent = nltk.pos_tag(sentence)
+        #         tok_index = sentence.index(token)
+        #         tok_pos = tagged_sent[tok_index][1]
+        #         if tok_pos not in self.pos_id: 
+        #             self.tag_counter[tok_pos] = 0
+        #             self.pos_id.setdefault(tok_pos, len(self.pos_id))
+        #         if tok_index not in self.token_index_counter:
+        #             self.token_index_counter[tok_index] = 0
+        #         self.tag_counter[tok_pos] += 1
+        #         self.token_index_counter[tok_index] += 1 
+        #         tok_pos_id = self.pos_id[tok_pos]
+        #         self.tagged_sentences[entry.id] = [tagged_sent, tok_index, tok_pos_id]
+        #     except:
+        #         max_pos = max(self.tag_counter, key=self.tag_counter.get)
+        #         max_pos_id = self.pos_id[max_pos]
+        #         max_tok_index = max(self.token_index_counter, key=self.token_index_counter.get) 
+        #         self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), max_tok_index, max_pos_id]
     
-    def get_pos(self, wordobject):
+    def __pos(self, wordobject):
         '''Return ID of PoS-tag of the token represented by the Word object.'''
-        pos_id = self.tagged_sentences[wordobject.id][2]
-        return [pos_id]
+        # if self.tagged_sentences[wordobject.id] == None:
+        #     max_pos = max(self.pos_counter, key = self.pos_counter.get)
+        #     return self.dummy_vars[max_pos]  
+        pos = self.tagged_sentences[wordobject.id][2]
+        return self.dummy_vars[pos]
     
-    def get_sen_len(self, wordobject):
-        #kolla upp adverb och particip taggar
+    def __sen_len(self, wordobject):
         '''Get length of sentence up to (not including) token. 
         Return two values: all_sen_len includes all words preceeding token,
         lex_sen_len counts only lexical/content words. These are defined as 
@@ -86,24 +125,26 @@ class PosTagger:
         Arguments:
             wordobject: 
         '''
-
-        upenn_content_tags = ['JJ', 'JJR', 'JJS', 'NN', 'NNS', 
-                              'NNP','NNPS', 'RB', 'RBR', 'UH', 'VB', 
-                              'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']
-
-        sen_id = wordobject.id
+        # if self.tagged_sentences[wordobject.id] == None:
+        #     return [self.average_index, self.average_index]
+            
         sentence = self.tagged_sentences[wordobject.id]
         all_sen_len = sentence[1]
+        lex_sen_len = 0
+        token_ind = sentence[1]
+        preceeding = sentence[0][:token_ind]
+        for word, tag in preceeding:
+            if tag in self.upenn_content_tags:
+                lex_sen_len += 1
 
-        try:
-            lex_sen_len = 0
-            token_ind = sentence[1]
-            preceeding = sentence[0][:token_ind]
-            for word, tag in preceeding:
-                if tag in upenn_content_tags:
-                    lex_sen_len += 1
-        except:
-            lex_sen_len = sentence[1]
         return [all_sen_len, lex_sen_len]
 
+    def get_pos_len(self, wordobject):
+        if self.tagged_sentences[wordobject.id] == None:
+            max_pos = max(self.pos_counter, key = self.pos_counter.get)
+            return self.dummy_vars[max_pos] + [self.average_index, self.average_index]
+        else:
+            pos = self.__pos(wordobject.id)
+            sen_len = self.__sen_len(wordobject.id)
+            return pos + sen_len 
 
