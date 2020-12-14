@@ -17,6 +17,10 @@ Training and test files are tab separated (.tsv) and follow the following struct
 
 All methods are called through main.py. 
 
+## Features
+
+\[unigram, bigram, trigram, wordlength, syllable count, pos * 4, sent len all, sent len lex, clusters, outliers, embeddings *768] == 781 features
+
 ### Required installments
 
 scikit scipy nltk bert-embedding numpy
