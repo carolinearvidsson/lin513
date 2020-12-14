@@ -1,11 +1,13 @@
 from nltk.corpus import cmudict
 from wordspace import WS
-# doesnt count correctly the cmudict isdigit
 
 class SyllCount():
 
     def __init__(self):
         self.syll_dict = cmudict.dict()
+    
+    def word_length(self, wordobject):
+        return [len(wordobject.token)]
     
     def get_syll_count(self, wordobject):
         token = wordobject.token.lower()
