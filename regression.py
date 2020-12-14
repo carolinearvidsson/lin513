@@ -69,6 +69,7 @@ class MultiLinear():
         #     for stat, statname in stat_functions:
         #         result = stat(test_compl, compl_pred)
         #         print(statname, result)
+        compl_pred = regr_models.predict(test_matrix)
         r_value = pearsonr(test_compl, compl_pred)
         rho = spearmanr(test_compl, compl_pred)
         mae = mean_absolute_error(test_compl, compl_pred)
