@@ -4,7 +4,6 @@ from nltk.lm import MLE
 from nltk.lm.models import Lidstone
 from nltk.lm.preprocessing import pad_both_ends
 from nltk.lm.preprocessing import padded_everygram_pipeline as pep
-from nltk.corpus import brown
 
 
 class Ngram():
@@ -22,6 +21,7 @@ class Ngram():
 
         self.ngram_models = pickle.load(open('data/ngram_models', 'rb'))
         self.uni, self.bi, self.tri = self.ngram_models.values()
+        self.observed_tokens = {}
     
     def ngram_probs(self, word_object):
         '''Return list containing uni, bi and trigram probabilities, 
@@ -30,9 +30,13 @@ class Ngram():
         Arguments:
             word_object: a Word object'''
         token = word_object.token
-        ngram_probabilities = [self.__uni_prob(token), self.__bi_prob(token),
-                               self.__tri_prob(token)
-                            ]
+        if token in self.observed_tokens:
+            ngram_probabilities = [self.__uni_prob(token), self.__bi_prob(token),
+                                self.__tri_prob(token)
+                                ]
+            self.observed_tokens[token] = ngram_probabilities
+        else: 
+            ngram_probabilities = self.observed_tokens[token]
         return ngram_probabilities
 
     
