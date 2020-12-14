@@ -8,7 +8,7 @@ of sentences from multiple domains. The sentences' target words are annotated us
 
 Training and test files are tab separated (.tsv) and follow the following structure:
 1. Sentence/token ID
-2. Domain (e.g.: bible, europarl, biomed)
+2. Domain (e.g. bible, europarl, biomed)
 3. Sentence
 4. Target word
 5. Complexity
