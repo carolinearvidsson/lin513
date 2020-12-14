@@ -1,6 +1,6 @@
 from nltk.corpus import cmudict
 
-class SyllCount():
+class Length():
 
     def __init__(self):
         self.syll_dict = cmudict.dict()
