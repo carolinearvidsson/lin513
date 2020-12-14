@@ -24,26 +24,22 @@ class Embeddings:
 
   def __init__(self, ws, embfile):
     self.wnl = WordNetLemmatizer()
-    self.ws = ws
-    self.all_target_types = set([wobj.token.lower() for wobj in self.ws.single_word])
-    self.embfile = embfile 
-
-    self.pdist_matrices = {}
-    self.average_embedding = []
+    self.target_types = ws.target_types
+    self.embfile = embfile
     self.__check_existing_file()
 
-  def get_token_embedding(self, wobj):
+  def token_embedding(self, wobj):
     embedding = self.tID_emb[wobj.id]
     if embedding == None:
       embedding = self.average_embedding
     return embedding.tolist()
 
-  def get_n_clusters(self, wobj):
+  def n_clusters(self, wobj):
     try:
       lemma = self.wnl.lemmatize(wobj.token.lower())
-      return [int(self.cluster_data[lemma])]
+      return [int(self.n_clusters[lemma])]
     except KeyError:
-      all_n_clusters = [self.cluster_data[wtype] for wtype in self.cluster_data]
+      all_n_clusters = [self.n_clusters[wtype] for wtype in self.n_clusters]
       average_n_clusters = sum(all_n_clusters) / len(all_n_clusters)
       return [float(average_n_clusters)]
 
@@ -54,6 +50,11 @@ class Embeddings:
       is_outlier = 1
     return [is_outlier]
 
+  def __get_average_embedding(self):
+    all_target_embeddings = [self.tID_emb[token] for token in \
+      self.tID_emb if self.tID_emb[token] != None]
+    self.average_embedding = np.mean(np.array(all_target_embeddings), axis=0)
+
   def __check_existing_file(self):
     '''Checks if the pickle file containing the embedding dicts
     (path given in __main__) already exists. 
@@ -63,20 +64,13 @@ class Embeddings:
     '''
     if path.exists(self.embfile):
       self.lemma_embs, self.tID_emb = pickle.load(open(self.embfile, "rb"))
-      self.cluster_data, self.cluster_outliers = {}, set()
       self.__get_average_embedding()
       self.__generate_clusters()
-      
     else:
       self.__setup()
       print('Embeddings have been created and are available \
                       in pickle format at path:', self.embfile)
       print('Embeddings not available:', self.embeddings_na)
-
-  def __get_average_embedding(self):
-    all_target_embeddings = [self.tID_emb[token] for token in \
-      self.tID_emb if self.tID_emb[token] != None]
-    self.average_embedding = np.mean(np.array(all_target_embeddings), axis=0)
 
   def __setup(self):
     '''Iterates through all sentences in the data in order to 
@@ -149,7 +143,7 @@ class Embeddings:
 
     if ''.join(tokens) not in self.sentences:
       self.sentences.add(''.join(tokens))
-      for wtype in self.all_target_types:
+      for wtype in self.target_types:
         if wtype in tokens:
           type_indices = [i for i, token in enumerate(tokens) if token == wtype]
           wtype = self.wnl.lemmatize(wtype)
@@ -168,6 +162,7 @@ class Embeddings:
     return tokens, sen_emb, token_embedding, tID
 
   def __generate_clusters(self):
+    self.n_clusters, self.cluster_outliers = {}, set()
     n_clusters = 1
     for wtype in self.lemma_embs:
       if len(self.lemma_embs[wtype]) > 1:
@@ -184,7 +179,7 @@ class Embeddings:
           n_clusters = max(clusters) - n_outliers
           for i in outlier_indices:
             self.cluster_outliers.add(tuple(self.lemma_embs[wtype][i]))
-      self.cluster_data[wtype] = n_clusters
+      self.n_clusters[wtype] = n_clusters
 
   def __get_best_clustering(self, pdist_matrix, linkage_matrix):
     max_score = -1 # Start at lowest possible silhouette score.
@@ -206,7 +201,7 @@ class Embeddings:
 
 # if __name__ == "__main__":
 #   from wordspace import WS
-#   ws = WS('data/homemade_train.tsv')
-#   em = Embeddings(ws, '/Users/carolinearvidsson/homemade_embeddings_train_201213')
-#   for wobj in ws.single_word:
-#     print(wobj.token, em.get_n_clusters(wobj), em.is_cluster_outlier(wobj))
+#   ws = WS('data/homemade_test.tsv')
+#   em = Embeddings(ws, '/Users/carolinearvidsson/homemade_embeddings_test_201214')
+  #  for wobj in ws.single_word:
+  #    print(wobj.token, em.get_n_clusters(wobj), em.is_cluster_outlier(wobj))

@@ -4,7 +4,7 @@ import re
 import math
 
 class Frequency:
-    '''Represents a frequency lexicon. Google ngram files that constitute the lexicon are
+    '''Represents a frequency lexicon. Google ngram files that are used to fill the lexicon are
     tab separated text files where each line represents a word type and columns have the following structure:
     1. word type
     2. absolute frequency
@@ -12,33 +12,39 @@ class Frequency:
     4. number of books in which the word type occurs 
     '''
 
-    def __init__(self, files):
+    def __init__(self, files, ws):
         self.filenames = glob.glob(files)
         self.frequencies = {}
+        self.target_types = ws.target_types
+        self.__parse_external_corpus()
+        self.__not_in_external_corpus()
 
     def get_absfrequency(self, wordobj):
         word = wordobj.token.lower()
-        if word not in self.frequencies:
-            absolute_freq = self.__parse_external_corpus(word)
-        else:
-            absolute_freq = self.frequencies[word]
-        return [math.log(absolute_freq)]
+        smooth = 0.5
+        abs_freq = self.frequencies[word]
+        return [math.log(smooth + abs_freq)]
 
-    def __parse_external_corpus(self, word):
+    def __parse_external_corpus(self):
         '''Takes a word (str) as input and returns 
         the logarithm of its absolute frequency (int)
         if the word exists in the frequency data.
         '''
-        smooth = 0.5
         for filename in self.filenames:
             with open(filename, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
-                regex = re.compile('^' + word + '\t.+$')
                 for line in lines:
-                    if regex.match(line) is not None:
-                        freqdata = regex.match(line).group().split('\t')
-                        absolute_freq = int(freqdata[1])
-                        self.frequencies[freqdata[0]] = absolute_freq
-                        return smooth + absolute_freq
+                    line = line.split('\t')
+                    if line[0] in self.target_types:
+                        self.frequencies[line[0]] = int(line[1])
 
-        return smooth
+    def __not_in_external_corpus(self):
+        for word in self.target_types:
+            if word not in self.frequencies:
+                self.frequencies[word] = 0
+
+    # def additive_smooting(self, absfreq):
+    #     pseudocount = 1
+    #     N = 1
+    #     categories = 1
+    #     return (absfreq + pseudocount) / (N + pseudocount * categories)
