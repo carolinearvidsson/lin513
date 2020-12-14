@@ -34,7 +34,7 @@ class Embeddings:
 
   def get_token_embedding(self, wobj):
     embedding = self.tID_emb[wobj.id]
-    if embedding == 'n/a':
+    if embedding == None:
       embedding = self.average_embedding
     return embedding.tolist()
 
@@ -75,7 +75,7 @@ class Embeddings:
 
   def __get_average_embedding(self):
     all_target_embeddings = [self.tID_emb[token] for token in \
-      self.tID_emb if self.tID_emb[token] != 'n/a']
+      self.tID_emb if self.tID_emb[token] != None]
     self.average_embedding = np.mean(np.array(all_target_embeddings), axis=0)
 
   def __setup(self):
@@ -164,7 +164,7 @@ class Embeddings:
       token_embedding = sen_emb[tokens.index(token)]
     except ValueError:
       self.embeddings_na.append(token + ' is not in sentence ' + tID)
-      token_embedding = 'n/a'
+      token_embedding = None
     return tokens, sen_emb, token_embedding, tID
 
   def __generate_clusters(self):

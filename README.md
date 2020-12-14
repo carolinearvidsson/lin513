@@ -18,13 +18,10 @@ Training and test files are tab separated (.tsv) and follow the following struct
 All methods are called through main.py. 
 
 ### Required installments
-`pip install glob`
 
-`pip install re`
-
-`pip install math`
+scikit scipy nltk bert-embedding numpy
 
 
 
-## Classes
+## Scripts
 

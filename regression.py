@@ -38,6 +38,7 @@ class MultiLinear():
 
     def train_linear_model(self, train_features):
         train_matrices = self.__make_versions(train_features.matrix)
+        print(train_matrices[0][0])
         train_compl = train_features.complexities
         print(len(train_compl))
         models = []
