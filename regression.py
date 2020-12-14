@@ -37,38 +37,44 @@ class MultiLinear():
     #     print(self.__predict(self.__train_linear_model(train_matrix, train_compl), test_matrix, test_compl))
 
     def train_linear_model(self, train_features):
-        train_matrices = self.__make_versions(train_features.matrix)
+        #train_matrices = self.__make_versions(train_features.matrix)
+        train_matrix = train_features.matrix
         train_compl = train_features.complexities
         print(len(train_compl))
         models = []
-        for train_matrix in train_matrices:
-            regr = linear_model.BayesianRidge() # Använda en annan? linear_model.Ridge(alpha=0.5)
-            regr.fit(train_matrix, train_compl)
-            models.append(regr)
-        return models
+        regr = linear_model.BayesianRidge() # Använda en annan? linear_model.Ridge(alpha=0.5)
+        regr.fit(train_matrix, train_compl)
+        # models.append(regr)
+        return regr
+        # for train_matrix in train_matrices:
+        #     regr = linear_model.BayesianRidge() # Använda en annan? linear_model.Ridge(alpha=0.5)
+        #     regr.fit(train_matrix, train_compl)
+        #     models.append(regr)
+        # return models
 
     def predict(self, regr_models, test_features):
-        test_matrices = self.__make_versions(test_features.matrix)
+        # test_matrices = self.__make_versions(test_features.matrix)
+        test_matrix = test_features.matrix
         test_compl = test_features.complexities
-        feature_versions = ['all', 'handcrafted', 'clusters + outliers + embeddings', 
-                            'handcrafted + clusters + outliers', 
-                            'handcrafted + clusters + outliers + 50 dimensions']
-        stat_functions = ((pearsonr, 'pearson\'s r = '), (spearmanr, 'spearman\'s rho = '),
-                         (mean_absolute_error, 'mae = '), (mean_squared_error, 'mse = '), 
-                         (r2_score, 'r2 = '))
-        for test_matrix, regr, features in zip(test_matrices, regr_models, feature_versions):
-            print('Features: ', features)
-            compl_pred = regr.predict(test_matrix)
-            for stat, statname in stat_functions:
-                result = stat(test_compl, compl_pred)
-                print(statname, result)
-            # r_value = pearsonr(test_compl, compl_pred)
-            # rho = spearmanr(test_compl, compl_pred)
-            # mae = mean_absolute_error(test_compl, compl_pred)
-            # mse = mean_squared_error(test_compl, compl_pred)
-            # r_2 = r2_score(test_compl, compl_pred)
-            # print('Features: ', features, '\nPearson\'s r = ', r_value, '\nSpearman\'s rho = ', rho,
-            #     '\nMAE = ', mae, '\nMSE = ', mse, '\nr2 = ', r_2 )
+        # feature_versions = ['all', 'handcrafted', 'clusters + outliers + embeddings', 
+        #                     'handcrafted + clusters + outliers', 
+        #                     'handcrafted + clusters + outliers + 50 dimensions']
+        # stat_functions = ((pearsonr, 'pearson\'s r = '), (spearmanr, 'spearman\'s rho = '),
+        #                  (mean_absolute_error, 'mae = '), (mean_squared_error, 'mse = '), 
+        #                  (r2_score, 'r2 = '))
+        # for test_matrix, regr, features in zip(test_matrices, regr_models, feature_versions):
+        #     print('Features: ', features)
+        #     compl_pred = regr.predict(test_matrix)
+        #     for stat, statname in stat_functions:
+        #         result = stat(test_compl, compl_pred)
+        #         print(statname, result)
+        r_value = pearsonr(test_compl, compl_pred)
+        rho = spearmanr(test_compl, compl_pred)
+        mae = mean_absolute_error(test_compl, compl_pred)
+        mse = mean_squared_error(test_compl, compl_pred)
+        r_2 = r2_score(test_compl, compl_pred)
+        print('Features: ', features, '\nPearson\'s r = ', r_value, '\nSpearman\'s rho = ', rho,
+            '\nMAE = ', mae, '\nMSE = ', mse, '\nr2 = ', r_2 )
         
     def __make_versions(self, matrix):
         matrices = [matrix]

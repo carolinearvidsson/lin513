@@ -8,14 +8,24 @@ class PosTagger:
     Arguments:
         ws: a WS (WordSpace) object, containing Word objects.
     Attributes:
-        tagged_sentences: a dictionary with sentence/token-IDs as key. 
-                          Value is a list with i) a tagged sentence, 
-                          ii) index for token of interest, iii) the id number 
-                          representing part of speech of token.
-        single_word: a set of Word-objects (where the token is a single word).
-        pos_id: a dictionary with PoS-tag as key and an integer as value.
-        tag_counter: a dictionary with PoS-tag as key and a count of number of occurrences in tagged material as value.
-        token_index_counter: a dictionary with all påträffade index of token in sentence as key, number of occurrences as value. 
+        tagged_sentences: 
+        a dictionary with sentence/token-IDs as key. Value is a list with i) 
+        a tagged sentence, ii) index for token of interest, iii) the id number 
+        representing part of speech of token. 
+        
+        single_word: 
+        a set of Word-objects (where the token is a single word).
+        
+        pos_id: 
+        a dictionary with PoS-tag as key and an integer as value.
+        
+        tag_counter: 
+        a dictionary with PoS-tag as key and a count of number of occurrences 
+        in tagged material as value.
+        
+        token_index_counter: 
+        a dictionary with all påträffade index of token in sentence as key, 
+        number of occurrences as value. 
     '''
 
     def __init__(self, ws):
