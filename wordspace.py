@@ -1,3 +1,5 @@
+# Christoffer
+
 from word import Word
 import numpy as np
 import nltk

@@ -1,3 +1,5 @@
+# Christoffer
+
 from wordspace import WS
 import nltk
 import pandas as pd

@@ -1,3 +1,5 @@
+# Christoffer
+
 from nltk.corpus import cmudict
 
 class Length():
