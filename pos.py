@@ -109,15 +109,15 @@ class PosTagger:
         #         max_tok_index = max(self.token_index_counter, key=self.token_index_counter.get) 
         #         self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), max_tok_index, max_pos_id]
     
-    def __pos(self, wordobject):
+    def __pos(self, sen_id):
         '''Return ID of PoS-tag of the token represented by the Word object.'''
         # if self.tagged_sentences[wordobject.id] == None:
         #     max_pos = max(self.pos_counter, key = self.pos_counter.get)
         #     return self.dummy_vars[max_pos]  
-        pos = self.tagged_sentences[wordobject.id][2]
+        pos = self.tagged_sentences[sen_id][2]
         return self.dummy_vars[pos]
     
-    def __sen_len(self, wordobject):
+    def __sen_len(self, sen_id):
         '''Get length of sentence up to (not including) token. 
         Return two values: all_sen_len includes all words preceeding token,
         lex_sen_len counts only lexical/content words. These are defined as 
@@ -128,7 +128,7 @@ class PosTagger:
         # if self.tagged_sentences[wordobject.id] == None:
         #     return [self.average_index, self.average_index]
             
-        sentence = self.tagged_sentences[wordobject.id]
+        sentence = self.tagged_sentences[sen_id]
         all_sen_len = sentence[1]
         lex_sen_len = 0
         token_ind = sentence[1]
