@@ -35,7 +35,7 @@ class WS:
                                 comments='##')
         for row in text: 
             self.single_word.add(Word(row))
-            self.target_types.add(row[3])
+            self.target_types.add(row[3].lower())
 
 
 
