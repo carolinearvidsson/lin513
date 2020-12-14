@@ -1,6 +1,3 @@
-#använder data som den är (i fråga om case). bör få data så vid initiering
-#kombinera pos och sen_len? annars görs pos-taggningen två gånger??
-#gruppera in alla verb/nouns etc i samma kategori??
 from wordspace import WS
 import nltk
 nltk.download('averaged_perceptron_tagger')
@@ -11,7 +8,10 @@ class PosTagger:
     Arguments:
         ws: a WS (WordSpace) object, containing Word objects.
     Attributes:
-        tagged_sentences: a dictionary with sentence/token-IDs as key. Value is a list with i) a tagged sentence, ii) index for token of interest, iii) the id number representing part of speech of token.
+        tagged_sentences: a dictionary with sentence/token-IDs as key. 
+                          Value is a list with i) a tagged sentence, 
+                          ii) index for token of interest, iii) the id number 
+                          representing part of speech of token.
         single_word: a set of Word-objects (where the token is a single word).
         pos_id: a dictionary with PoS-tag as key and an integer as value.
         tag_counter: a dictionary with PoS-tag as key and a count of number of occurrences in tagged material as value.
