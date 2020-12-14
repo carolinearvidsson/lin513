@@ -24,7 +24,7 @@ if __name__ == "__main__":
     reg = MultiLinear()
 
     if mode == 'train':
-        pickle.dump(matrix, open(model, 'wb'))
+        pickle.dump(matrix, open('matris_träning', 'wb'))
         train_model = reg.train_linear_model(matrix)
         pickle.dump(train_model, open(model, 'wb'))
     elif mode == 'test':
