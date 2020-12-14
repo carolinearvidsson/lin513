@@ -8,7 +8,7 @@ class Length():
         self.syll_dict = cmudict.dict()
         self.observed_tokens = {}
     
-    def word_length(self, wordobject):
+    def length(self, wordobject):
         token = wordobject.token.lower()
         if token not in self.observed_tokens:
             length = len(token)
