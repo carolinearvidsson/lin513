@@ -11,9 +11,9 @@ class FeatureMatrix:
         self.__get_feature_methods()
         
     def __get_feature_methods(self):
-        '''Returns a list of specific methods from the feature classes. 
+        '''Creates a list of specific methods from the feature classes. 
         Importantly, these are the only methods in the feature classes 
-        whose names do not start with underscore. Their purpose is
+        whose names do not start with underscore. The purpose of these methods is
         to return features to be used in the feature matrix.
         '''
         self.feature_methods = [getattr(clss, method) for clss in self.fclsses for\
