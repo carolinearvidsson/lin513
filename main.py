@@ -13,8 +13,8 @@ from regression import MultiLinear
 if __name__ == "__main__":
     mode = sys.argv[1]
     model = sys.argv[2]
-    data = sys.argv[3]#['data/homemade_train.tsv']
-    embeddings = sys.argv[4]#'/Users/carolinearvidsson/homemade_embeddings_train_201212'
+    data = sys.argv[3]# 'data/homemade_train.tsv'
+    embeddings = sys.argv[4]#'/Users/carolinearvidsson/homemade_embeddings_train_201213'
     freqdata = sys.argv[5]#'/Users/carolinearvidsson/googlebooks-eng-all-1gram-20090715-*.txt'
 
     ws = WS(data)

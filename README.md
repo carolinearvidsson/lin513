@@ -14,4 +14,7 @@ Training and test files are tab separated (.tsv) and follow the following struct
 5. Complexity
 
 ## Usage
-
+### Required installments
+´´´import glob´´´
+´´´import re´´´
+´´´import math´´´

@@ -171,7 +171,6 @@ class Embeddings:
     n_clusters = 1
     for wtype in self.lemma_embs:
       if len(self.lemma_embs[wtype]) > 1:
-        print(wtype, len(self.lemma_embs[wtype]))
         pdist_matrix = pdist(self.lemma_embs[wtype], metric='cosine')
         self.pdist_matrices[wtype] = pdist_matrix
         linkage_matrix = linkage(pdist_matrix, method='complete', metric='cosine')
@@ -184,7 +183,6 @@ class Embeddings:
           n_outliers, outlier_indices = self.__get_outliers(clusters)
           n_clusters = max(clusters) - n_outliers
           for i in outlier_indices:
-            print(len(self.lemma_embs[wtype]))
             self.cluster_outliers.add(tuple(self.lemma_embs[wtype][i]))
       self.cluster_data[wtype] = n_clusters
 
@@ -206,9 +204,9 @@ class Embeddings:
     n_outliers = len(outlier_indices)
     return n_outliers, outlier_indices
 
-if __name__ == "__main__":
-  from wordspace import WS
-  ws = WS('data/homemade_train.tsv')
-  em = Embeddings(ws, '/Users/carolinearvidsson/homemade_embeddings_train_201213')
-  for wobj in ws.single_word:
-    print(wobj.token, em.get_n_clusters(wobj), em.is_cluster_outlier(wobj))
+# if __name__ == "__main__":
+#   from wordspace import WS
+#   ws = WS('data/homemade_train.tsv')
+#   em = Embeddings(ws, '/Users/carolinearvidsson/homemade_embeddings_train_201213')
+#   for wobj in ws.single_word:
+#     print(wobj.token, em.get_n_clusters(wobj), em.is_cluster_outlier(wobj))
