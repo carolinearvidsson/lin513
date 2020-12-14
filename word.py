@@ -1,13 +1,13 @@
-
+# Christoffer
 
 class Word:
-    '''Represents a token (single or multiple words) from the CompLex corpus.
+    '''Represents an entry of a target word from the CompLex corpus.
     
     Attributes:
         id: identity number of entry.
         subcorpus: domain sentence is from (bible, biomed or europarl).
         sentence: sentence in which the token appears.
-        token: a single word or two words (Multi Word Expression).
+        token: a single target word.
         complexity: the perceived complexity of token in context by manual 
                     annotators (normalized as 0–1, based on a 1–5 Likert scale).
     '''

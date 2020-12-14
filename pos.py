@@ -1,3 +1,5 @@
+# Christoffer
+
 from wordspace import WS
 import nltk
 import pandas as pd
@@ -109,11 +111,18 @@ class PosTagger:
         #         max_tok_index = max(self.token_index_counter, key=self.token_index_counter.get) 
         #         self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), max_tok_index, max_pos_id]
     
+   
+    def get_pos_len(self, wordobject):
+        if self.tagged_sentences[wordobject.id] == None:
+            max_pos = max(self.pos_counter, key = self.pos_counter.get)
+            return self.dummy_vars[max_pos] + [self.average_index, self.average_index]
+        else:
+            pos = self.__pos(wordobject.id)
+            sen_len = self.__sen_len(wordobject.id)
+            return pos + sen_len 
+    
     def __pos(self, sen_id):
         '''Return ID of PoS-tag of the token represented by the Word object.'''
-        # if self.tagged_sentences[wordobject.id] == None:
-        #     max_pos = max(self.pos_counter, key = self.pos_counter.get)
-        #     return self.dummy_vars[max_pos]  
         pos = self.tagged_sentences[sen_id][2]
         return self.dummy_vars[pos]
     
@@ -125,9 +134,6 @@ class PosTagger:
         Arguments:
             wordobject: 
         '''
-        # if self.tagged_sentences[wordobject.id] == None:
-        #     return [self.average_index, self.average_index]
-            
         sentence = self.tagged_sentences[sen_id]
         all_sen_len = sentence[1]
         lex_sen_len = 0
@@ -139,12 +145,5 @@ class PosTagger:
 
         return [all_sen_len, lex_sen_len]
 
-    def get_pos_len(self, wordobject):
-        if self.tagged_sentences[wordobject.id] == None:
-            max_pos = max(self.pos_counter, key = self.pos_counter.get)
-            return self.dummy_vars[max_pos] + [self.average_index, self.average_index]
-        else:
-            pos = self.__pos(wordobject.id)
-            sen_len = self.__sen_len(wordobject.id)
-            return pos + sen_len 
+
 
