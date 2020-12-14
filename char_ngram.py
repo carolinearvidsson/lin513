@@ -30,7 +30,7 @@ class Ngram():
         Arguments:
             word_object: a Word object'''
         token = word_object.token
-        if token in self.observed_tokens:
+        if token not in self.observed_tokens:
             ngram_probabilities = [self.__uni_prob(token), self.__bi_prob(token),
                                 self.__tri_prob(token)
                                 ]

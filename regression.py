@@ -2,8 +2,6 @@ from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from scipy.stats import pearsonr, spearmanr
 
-import pickle
-
 class MultiLinear():
     #hej    
     # def get_value(self, train_feature_matrix, test_feature_matrix):
@@ -52,16 +50,25 @@ class MultiLinear():
     def predict(self, regr_models, test_features):
         test_matrices = self.__make_versions(test_features.matrix)
         test_compl = test_features.complexities
-        feature_versions = ['all', 'handcrafted', 'clusters + outliers + embeddings', 'handcrafted + clusters + outliers', 'handcrafted + 50 dimensions']
+        feature_versions = ['all', 'handcrafted', 'clusters + outliers + embeddings', 
+                            'handcrafted + clusters + outliers', 
+                            'handcrafted + clusters + outliers + 50 dimensions']
+        stat_functions = ((pearsonr, 'pearson\'s r = '), (spearmanr, 'spearman\'s rho = '),
+                         (mean_absolute_error, 'mae = '), (mean_squared_error, 'mse = '), 
+                         (r2_score, 'r2 = '))
         for test_matrix, regr, features in zip(test_matrices, regr_models, feature_versions):
+            print('Features: ', features)
             compl_pred = regr.predict(test_matrix)
-            r_value = pearsonr(test_compl, compl_pred)
-            rho = spearmanr(test_compl, compl_pred)
-            mae = mean_absolute_error(test_compl, compl_pred)
-            mse = mean_squared_error(test_compl, compl_pred)
-            r_2 = r2_score(test_compl, compl_pred)
-            print('Features: ', features, '\nPearson\'s r = ', r_value, '\nSpearman\'s rho = ', rho,
-                '\nMAE = ', mae, '\nMSE = ', mse, '\nr2 = ', r_2 )
+            for stat, statname in stat_functions:
+                result = stat(test_compl, compl_pred)
+                print(statname, result)
+            # r_value = pearsonr(test_compl, compl_pred)
+            # rho = spearmanr(test_compl, compl_pred)
+            # mae = mean_absolute_error(test_compl, compl_pred)
+            # mse = mean_squared_error(test_compl, compl_pred)
+            # r_2 = r2_score(test_compl, compl_pred)
+            # print('Features: ', features, '\nPearson\'s r = ', r_value, '\nSpearman\'s rho = ', rho,
+            #     '\nMAE = ', mae, '\nMSE = ', mse, '\nr2 = ', r_2 )
         
     def __make_versions(self, matrix):
         matrices = [matrix]
