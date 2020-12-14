@@ -9,13 +9,13 @@
 #använder nu complete linking. Vill använda ward men då behövs elucidean
 
 import pickle
+from os import path
 import numpy as np
+from matplotlib import pyplot
 from scipy.spatial.distance import pdist, squareform
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 from sklearn.metrics import silhouette_score, silhouette_samples
-from matplotlib import pyplot
 from nltk.stem import WordNetLemmatizer
-from os import path
 from bert_embedding import BertEmbedding
 
 
