@@ -65,10 +65,10 @@ class MultiLinear():
         
     def __make_versions(self, matrix):
         matrices = [matrix]
-        matrices.append([row[:9] for row in matrix])
-        matrices.append([row[9:] for row in matrix])
-        matrices.append([row[:11] for row in matrix])
-        matrices.append([row[:11] + row[-50:] for row in matrix])
+        matrices.append([row[:10] for row in matrix])
+        matrices.append([row[10:] for row in matrix])
+        matrices.append([row[:12] for row in matrix])
+        matrices.append([row[:12] + row[-50:] for row in matrix])
 
         return [matrices]
         
