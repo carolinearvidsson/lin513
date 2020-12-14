@@ -13,7 +13,7 @@ class MultiLinear():
         print(len(train_compl))
         models = []
         for train_matrix in train_matrices:
-            regr = linear_model.BayesianRidge() # Använda en annan? linear_model.Ridge(alpha=0.5)
+            regr = linear_model.Ridge(alpha=0.5)#.BayesianRidge() # Använda en annan? linear_model.Ridge(alpha=0.5)
             regr.fit(train_matrix, train_compl)
             models.append(regr)
         return models

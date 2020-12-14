@@ -18,13 +18,12 @@ if __name__ == "__main__":
     freqdata = sys.argv[5]#'/Users/carolinearvidsson/googlebooks-eng-all-1gram-20090715-*.txt'
 
     ws = WS(data)
-    fclsses = (Ngram(), Length(), PosTagger(ws), DomainSpecificity(ws), Frequency(freqdata), Embeddings(ws, embeddings))
+    fclsses = (Ngram(), Length(), PosTagger(ws), DomainSpecificity(ws), Frequency(freqdata, ws), Embeddings(ws, embeddings))
     matrix = FeatureMatrix(fclsses, ws)
     matrix.populate_matrix()
     reg = MultiLinear()
 
     if mode == 'train':
-        pickle.dump(matrix, open('matrix_train', 'wb'))
         train_model = reg.train_linear_model(matrix)
         pickle.dump(train_model, open(model, 'wb'))
     elif mode == 'test':

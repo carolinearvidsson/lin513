@@ -30,7 +30,7 @@ class Embeddings:
 
   def token_embedding(self, wobj):
     embedding = self.tID_emb[wobj.id]
-    if embedding == None:
+    if embedding is None:
       embedding = self.average_embedding
     return embedding.tolist()
 
@@ -45,14 +45,14 @@ class Embeddings:
 
   def is_cluster_outlier(self, wobj):
     is_outlier = 0
-    embedding = tuple(self.tID_emb[wobj.id])
-    if embedding in self.cluster_outliers: 
+    embedding = self.tID_emb[wobj.id]
+    if embedding is not None and tuple(embedding) in self.cluster_outliers: 
       is_outlier = 1
     return [is_outlier]
 
   def __get_average_embedding(self):
     all_target_embeddings = [self.tID_emb[token] for token in \
-      self.tID_emb if self.tID_emb[token] != None]
+      self.tID_emb if self.tID_emb[token] is not None]
     self.average_embedding = np.mean(np.array(all_target_embeddings), axis=0)
 
   def __check_existing_file(self):
@@ -167,7 +167,7 @@ class Embeddings:
     for wtype in self.lemma_embs:
       if len(self.lemma_embs[wtype]) > 1:
         pdist_matrix = pdist(self.lemma_embs[wtype], metric='cosine')
-        self.pdist_matrices[wtype] = pdist_matrix
+        # self.pdist_matrices[wtype] = pdist_matrix
         linkage_matrix = linkage(pdist_matrix, method='complete', metric='cosine')
       #fig = pyplot.figure(num=wtype, figsize=(13,5))
       #dn = dendrogram(linkage_matrix)

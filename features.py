@@ -22,7 +22,8 @@ class FeatureMatrix:
         print('metoder: ', self.feature_methods)
 
     def populate_matrix(self):
-        for wordobj in self.ws.single_word:
+        for e, wordobj in enumerate(self.ws.single_word):
+            #print('Getting features for: ', e, wordobj.token)
             features = [feature for method in self.feature_methods for feature in method(wordobj)]
             self.complexities.append(wordobj.complexity)
             self.matrix.append(features)
