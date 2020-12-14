@@ -75,7 +75,7 @@ class MultiLinear():
         mae = mean_absolute_error(test_compl, compl_pred)
         mse = mean_squared_error(test_compl, compl_pred)
         r_2 = r2_score(test_compl, compl_pred)
-        print('Features: ', features, '\nPearson\'s r = ', r_value, '\nSpearman\'s rho = ', rho,
+        print('\nPearson\'s r = ', r_value, '\nSpearman\'s rho = ', rho,
             '\nMAE = ', mae, '\nMSE = ', mse, '\nr2 = ', r_2 )
         
     def __make_versions(self, matrix):
