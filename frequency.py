@@ -40,8 +40,8 @@ class Frequency:
 
     def __not_in_external_corpus(self):
         missing_freq = self.target_types ^ set(self.frequencies)
-            for word in missing_freq:
-                self.frequencies[word] = 0
+        for word in missing_freq:
+            self.frequencies[word] = 0
 
     # def additive_smooting(self, absfreq):
     #     pseudocount = 1
