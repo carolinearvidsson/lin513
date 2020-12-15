@@ -38,10 +38,10 @@ class MultiLinear():
         
     def __make_versions(self, matrix):
         
-        handcraft = [row[:13] for row in matrix]
-        embeddings = [row[13:] for row in matrix]
-        handcraft_senses = [row[:15] for row in matrix]
-        handcrafted_senses_50_emb = [row[:15] + row[-50:] for row in matrix]
+        handcraft = [row[:14] for row in matrix]
+        embeddings = [row[14:] for row in matrix]
+        handcraft_senses = [row[:16] for row in matrix]
+        handcrafted_senses_50_emb = [row[:16] + row[-50:] for row in matrix]
 
         return [matrix, handcraft, embeddings, handcraft_senses, handcrafted_senses_50_emb]
 
