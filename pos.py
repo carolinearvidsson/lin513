@@ -54,6 +54,8 @@ class PosTagger:
         In case of error and PoS or index cannot be found (i.e. errors in the 
         given data), give most common index and PoS.
 
+        Since the Penn Treebank tag set tags, for instance, nouns by number, verbs by tense, those 
+
         '''    
         self.pos_counter = {'NN': 0, 'JJ':0, 'RB':0, 'VB':0, 'OT':0 }
         pos = ['NN', 'JJ', 'VB', 'RB', 'OT']
@@ -87,31 +89,7 @@ class PosTagger:
             except:
                 self.tagged_sentences[entry.id] = None
         self.average_index = round(self.average_index / n)
-
-        # tokenizer = nltk.RegexpTokenizer(r'\w+')
-        # for entry in self.single_word:
-        #     token = entry.token
-        #     sentence = tokenizer.tokenize(entry.sentence)
-        #     try:
-        #         tagged_sent = nltk.pos_tag(sentence)
-        #         tok_index = sentence.index(token)
-        #         tok_pos = tagged_sent[tok_index][1]
-        #         if tok_pos not in self.pos_id: 
-        #             self.tag_counter[tok_pos] = 0
-        #             self.pos_id.setdefault(tok_pos, len(self.pos_id))
-        #         if tok_index not in self.token_index_counter:
-        #             self.token_index_counter[tok_index] = 0
-        #         self.tag_counter[tok_pos] += 1
-        #         self.token_index_counter[tok_index] += 1 
-        #         tok_pos_id = self.pos_id[tok_pos]
-        #         self.tagged_sentences[entry.id] = [tagged_sent, tok_index, tok_pos_id]
-        #     except:
-        #         max_pos = max(self.tag_counter, key=self.tag_counter.get)
-        #         max_pos_id = self.pos_id[max_pos]
-        #         max_tok_index = max(self.token_index_counter, key=self.token_index_counter.get) 
-        #         self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), max_tok_index, max_pos_id]
-    
-   
+     
     def get_pos_len(self, wordobject):
         if self.tagged_sentences[wordobject.id] == None:
             max_pos = max(self.pos_counter, key = self.pos_counter.get)
@@ -144,6 +122,31 @@ class PosTagger:
                 lex_sen_len += 1
 
         return [all_sen_len, lex_sen_len]
+
+
+
+        # tokenizer = nltk.RegexpTokenizer(r'\w+')
+        # for entry in self.single_word:
+        #     token = entry.token
+        #     sentence = tokenizer.tokenize(entry.sentence)
+        #     try:
+        #         tagged_sent = nltk.pos_tag(sentence)
+        #         tok_index = sentence.index(token)
+        #         tok_pos = tagged_sent[tok_index][1]
+        #         if tok_pos not in self.pos_id: 
+        #             self.tag_counter[tok_pos] = 0
+        #             self.pos_id.setdefault(tok_pos, len(self.pos_id))
+        #         if tok_index not in self.token_index_counter:
+        #             self.token_index_counter[tok_index] = 0
+        #         self.tag_counter[tok_pos] += 1
+        #         self.token_index_counter[tok_index] += 1 
+        #         tok_pos_id = self.pos_id[tok_pos]
+        #         self.tagged_sentences[entry.id] = [tagged_sent, tok_index, tok_pos_id]
+        #     except:
+        #         max_pos = max(self.tag_counter, key=self.tag_counter.get)
+        #         max_pos_id = self.pos_id[max_pos]
+        #         max_tok_index = max(self.token_index_counter, key=self.token_index_counter.get) 
+        #         self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), max_tok_index, max_pos_id]
 
 
 
