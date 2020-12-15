@@ -42,9 +42,3 @@ class Frequency:
         missing_freq = self.target_types ^ set(self.frequencies)
         for word in missing_freq:
             self.frequencies[word] = 0
-
-    # def additive_smooting(self, absfreq):
-    #     pseudocount = 1
-    #     N = 1
-    #     categories = 1
-    #     return (absfreq + pseudocount) / (N + pseudocount * categories)

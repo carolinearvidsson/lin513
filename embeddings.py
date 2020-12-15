@@ -168,10 +168,9 @@ class Embeddings:
       if len(self.lemma_embs[wtype]) > 1:
         pdist_matrix = pdist(self.lemma_embs[wtype], metric='cosine')
         linkage_matrix = linkage(pdist_matrix, method='complete', metric='cosine')
-      #fig = pyplot.figure(num=wtype, figsize=(13,5))
-      #dn = dendrogram(linkage_matrix)
-      #pyplot.show()
-      #print(wtype)
+        # fig = pyplot.figure(num=wtype, figsize=(13,5))
+        # dn = dendrogram(linkage_matrix)
+        # pyplot.show()
         sil_score, clusters = self.__get_best_clustering(pdist_matrix, linkage_matrix)
         if sil_score > 0.25:
           n_outliers, outlier_indices = self.__get_outliers(clusters)
@@ -179,6 +178,8 @@ class Embeddings:
           for i in outlier_indices:
             self.cluster_outliers.add(tuple(self.lemma_embs[wtype][i]))
       self.n_clusters[wtype] = n_clusters
+      if n_clusters == 3:
+        print(wtype, n_clusters)
 
   def __get_best_clustering(self, pdist_matrix, linkage_matrix):
     max_score = -1 # Start at lowest possible silhouette score.
@@ -197,3 +198,9 @@ class Embeddings:
     outlier_indices = [clusters.index(obs) for obs in set(clusters) if clusters.count(obs) == 1]
     n_outliers = len(outlier_indices)
     return n_outliers, outlier_indices
+
+if __name__ == "__main__":
+  from wordspace import WS
+  ws = WS('data/homemade_train.tsv')
+  em = Embeddings(ws, '/Users/carolinearvidsson/homemade_embeddings_train_201214')
+    
