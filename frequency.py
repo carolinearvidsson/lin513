@@ -21,9 +21,9 @@ class Frequency:
 
     def get_absfrequency(self, wordobj):
         word = wordobj.token.lower()
-        smooth = 0.5
+        pseudocount = 0.5
         abs_freq = self.frequencies[word]
-        return [math.log(smooth + abs_freq)]
+        return [math.log(pseudocount + abs_freq)]
 
     def __parse_external_corpus(self):
         '''Takes a word (str) as input and returns 
@@ -39,9 +39,9 @@ class Frequency:
                         self.frequencies[line[0]] = int(line[1])
 
     def __not_in_external_corpus(self):
-        for word in self.target_types:
-            if word not in self.frequencies:
-                self.frequencies[word] = 0
+        missing_freq = self.target_types ^ set(self.frequencies)
+        for word in missing_freq:
+            self.frequencies[word] = 0
 
     # def additive_smooting(self, absfreq):
     #     pseudocount = 1

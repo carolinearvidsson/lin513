@@ -11,20 +11,20 @@ class FeatureMatrix:
         self.__get_feature_methods()
         
     def __get_feature_methods(self):
-        '''Returns a list of specific methods from the feature classes. 
+        '''Creates a list of specific methods from the feature classes. 
         Importantly, these are the only methods in the feature classes 
-        whose names do not start with underscore. Their purpose is
+        whose names do not start with underscore. The purpose of these methods is
         to return features to be used in the feature matrix.
         '''
-        self.feature_methods = [getattr(clss, method) for clss in self.fclsses for\
-            method in dir(clss) if callable(getattr(clss, method)) and not\
-                 method.startswith('_')]
-        print('metoder: ', self.feature_methods)
+        self.fmethods = [getattr(clss, m) for clss in self.fclsses for \
+                    m in dir(clss) if callable(getattr(clss, m)) and not \
+                                                            m.startswith('_')]
+        print('metoder: ', self.fmethods)
 
     def populate_matrix(self):
-        for e, wordobj in enumerate(self.ws.single_word):
-            #print('Getting features for: ', e, wordobj.token)
-            features = [feature for method in self.feature_methods for feature in method(wordobj)]
-            self.complexities.append(wordobj.complexity)
-            self.matrix.append(features)
+        for e, wobj in enumerate(self.ws.single_word):
+            #print('Getting features for: ', e, wobj.token)
+            feats = [feat for mthd in self.fmethods for feat in mthd(wobj)]
+            self.complexities.append(wobj.complexity)
+            self.matrix.append(feats)
 

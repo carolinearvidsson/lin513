@@ -106,8 +106,8 @@ class Embeddings:
         In the training data of 7000+ target tokens, 
         this happened with a total of 5 tokens.
     '''
-    self.tID_emb, self.lemma_embs, self.sentences = {}, {}, set()
-    self.embeddings_na = []
+    self.tID_emb, self.lemma_embs,  = {}, {}
+    self.sentences, self.embeddings_na = set(), []
     self.bert = BertEmbedding(max_seq_length=200)
     for wobj in self.ws.single_word:
       sen, tokn, tID = wobj.sentence, wobj.token.lower(), wobj.id
@@ -167,7 +167,6 @@ class Embeddings:
     for wtype in self.lemma_embs:
       if len(self.lemma_embs[wtype]) > 1:
         pdist_matrix = pdist(self.lemma_embs[wtype], metric='cosine')
-        # self.pdist_matrices[wtype] = pdist_matrix
         linkage_matrix = linkage(pdist_matrix, method='complete', metric='cosine')
       #fig = pyplot.figure(num=wtype, figsize=(13,5))
       #dn = dendrogram(linkage_matrix)
@@ -198,10 +197,3 @@ class Embeddings:
     outlier_indices = [clusters.index(obs) for obs in set(clusters) if clusters.count(obs) == 1]
     n_outliers = len(outlier_indices)
     return n_outliers, outlier_indices
-
-# if __name__ == "__main__":
-#   from wordspace import WS
-#   ws = WS('data/homemade_test.tsv')
-#   em = Embeddings(ws, '/Users/carolinearvidsson/homemade_embeddings_test_201214')
-  #  for wobj in ws.single_word:
-  #    print(wobj.token, em.get_n_clusters(wobj), em.is_cluster_outlier(wobj))
