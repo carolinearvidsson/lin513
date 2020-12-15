@@ -54,13 +54,14 @@ class PosTagger:
         In case of error and PoS or index cannot be found (i.e. errors in the 
         given data), give most common index and PoS.
 
-        Since the Penn Treebank tag set tags, for instance, nouns by number, verbs by tense, those 
+        Since the Penn Treebank tag set tags, for instance, nouns by number, verbs by tense, all those tags are collapsed
+        into their "parent" PoS
 
         '''    
         self.pos_counter = {'NN': 0, 'JJ':0, 'RB':0, 'VB':0, 'OT':0 }
         pos = ['NN', 'JJ', 'VB', 'RB', 'OT']
         
-        dummy_matrix = pd.get_dummies(pos, drop_first=True)
+        dummy_matrix = pd.get_dummies(pos)
         self.dummy_vars = {}
         for i, part in zip(range(5), pos):
             self.dummy_vars[part] = list(dummy_matrix.loc[i])
