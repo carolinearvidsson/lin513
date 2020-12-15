@@ -26,7 +26,7 @@ class Length():
                 if any(char.isdigit() for char in phoneme) == True:
                     syll_count += 1
         except:
-            vowels = ['a','e','o','u','i']
+            vowels = ['a','e','o','u','i', 'y']
             for i, character in enumerate(token):
                 if character in vowels:
                     if i == 0:
