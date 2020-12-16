@@ -1,12 +1,4 @@
-#Requires installment of bert-embedding: pip install bert-embedding
-#Saves embeddings in a file on computer
-#One sentence at a time takes 7m59.681s. Check time for list of sentences
-#Make sure the setup method works before getting train embeddings
-#Hur ska jag prioritera? Antingen kommer alla parwise distance matrices finnas lagrade i minnet, eller så tar man fram dem när 
-#Det är dags att skapa matriserna varje gång man ska ge ett särdrag till ett token.
-#Lemmatize the target words!
-#436 of 1252 pairwise dist matrices are empty because 436 of lemmas have only 1 embedding.
-#använder nu complete linking. Vill använda ward men då behövs elucidean
+# Caroline
 
 import pickle
 from os import path
