@@ -24,14 +24,19 @@ class Length():
         self.observed_tokens = {}
     
     def length(self, wordobject):
-        '''Return word length and syllable count in a list. If token 
-        has already been seen, return stored feature values. 
+        '''Method 
         
         Parameters:
 
             wordobject (Word-object)
-                Represents a single entry in the CompLex corpus.    
+                Represents a single entry in the CompLex corpus.   
+
+        Returns:
+
+            list with integers for word character length and word 
+            syllable count 
         '''
+
         token = wordobject.token.lower()
         if token not in self.observed_tokens:
             length = len(token)
@@ -48,8 +53,14 @@ class Length():
         of syllabic status, thus 'natural' = three syllables.
 
         Parameters:
+
             token (str)
                 a single word.
+        
+        Returns:
+
+            syll_count (int)
+                number of syllables in token
         
         '''
         syll_count = 0

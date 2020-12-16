@@ -32,6 +32,8 @@ class MultiLinear():
         train_matrices = self.__make_versions(train_features.matrix)
         train_compl = train_features.complexities
         models = []
+        # Iterate through feature matrix versions, train regression models 
+        # and append to models list.
         for train_matrix in train_matrices: 
             regr = linear_model.BayesianRidge()
             regr.fit(train_matrix, train_compl)
@@ -99,12 +101,12 @@ class MultiLinear():
             certain features.  
         '''
         
-        handcraft = [row[:14] for row in matrix]
+        handcrafted = [row[:14] for row in matrix]
         embeddings = [row[14:] for row in matrix]
-        handcraft_senses = [row[:16] for row in matrix]
+        handcrafted_senses = [row[:16] for row in matrix]
         handcrafted_senses_50_emb = [row[:16] + row[-50:] for row in matrix]
 
-        return [matrix, handcraft, embeddings, handcraft_senses, handcrafted_senses_50_emb]
+        return [matrix, handcrafted, embeddings, handcrafted_senses, handcrafted_senses_50_emb]
 
         
 
