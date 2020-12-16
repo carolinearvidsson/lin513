@@ -1,41 +1,36 @@
 # Christoffer
-
-from wordspace import WS
 import nltk
 import pandas as pd
-nltk.download('averaged_perceptron_tagger')
 
 class PosTagger:
-    '''Is a collection of part of speech tagged sentences.
+    '''Is a collection of part of speech (PoS) tagged sentences.
+    To be used in regression analysis, P
     
-    Arguments:
-        ws: a WS (WordSpace) object, containing Word objects.
+    Parameters:
+        ws (WS-object) 
+            A collection of Word-objects, representing entries 
+            in the CompLex corpus.
+    
     Attributes:
-        tagged_sentences: 
-        a dictionary with sentence/token-IDs as key. Value is a list with i) 
-        a tagged sentence, ii) index for token of interest, iii) the id number 
-        representing part of speech of token. 
+
+        tagged_sentences (dict) 
+            Contains lists where elements are i) a PoS tagged sentence, 
+            ii) index in sentence for a specific target word, iii) a 
+            (simplified) PoS-tag of target word. Key is unique entry ID.
+            
+        single_word (set) 
+            Collection of Word-objects (where the token is a single word).
         
-        single_word: 
-        a set of Word-objects (where the token is a single word).
-        
-        pos_id: 
-        a dictionary with PoS-tag as key and an integer as value.
-        
-        tag_counter: 
-        a dictionary with PoS-tag as key and a count of number of occurrences 
-        in tagged material as value.
-        
-        token_index_counter: 
-        a dictionary with all påträffade index of token in sentence as key, 
-        number of occurrences as value. 
+        token_index_counter (dict)
+            Contains all occuring target word sentence indices (key) and 
+            their frequencies (value).
+
     '''
 
     def __init__(self, ws):
         '''Upon initialization, tag all sentences in given data.'''
         self.tagged_sentences = {}
         self.single_word = ws.single_word
-        self.pos_id = {}
         self.tag_counter = {}
         self.token_index_counter= {}
         self.upenn_content_tags = ['JJ', 'JJR', 'JJS', 'NN', 'NNS', 
@@ -44,18 +39,21 @@ class PosTagger:
         self.__tag_text()
     
     def __tag_text(self):
-        '''Tag sentences using nltk's PoS-tagger which produces a list of tuples 
-        with word and PoS-tag. Assign a unique ID (as int) for specific PoS. 
-        Count i) number of times a token is a particular PoS, ii) number of times 
-        the specific indice where token appears in sentence. 
+        '''Tag sentences using nltk's PoS-tagger which produces a list 
+        of tuples with word and PoS-tag. Sentences come from entries in 
+        the CompLex corpus. 
         
-        Fill tagged_sentences dictionary with key being the specific entry's ID, 
-        and a key as follows [tagged sentence, index where token is found, ID for PoS]
-        In case of error and PoS or index cannot be found (i.e. errors in the 
-        given data), give most common index and PoS.
+        In addition to tagging sentences, each sentence has a specific 
+        target word. Per sentence, store in list PoS-tag of target word 
+        and indexed position in sentence. Also, count i) number of times 
+        target words belong to particular PoS, ii) number of times target 
+        words appear at particular index in sentences. Populate dict 
+        tagged_sentences with sentence ID as key and value [tagged sentence, 
+        target index, target PoS]. In case of error, value is None.
 
-        Since the Penn Treebank tag set tags, for instance, nouns by number, verbs by tense, all those tags are collapsed
-        into their "parent" PoS
+        Since the Penn Treebank tag set specifies, for instance, nouns 
+        by number, verbs by tense, such tags are collapsed into their 
+        "parent" PoS (i.e. 'NN' for all noun versions).
 
         '''    
         self.pos_counter = {'NN': 0, 'JJ':0, 'RB':0, 'VB':0, 'OT':0 }
@@ -92,6 +90,23 @@ class PosTagger:
         self.average_index = round(self.average_index / n)
      
     def get_pos_len(self, wordobject):
+        '''Return list of PoS-tag, as dummy variables, for a target word 
+        (based on previously tagged sentence), number of words preceeding 
+        target in sentence and number of lexical (content) words preceeding 
+        target.
+
+        Fetches PoS and sentence length information from dictionary 
+        tagged sentences. If value is None, due to data error, returns 
+        most common PoS-tag and the average sentence length (same for all
+        words and lexical words).
+
+        Parameters:
+            
+            wordobject (Word-object)
+                Represents a single entry in the CompLex corpus.
+
+        '''
+
         if self.tagged_sentences[wordobject.id] == None:
             max_pos = max(self.pos_counter, key = self.pos_counter.get)
             return self.dummy_vars[max_pos] + [self.average_index, self.average_index]
