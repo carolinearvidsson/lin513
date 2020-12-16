@@ -12,43 +12,31 @@ class Length():
             the CMP dictionary with words as keys and pronounciation
             in list form as values. Some entries have alternative 
             pronounciations, in every case only the first one is used.
-        
-        observed_tokens (dict)
-            contains all previously observed tokens as key and their
-            word length and syllable count as values, as to avoid repetition.
 
     '''
 
     def __init__(self):
         self.syll_dict = cmudict.dict()
-        self.observed_tokens = {}
     
     def length(self, wordobject):
-        '''Method 
+        '''Checks length and syllable count of a word.
         
         Parameters:
-
             wordobject (Word-object)
                 Represents a single entry in the CompLex corpus.   
 
         Returns:
-
             list with integers for word character length and word 
             syllable count 
         '''
-
         token = wordobject.token.lower()
-        if token not in self.observed_tokens:
-            length = len(token)
-            syll_count = self.__syll_count(token)
-            self.observed_tokens[token] = [length, syll_count]
-            return [length, syll_count]
-        else:
-            return self.observed_tokens[token]
+        length = len(token)
+        syll_count = self.__syll_count(token)
+        return [length, syll_count]
     
     def __syll_count(self, token):
-        '''Return amount of syllables in a word. CMPD returns a list 
-        of phonemes: 'natural' = ['N', 'AE1', 'CH', 'UR0', 'A0', 'L'], 
+        '''Counts amount of syllables in a word. Given a token, CMPD returns 
+        a list of phonemes: 'natural' = ['N', 'AE1', 'CH', 'UR0', 'A0', 'L'], 
         where number indicates stress status. This is taken as indicator 
         of syllabic status, thus 'natural' = three syllables.
 
@@ -76,7 +64,7 @@ class Length():
             vowels = ['a','e','o','u','i', 'y']
             for i, character in enumerate(token):
                 if character in vowels:
-                    if i == 0: # to avoid index error, if first character is vowel, count as syllabic.
+                    if i == 0: # to avoid index error looking at previous character, if first character is vowel, count as syllabic.
                         syll_count += 1
                     else:
                         if token[i-1] not in vowels:

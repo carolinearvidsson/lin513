@@ -4,8 +4,9 @@ import nltk
 class Ngram():
     '''Is a character ngram-probability calculator. Utilizes 
     ngram-models previously trained on the Brown corpus with Lidstone 
-    smoothing (see model builder in data/ngram_train.py). Uses logspace
-    to represent the probability values rather than ...
+    smoothing (see model builder script in data/ngram_train.py and pickled 
+    model file data/ngram_models). Uses logspace to represent the probability 
+    values.
     
     Attributes:
 
@@ -34,14 +35,20 @@ class Ngram():
         self.observed_tokens = {}
     
     def ngram_probs(self, word_object):
-        '''Return list containing uni, bi and trigram probabilities
-        in logspace for a given token. For each new token, add token
-        and its ngram probabilities to observed_tokens dict.
+        '''Calculate uni-, bi- and trigram probabilities for target token. 
+        For each new token, add token and its ngram probabilities to 
+        observed_tokens dictionary to avoid repetition. 
         
         Parameters:
 
             word_object (Word-object)
                 Represents a single entry in the CompLex corpus.
+
+        Returns:
+
+            ngram_probabilities (list)
+                Contains values in logspace, representing uni-, bi- 
+                and trigram probabilities for target
             
         '''
         token = word_object.token
@@ -93,7 +100,7 @@ class Ngram():
             token (string)
                 a single word.
         '''
-        token = list(pad_both_ends(token, n=3)) # add (2) start and end symbols
+        token = list(pad_both_ends(token, n=3)) # tokenize and add (2) start and end symbols
         tri_prob_val = 0
         for index, char in enumerate(token):
             if index < 2 : # if first or second character of word, skip as to avoid index error
