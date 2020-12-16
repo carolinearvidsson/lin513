@@ -21,9 +21,9 @@ from bert_embedding import BertEmbedding
 
 class Embeddings:
   '''Generates BERT embeddings and uses them to perform word sense induction
-  on observations of word types.
+  on observations belonging to the same word type.
 
-  All public methods (that do not start with leading underscore) are used to 
+  All public methods (these are not prefixed with leading underscore) are used to 
   return one or more feature(s) of a given word object. These features
   are used to predict lexical complexity of a word in context.
   
@@ -36,7 +36,7 @@ class Embeddings:
       The path of a pickle format file holding the embeddings. If file 
       does not exist, it will be created and the process of generating
       embeddings will be initialized.
-      For a detailed rescription of the contents of this file,
+      For a detailed rescription of the contents of the embedding file,
       see the documentation for local method: __setup.
       
   Attributes:
@@ -55,13 +55,15 @@ class Embeddings:
     self.__check_existing_file()
 
   def __check_existing_file(self):
-    '''Checks if the pickled file (path given as class parameter)
+    '''Checks if the pickled file given as class parameter and
     containing the embedding dictionaries already exists. 
     For a detailed description of the dictionaries,
     see documentation of local method: __setup.
     If file does not exist, the retrievement of embeddings is initialized.
     If file already exists, the dicts are loaded into 
-    their respective variables.
+    their respective variables and the process of 
+    forming clusters for each target word type in
+    the data is initialized.
     '''
     if path.exists(self.embfile):
       self.lemma_embs, self.tID_emb = pickle.load(open(self.embfile, "rb"))
@@ -76,10 +78,6 @@ class Embeddings:
   def __setup(self):
     '''Iterates through all sentences in the data in order to 
     get BERT embeddings for every target word instance.
-    When all embeddings have been retrieved, the process
-    of forming clusters for each target word type in
-    the data is initialized.
-
     When all embeddings have been retrieved, they are dumped into
     a pickle format file (path given as class parameter.)
     
