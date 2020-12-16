@@ -37,7 +37,7 @@ class WS:
             represents a filename, a specific subset of the CompLex corpus.
             File will be tab separated (.tsv).
         '''
-
+        
         text = np.genfromtxt(open(file), delimiter='\t', skip_header=1, 
                                 dtype=None, encoding=None, invalid_raise=False, 
                                 deletechars="~!@#$%^&*()-=+~\|]}[{';: /?.>,<.", 
