@@ -5,7 +5,7 @@ import numpy as np
 
 class WS:
     '''Represents a collection of Word-objects, which are entries from 
-    a subset of the whole CompLex corpus.
+    the whole CompLex corpus.
     
     Parameters:
 
@@ -29,18 +29,21 @@ class WS:
         self.structure_data(file)
     
     def structure_data(self, file):
-        '''Structure and extract data from CompLex files. Method populates
-        WS attributes with Word-objects (single_word) or just target of 
-        entry (target_types). 
+        '''Structure and extract data from a file from the CompLex corpus. 
+        Method populates. WS attributes with Word-objects (single_word) 
+        or specific target of entry (target_types). 
         
         Parameters: 
-            represents a filename, a specific subset of the CompLex corpus.
-            File will be tab separated (.tsv).
+            
+            file (str)
+                represents a filename, a specific subset of the CompLex corpus.
+                File will be tab separated (.tsv).
         '''
-        
+        # First line of CompLex files contains column info, thus skip_header=1. 
+        # Further arguments in np.genfromtext as to avoid certain Errors and 
+        # Warnings that may loose certain attributes for Word-objects.
         text = np.genfromtxt(open(file), delimiter='\t', skip_header=1, 
                                 dtype=None, encoding=None, invalid_raise=False, 
-                                deletechars="~!@#$%^&*()-=+~\|]}[{';: /?.>,<.", 
                                 comments='##')
         for row in text: 
             self.single_word.add(Word(row))

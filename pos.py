@@ -55,13 +55,15 @@ class PosTagger:
         by number, verbs by tense, such tags are collapsed into their 
         "parent" PoS (i.e. 'NN' for all noun versions).
 
+        Method uses dummy variables to identify the chosen PoS
+
         '''    
         self.pos_counter = {'NN': 0, 'JJ':0, 'RB':0, 'VB':0, 'OT':0 }
-        pos = ['NN', 'JJ', 'VB', 'RB', 'OT']
         
-        dummy_matrix = pd.get_dummies(pos)
+        # Create dummy variables for chosen PoS.
+        dummy_matrix = pd.get_dummies(list(pos_counter.keys()))
         self.dummy_vars = {}
-        for i, part in zip(range(5), pos):
+        for i, part in zip(range(5), list(self.pos_counter.keys())):
             self.dummy_vars[part] = list(dummy_matrix.loc[i])
         
         self.average_index, n = 0, 0
@@ -90,20 +92,20 @@ class PosTagger:
         self.average_index = round(self.average_index / n)
      
     def get_pos_len(self, wordobject):
-        '''Return list of PoS-tag, as dummy variables, for a target word 
-        (based on previously tagged sentence), number of words preceeding 
-        target in sentence and number of lexical (content) words preceeding 
-        target.
-
-        Fetches PoS and sentence length information from dictionary 
-        tagged sentences. If value is None, due to data error, returns 
-        most common PoS-tag and the average sentence length (same for all
-        words and lexical words).
+        '''Fetch PoS-tag and sentence length features from dictionary
+        tagged_sentences. If value is None, due to erroneous data while
+        tagging, default values will be most common PoS-tag and sentence
+        length.  
 
         Parameters:
             
             wordobject (Word-object)
                 Represents a single entry in the CompLex corpus.
+        
+        Returns:
+            list containing pos-features (as 5 dummy variables), 
+            number of words preceeding target in sentence, number
+            of lexical words preceeding target
 
         '''
 
