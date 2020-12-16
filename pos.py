@@ -55,13 +55,15 @@ class PosTagger:
         by number, verbs by tense, such tags are collapsed into their 
         "parent" PoS (i.e. 'NN' for all noun versions).
 
+        Method uses dummy variables to identify the chosen PoS
+
         '''    
         self.pos_counter = {'NN': 0, 'JJ':0, 'RB':0, 'VB':0, 'OT':0 }
-        pos = ['NN', 'JJ', 'VB', 'RB', 'OT']
         
-        dummy_matrix = pd.get_dummies(pos)
+        # Create dummy variables for chosen PoS
+        dummy_matrix = pd.get_dummies(list(pos_counter.keys()))
         self.dummy_vars = {}
-        for i, part in zip(range(5), pos):
+        for i, part in zip(range(5), list(self.pos_counter.keys())):
             self.dummy_vars[part] = list(dummy_matrix.loc[i])
         
         self.average_index, n = 0, 0
