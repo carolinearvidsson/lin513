@@ -2,18 +2,24 @@
 
 from word import Word
 import numpy as np
-import nltk
-#nltk.download('punkt')
-
-
 
 class WS:
-    '''Class contains dict objects that separates single- 
-    and multiple-word (2) tokens from the CompLex corpus.
+    '''Represents a collection of Word-objects, which are entries from 
+    a subset of the whole CompLex corpus.
+    
+    Parameters:
+
+        file (str)
+            represents a filename, a specific subset of the CompLex corpus.
+            File will be tab separated (.tsv).
 
     Attributes:
-        single_word: set listing single-word Word-objects. Attributes are ID-number of entry, 
-        subcorpus token appears in, sentence, token and complexity value.
+
+        single_word (set) 
+            Collection of Word-objects where the target is a single word.
+        
+        target_types (set)
+            Collection of all unique target types occurring in the data.
         
     '''
     def __init__(self, file):
@@ -23,14 +29,15 @@ class WS:
         self.structure_data(file)
     
     def structure_data(self, file):
-        '''Structure and extract data from CompLex files.
+        '''Structure and extract data from CompLex files. Method populates
+        WS attributes with Word-objects (single_word) or just target of 
+        entry (target_types). 
         
-        Arguments: 
-            files: list of names CompLex-files.
+        Parameters: 
+            represents a filename, a specific subset of the CompLex corpus.
+            File will be tab separated (.tsv).
         '''
 
-            #PROBLEM(LÖST!!), genfromtext feltolkar vissa rader/kolumner i train-filerna (därav try).
-            #argumentet comments tog bort fallen där ensam '#' gjorde resten av raden till en och samma kolumn. len av dict är nu samma som träningsdatan
         text = np.genfromtxt(open(file), delimiter='\t', skip_header=1, 
                                 dtype=None, encoding=None, invalid_raise=False, 
                                 deletechars="~!@#$%^&*()-=+~\|]}[{';: /?.>,<.", 
