@@ -16,35 +16,43 @@ Training and test files are tab separated (.tsv) and follow the following column
 
 All methods are called through main.py. 
 
-## Features
+## Classes
+
+### Data
+
+##### Wordspace
+
+##### Word
+
+### Features
 
 The following features are calculated for each entry. In total there are 783 feature values spread over eight overarching features. 
 
-### Handcrafted
+#### Handcrafted
 
-#### Word length (CFS)
+##### Word length (CFS)
 
-#### Syllable count (CFS)
+##### Syllable count (CFS)
 
-#### Ngram (CFS)
+##### Ngram (CFS)
 
 Consists of three features; uni-, bi- and trigram probabilities on character level. Ngram models are trained with nltk language model (Lidstone smoothing) and returns values in log2.
 
-#### Word frequency (CFS)
+##### Word frequency (CFS)
 
-#### Part of speech (CFS)
+##### Part of speech (CFS)
 Utilizes nltk's part of speech tagger (which uses a tagset from Penn Treebank). Represented by dummy variables for parts of speech noun, verb, adjective and adverbs – all other parts of speech are grouped together as other. 
 
-#### Domain specificity (CA)
+##### Domain specificity (CA)
 
-#### Sentence length (CFS)
+##### Sentence length (CFS)
 Consists of two features: number of words (any) preceeding target word and number of lexical/content words preceeding target. Lexical words are here defined as nouns (including proper names), verbs, adjectives and adverbs.
 
-### Embeddings and word sense induction 
+#### Embeddings and word sense induction 
 
-#### BERT embeddings (CA)
+##### BERT embeddings (CA)
 
-#### Clusters and outliers (CA)
+##### Clusters and outliers (CA)
 
 
 
