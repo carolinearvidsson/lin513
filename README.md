@@ -18,10 +18,9 @@ All methods are called through main.py.
 
 ## Features
 
-The following features are calculated for each entry (some features consist of more than one value):
-\[unigram, bigram, trigram, wordlength, syllable count, pos * 4, sent len all, sent len lex, clusters, outliers, embeddings *768] == 781 features
+The following features are calculated for each entry. In total there are 783 feature values spread over eight overarching features. 
 
-In total there are 783 feature values, but 
+### Handcrafted
 
 #### Word length
 
