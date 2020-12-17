@@ -34,7 +34,7 @@ def __struct_train_data():
     for nltk's language model module.
 
     Returns:
-    
+
         final_training_data (list) 
             contains lists of character tokenized words. 
             Ex: [['w', 'o', 'r', 'd', '1'], ['w', 'o', 'r', 'd', '2'], ...]
@@ -67,8 +67,3 @@ def __train_lm(n, training_data):
     lm = Lidstone(0.5, lm)
     lm.fit(train, vocab)
     return lm
-
-
-
-if __name__ == "__main__":
-    get_ngram_models()

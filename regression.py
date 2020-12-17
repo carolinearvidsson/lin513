@@ -70,15 +70,17 @@ class MultiLinear():
         
         # Create tuples of statistic measure and corresponding name 
         # to iterate and print results with.
-        stat_functions = ((pearsonr, 'pearson\'s r = '), (spearmanr, 'spearman\'s rho = '),
-                          (mean_absolute_error, 'mae = '), (mean_squared_error, 'mse = '), 
+        stat_functions = ((pearsonr, 'pearson\'s r = '), 
+                          (spearmanr, 'spearman\'s rho = '),
+                          (mean_absolute_error, 'mae = '), 
+                          (mean_squared_error, 'mse = '), 
                           (r2_score, 'r2 = '))
        
        # Iterate through matrices and corresponding trained regression models. 
        # For each model, predict complexities and apply (5) statistic measures. 
        # Print results.
-        for test_matrix, regr, features in zip(test_matrices, regr_models, \
-                                                feature_versions):
+        for test_matrix, regr, features in zip(test_matrices, regr_models,
+                                               feature_versions):
             compl_pred = regr.predict(test_matrix)
             print('\nFeatures: ', features)
             for stat, statname in stat_functions:
@@ -107,8 +109,10 @@ class MultiLinear():
         embeddings = [row[14:] for row in matrix]
         handcrafted_senses = [row[:16] for row in matrix]
         handcrafted_senses_50_emb = [row[:16] + row[-50:] for row in matrix]
+        new_matrices = [matrix, handcrafted, embeddings, handcrafted_senses, 
+                        handcrafted_senses_50_emb]
 
-        return [matrix, handcrafted, embeddings, handcrafted_senses, handcrafted_senses_50_emb]
+        return new_matrices
 
         
 

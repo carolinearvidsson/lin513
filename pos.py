@@ -79,9 +79,10 @@ class PosTagger:
         self.pos_counter = {'NN': 0, 'JJ':0, 'RB':0, 'VB':0, 'OT':0 }
         
         # Create dummy variables for chosen PsoS.
-        dummy_matrix = pd.get_dummies(list(pos_counter.keys()))
+        dummy_matrix = pd.get_dummies(list(pos_counter.keys())) # Makes as many dummy variables as chosen PoS-tags to consider
         self.dummy_vars = {}
-        for i, part in zip(range(5), list(self.pos_counter.keys())):
+        for i, part in zip(range(len(self.pos_counter)), 
+                           list(self.pos_counter.keys())):
             self.dummy_vars[part] = list(dummy_matrix.loc[i])
         
         total_index, n = 0, 0 # Counters to calculate average index of target, in case of error finding target in sentence
@@ -90,20 +91,21 @@ class PosTagger:
         tokenizer = nltk.RegexpTokenizer(r'\w+')
         for entry in self.single_word:
             token = entry.token
-            sentence = tokenizer.tokenize(entry.sentence)
+            sentence = tokenizer.tokenize(entry.sentence) # pos_tag returns each word and PoS-tag as tuple ('word', tag)
             try:
                 tagged_sent = nltk.pos_tag(sentence)
                 tok_index = sentence.index(token)
-                tok_pos = tagged_sent[tok_index][1] # pos_tag returns each word and PoS as tuple, PoS is second element
+                tok_pos = tagged_sent[tok_index][1] # Find target word in tagged sentences, second element of tuple is PoS-tag
                 if tok_pos in self.upenn_content_tags:
-                    self.pos_counter[tok_pos[:2]] += 1 # If PoS is deemed being a content class, only use first two letters of tag, i.e. "parent" PoS
+                    self.pos_counter[tok_pos[:2]] += 1 # If PoS is considered part of content class, only use first two letters of tag, i.e. "parent" PoS
                 else:
                     tok_pos = 'OT' # If PoS not among content classes, make PoS-tag general "other", OT
                     self.pos_counter[tok_pos] += 1
                 if tok_index not in self.token_index_counter: # If index of target word in sentence have not previously been seen, create dictionary entry for index
                     self.token_index_counter[tok_index] = 0
                 self.token_index_counter[tok_index] += 1 
-                self.tagged_sentences[entry.id] = [tagged_sent, tok_index, tok_pos[:2]]
+                self.tagged_sentences[entry.id] = [tagged_sent, tok_index, 
+                                                   tok_pos[:2]]
                 total_index += tok_index
                 n += 1
             except: # If target word cannot be found in sentence, set all values of entry as None
@@ -122,22 +124,24 @@ class PosTagger:
                 Represents a single entry in the CompLex corpus.
         
         Returns:
-            list containing PoS-features (as 5 dummy variables), 
-            number of words preceeding target in sentence, number
-            of lexical words preceeding target. If wordobject entry
-            has not been able be properly tagged, list will contain the 
-            most frequent PoS-features and the average target index (for
-            both sentence length features).
+            pos_len
+                Contains PoS-features (as 5 dummy variables), number of 
+                words preceeding target in sentence, number of lexical words 
+                preceeding target. If Wordobject entry has not been able be 
+                properly tagged, list will contain the most frequent 
+                PoS-features and the average target index (for both sentence 
+                length features).
 
         '''
 
         if self.tagged_sentences[wordobject.id] == None:
             max_pos = max(self.pos_counter, key = self.pos_counter.get)
-            return self.dummy_vars[max_pos] + [self.average_index, self.average_index]
+            pos_len = self.dummy_vars[max_pos] + [self.average_index, 
+                                                  self.average_index]
+            return pos_len
         else:
-            pos = self.__pos(wordobject.id)
-            sen_len = self.__sen_len(wordobject.id)
-            return pos + sen_len 
+            pos_len = self.__pos(wordobject.id) + self.__sen_len(wordobject.id)
+            return pos_len
     
     def __pos(self, sen_id):
         '''Fetch dummy variables representing of PoS-tag of the 
@@ -150,8 +154,9 @@ class PosTagger:
         Returns:
             list of dummy variables (int).
         '''
-        pos = self.tagged_sentences[sen_id][2]
-        return self.dummy_vars[pos]
+        pos_tag = self.tagged_sentences[sen_id][2]
+        pos_dummy_var = self.dummy_vars[pos_tag]
+        return pos_dummy_var
     
     def __sen_len(self, sen_id):
         '''Get length of sentence up to (not including) token. 
@@ -167,7 +172,7 @@ class PosTagger:
             target word and all lexical/content words preceeding target.
         '''
         sentence_entry = self.tagged_sentences[sen_id]
-        all_sen_len = sentence[1] # all_sen_len is same as target's index in sentence
+        all_sen_len = sentence[1] # all_sen_len is same as target's index in sentence, see two lines down
         lex_sen_len = 0
         preceeding = sentence[0][:all_sen_len] # extract only preceeding tuples (containing word and PoS-tag) in sentence
         for word, tag in preceeding:
