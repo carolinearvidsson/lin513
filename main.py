@@ -77,9 +77,9 @@ from regression import MultiLinear
 if __name__ == "__main__":
     mode = sys.argv[1]
     model = sys.argv[2]
-    data = sys.argv[3]# 'data/homemade_train.tsv'
-    embeddings = sys.argv[4]#'/Users/carolinearvidsson/homemade_embeddings_train_201214'
-    freqdata = sys.argv[5]#'/Users/carolinearvidsson/googlebooks-eng-all-1gram-20090715-*.txt'
+    data = sys.argv[3]
+    embeddings = sys.argv[4]
+    freqdata = sys.argv[5]
 
     # Initialize wordspace
     ws = WS(data)
