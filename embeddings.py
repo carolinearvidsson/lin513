@@ -325,7 +325,8 @@ class Embeddings:
     '''Returns the number of clusters of a given word object's
     lemma (int). If the number of clusters cannot be retrieved
     due to the absence of the word object's embedding, an average
-    number of clusters is returned'''
+    number of clusters is returned
+    '''
     try:
       lemma = self.wnl.lemmatize(wobj.token.lower())
       return [int(self.n_clusters[lemma])]

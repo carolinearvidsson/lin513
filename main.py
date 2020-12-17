@@ -1,3 +1,31 @@
+# Caroline
+'''
+A script for training and testing a model to predict lexical complexity
+of single words in context.
+
+Usage: 
+python3 main.py mode(test/train) modelfile data(test/train) embeddingfile frequencyfile
+
+Modes:
+If mode is train, the model file will be created or overwritten if it exists.
+If mode is test, the model will be used to predict lexical complexity.
+
+Data:
+Train/test data is a tsv file with following structure:
+    1. Target token ID 
+    2. Domain type (e.g. bible)
+    3. Sentence in which the target token occurs
+    4. Target token
+    5. Annotated complexity (a float value between 0.0 and 1.0)
+
+Embeddingfile:
+A file containing embedding data. If path does not exist, the file will be created and the 
+process of getting embeddings will be initialized. 
+
+This script will fill a wordspace object with train or test data, 
+provide feature classes to a feature matrix to be used in training and testing
+a linear regression model.
+'''
 import pickle
 import sys
 from wordspace import WS
