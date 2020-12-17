@@ -2,7 +2,7 @@ import pickle
 import nltk
 
 class Ngram():
-    '''Is a character ngram-probability calculator. Utilizes 
+    '''Class is a character ngram-probability calculator. Utilizes 
     ngram-models previously trained on the Brown corpus with Lidstone 
     smoothing (see model builder script in data/ngram_train.py and pickled 
     model file data/ngram_models). Uses logspace to represent the probability 
@@ -53,9 +53,9 @@ class Ngram():
         '''
         token = word_object.token
         if token not in self.observed_tokens:
-            ngram_probabilities = [self.__uni_prob(token), self.__bi_prob(token),
-                                self.__tri_prob(token)
-                                ]
+            ngram_probabilities = [self.__uni_prob(token), 
+                                   self.__bi_prob(token),
+                                   self.__tri_prob(token)]
             self.observed_tokens[token] = ngram_probabilities
         else: 
             ngram_probabilities = self.observed_tokens[token]
