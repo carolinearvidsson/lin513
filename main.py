@@ -81,16 +81,11 @@ if __name__ == "__main__":
     embeddings = sys.argv[4]
     freqdata = sys.argv[5]
 
-    # Initialize wordspace
     ws = WS(data)
-
-    # List all feature classes
     fclsses = ( Ngram(), Length(), 
                 PosTagger(ws), DomainSpecificity(ws), 
                 Frequency(ws, freqdata), Embeddings(ws, embeddings)
                 )
-    
-    # Create and populate the feature matrix
     matrix = FeatureMatrix(ws, fclsses)
     matrix.populate_matrix()
     reg = MultiLinear()

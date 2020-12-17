@@ -1,6 +1,4 @@
 # Caroline
-import pickle
-
 class FeatureMatrix:
     '''A feature matrix where rows represent target tokens and 
     columns represent their features to be used in predicting

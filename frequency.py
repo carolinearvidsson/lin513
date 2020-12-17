@@ -1,6 +1,5 @@
 # Caroline
 import glob
-import re
 import math
 
 class Frequency:
