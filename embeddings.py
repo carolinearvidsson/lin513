@@ -1,5 +1,4 @@
 # Caroline
-
 import pickle
 from os import path
 import numpy as np
@@ -21,8 +20,9 @@ class Embeddings:
   
   Parameters:
   
-    ws (worspace object)
-      A wordspace class object.
+    ws (WS-object) 
+      A collection of Word-objects, representing entries 
+      in the CompLex corpus.
       
     embfile (str)
       The path of a pickle format file holding the embeddings. If file 
