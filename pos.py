@@ -3,8 +3,8 @@ import nltk
 import pandas as pd
 
 class PosTagger:
-    '''Is a collection of part of speech (PoS) tagged sentences.
-    To be used in regression analysis, P
+    '''Class is a collection of part of speech (PoS) tagged sentences 
+    and sentence index and PoS of target words. Utilizes nltk's PoS-tagger. 
     
     Parameters:
         ws (WS-object) 
@@ -24,6 +24,10 @@ class PosTagger:
         token_index_counter (dict)
             Contains all occuring target word sentence indices (key) and 
             their frequencies (value).
+        
+        upenn_content_tags (list)
+            Penn Treebank PoS-tags. Contains tags for PoS deemed to be 
+            lexical, or content words.
 
     '''
 
@@ -31,7 +35,6 @@ class PosTagger:
         '''Upon initialization, tag all sentences in given data.'''
         self.tagged_sentences = {}
         self.single_word = ws.single_word
-        self.tag_counter = {}
         self.token_index_counter= {}
         self.upenn_content_tags = ['JJ', 'JJR', 'JJS', 'NN', 'NNS', 
                               'NNP','NNPS', 'RB', 'RBR', 'RBS' 'VB', 
@@ -55,19 +58,35 @@ class PosTagger:
         by number, verbs by tense, such tags are collapsed into their 
         "parent" PoS (i.e. 'NN' for all noun versions).
 
-        Method uses dummy variables to identify the chosen PoS
+        For target words in sentence, only 4 PoS are used (and one for 
+        others). These are nouns (NN), adjectives (JJ), verbs (VB), adverbs
+        (RB) and other (OT). To be able to utilize this feature for regression
+        dummy variables (5) created by pandas are used to identify the PoS. 
+
+        Attributes:
+
+            pos_counter (dict)
+                Counts the frequency of target word PoS.
+            
+            dummy_vars (dict)
+                Contains the dummy variables for the chosen PoS.
+
+            average_index (int)
+                The average index position of the target word over all
+                sentences. Utilized if target cannot be found in sentence.
 
         '''    
         self.pos_counter = {'NN': 0, 'JJ':0, 'RB':0, 'VB':0, 'OT':0 }
         
-        # Create dummy variables for chosen PoS.
+        # Create dummy variables for chosen PsoS.
         dummy_matrix = pd.get_dummies(list(pos_counter.keys()))
         self.dummy_vars = {}
         for i, part in zip(range(5), list(self.pos_counter.keys())):
             self.dummy_vars[part] = list(dummy_matrix.loc[i])
         
-        self.average_index, n = 0, 0
+        total_index, n = 0, 0 # Counters to calculate average index of target, in case of error finding target in sentence
         
+        # Tokenize text by word to fit nltk's PoS tagger.
         tokenizer = nltk.RegexpTokenizer(r'\w+')
         for entry in self.single_word:
             token = entry.token
@@ -75,21 +94,21 @@ class PosTagger:
             try:
                 tagged_sent = nltk.pos_tag(sentence)
                 tok_index = sentence.index(token)
-                tok_pos = tagged_sent[tok_index][1]
+                tok_pos = tagged_sent[tok_index][1] # pos_tag returns each word and PoS as tuple, PoS is second element
                 if tok_pos in self.upenn_content_tags:
-                    self.pos_counter[tok_pos[:2]] += 1
+                    self.pos_counter[tok_pos[:2]] += 1 # If PoS is deemed being a content class, only use first two letters of tag, i.e. "parent" PoS
                 else:
-                    tok_pos = 'OT'
+                    tok_pos = 'OT' # If PoS not among content classes, make PoS-tag general "other", OT
                     self.pos_counter[tok_pos] += 1
-                if tok_index not in self.token_index_counter:
+                if tok_index not in self.token_index_counter: # If index of target word in sentence have not previously been seen, create dictionary entry for index
                     self.token_index_counter[tok_index] = 0
                 self.token_index_counter[tok_index] += 1 
                 self.tagged_sentences[entry.id] = [tagged_sent, tok_index, tok_pos[:2]]
-                self.average_index += tok_index
+                total_index += tok_index
                 n += 1
-            except:
+            except: # If target word cannot be found in sentence, set all values of entry as None
                 self.tagged_sentences[entry.id] = None
-        self.average_index = round(self.average_index / n)
+        self.average_index = round(total_index / n)
      
     def get_pos_len(self, wordobject):
         '''Fetch PoS-tag and sentence length features from dictionary
@@ -103,9 +122,12 @@ class PosTagger:
                 Represents a single entry in the CompLex corpus.
         
         Returns:
-            list containing pos-features (as 5 dummy variables), 
+            list containing PoS-features (as 5 dummy variables), 
             number of words preceeding target in sentence, number
-            of lexical words preceeding target
+            of lexical words preceeding target. If wordobject entry
+            has not been able be properly tagged, list will contain the 
+            most frequent PoS-features and the average target index (for
+            both sentence length features).
 
         '''
 
@@ -118,7 +140,16 @@ class PosTagger:
             return pos + sen_len 
     
     def __pos(self, sen_id):
-        '''Return ID of PoS-tag of the token represented by the Word object.'''
+        '''Fetch dummy variables representing of PoS-tag of the 
+        token represented by the Word object.
+
+        Parameters:
+            sen_id (string)
+                Unique ID for a wordobject entry.
+        
+        Returns:
+            list of dummy variables (int).
+        '''
         pos = self.tagged_sentences[sen_id][2]
         return self.dummy_vars[pos]
     
@@ -127,44 +158,23 @@ class PosTagger:
         Return two values: all_sen_len includes all words preceeding token,
         lex_sen_len counts only lexical/content words. These are defined as 
         
-        Arguments:
-            wordobject: 
+        Parameters:
+            sen_id (string)
+                Unique ID for a wordobject entry.
+        
+        Returns:
+            list with two integers representing all words preceeding 
+            target word and all lexical/content words preceeding target.
         '''
-        sentence = self.tagged_sentences[sen_id]
-        all_sen_len = sentence[1]
+        sentence_entry = self.tagged_sentences[sen_id]
+        all_sen_len = sentence[1] # all_sen_len is same as target's index in sentence
         lex_sen_len = 0
-        token_ind = sentence[1]
-        preceeding = sentence[0][:token_ind]
+        preceeding = sentence[0][:all_sen_len] # extract only preceeding tuples (containing word and PoS-tag) in sentence
         for word, tag in preceeding:
             if tag in self.upenn_content_tags:
-                lex_sen_len += 1
+                lex_sen_len += 1 
 
         return [all_sen_len, lex_sen_len]
-
-
-
-        # tokenizer = nltk.RegexpTokenizer(r'\w+')
-        # for entry in self.single_word:
-        #     token = entry.token
-        #     sentence = tokenizer.tokenize(entry.sentence)
-        #     try:
-        #         tagged_sent = nltk.pos_tag(sentence)
-        #         tok_index = sentence.index(token)
-        #         tok_pos = tagged_sent[tok_index][1]
-        #         if tok_pos not in self.pos_id: 
-        #             self.tag_counter[tok_pos] = 0
-        #             self.pos_id.setdefault(tok_pos, len(self.pos_id))
-        #         if tok_index not in self.token_index_counter:
-        #             self.token_index_counter[tok_index] = 0
-        #         self.tag_counter[tok_pos] += 1
-        #         self.token_index_counter[tok_index] += 1 
-        #         tok_pos_id = self.pos_id[tok_pos]
-        #         self.tagged_sentences[entry.id] = [tagged_sent, tok_index, tok_pos_id]
-        #     except:
-        #         max_pos = max(self.tag_counter, key=self.tag_counter.get)
-        #         max_pos_id = self.pos_id[max_pos]
-        #         max_tok_index = max(self.token_index_counter, key=self.token_index_counter.get) 
-        #         self.tagged_sentences[entry.id] = [nltk.pos_tag(sentence), max_tok_index, max_pos_id]
 
 
 

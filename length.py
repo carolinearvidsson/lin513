@@ -2,9 +2,9 @@
 from nltk.corpus import cmudict
 
 class Length():
-    '''Is a word length (character) and syllable count calculator. 
-    Utilizes the Carnegie Mellon Pronouncing Dictionary (CMPD/cmudict) 
-    to tokenize words on a phoneme level.
+    '''Class is a word length (character) and syllable count calculator. 
+    Utilizes the Carnegie Mellon Pronouncing Dictionary (CMPD/cmudict),
+    accessed through nltk, to tokenize words on a phoneme level.
     
     Attributes:
 
@@ -19,34 +19,32 @@ class Length():
         self.syll_dict = cmudict.dict()
     
     def length(self, wordobject):
-        '''Checks length and syllable count of a word.
+        '''Check length and syllable count of a word.
         
         Parameters:
             wordobject (Word-object)
                 Represents a single entry in the CompLex corpus.   
 
         Returns:
-            list with integers for word character length and word 
-            syllable count 
+            length_syllcount (list)
+                Contains integers representing token character length 
+                and token syllable count 
         '''
         token = wordobject.token.lower()
-        length = len(token)
-        syll_count = self.__syll_count(token)
-        return [length, syll_count]
+        length_syllcount = [len(token), self.__syll_count(token)]
+        return length_syllcount
     
     def __syll_count(self, token):
-        '''Counts amount of syllables in a word. Given a token, CMPD returns 
+        '''Count amount of syllables in a word. Given a token, CMPD returns 
         a list of phonemes: 'natural' = ['N', 'AE1', 'CH', 'UR0', 'A0', 'L'], 
         where number indicates stress status. This is taken as indicator 
         of syllabic status, thus 'natural' = three syllables.
 
         Parameters:
-
             token (str)
                 a single word.
         
         Returns:
-
             syll_count (int)
                 number of syllables in token
         
@@ -60,7 +58,7 @@ class Length():
         except:
             # If word does not exist in CMPD, make an approximate calculation 
             # of syllable count. Vowel indicates syllable, except multiple 
-            # vowels in a row.
+            # vowels in a row (counted as 1).
             vowels = ['a','e','o','u','i', 'y']
             for i, character in enumerate(token):
                 if character in vowels:

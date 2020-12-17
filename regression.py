@@ -1,6 +1,6 @@
 # Christoffer
 
-from sklearn import datasets, linear_model
+from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from scipy.stats import pearsonr, spearmanr
 
@@ -12,15 +12,17 @@ class MultiLinear():
     '''
 
     def train_linear_model(self, train_features):
-        '''Return (Ridge) regressian models trained with features (x) 
-        and complexities (y) based from the CompLex corpus. 
+        '''Traine (Ridge) regression models with features (x) and 
+        complexities (y) based on features of target words from the 
+        CompLex corpus. 
 
         Parameters:
 
             train_features (FeatureMatrix-object)
-                Object contains an array of entries with features and 
-                corresponding lexical complexities per entry, based on
-                training data from the CompLex corpus. 
+                Object contains an array/matrix of entries with features 
+                and corresponding lexical complexities per entry, based 
+                ontraining data and manual complexity annotation from the 
+                CompLex corpus. 
         
         Returns:
 
@@ -29,7 +31,7 @@ class MultiLinear():
 
         '''
 
-        train_matrices = self.__make_versions(train_features.matrix)
+        train_matrices = self.__make_versions(train_features.matrix) # Gets multiple versions of the full matrix, with different sets of features included
         train_compl = train_features.complexities
         models = []
         # Iterate through feature matrix versions, train regression models 
@@ -58,7 +60,7 @@ class MultiLinear():
                 corresponding lexical complexities per entry, based on
                 test data from the ComPlex corpus. 
         '''
-        test_matrices = self.__make_versions(test_features.matrix)
+        test_matrices = self.__make_versions(test_features.matrix) # Gets multiple versions of the full matrix, with different sets of features included
         test_compl = test_features.complexities
         
         # Names of versions of feature matrices.
@@ -66,7 +68,7 @@ class MultiLinear():
                             'handcrafted + clusters + outliers', 
                             'handcrafted + clusters + outliers + 50 dimensions']
         
-        # Create tuples of statistic measure and corresponding string 
+        # Create tuples of statistic measure and corresponding name 
         # to iterate and print results with.
         stat_functions = ((pearsonr, 'pearson\'s r = '), (spearmanr, 'spearman\'s rho = '),
                           (mean_absolute_error, 'mae = '), (mean_squared_error, 'mse = '), 
