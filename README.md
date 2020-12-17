@@ -18,13 +18,29 @@ All methods are called through main.py.
 
 ## Features
 
+The following features are calculated for each entry (some features consist of more than one value):
 \[unigram, bigram, trigram, wordlength, syllable count, pos * 4, sent len all, sent len lex, clusters, outliers, embeddings *768] == 781 features
+
+In total there are 783 feature values, but 
 
 #### Ngram
 
+Consists of three features; uni-, bi- and trigram probabilities on character level. Ngram models are trained with nltk language model (Lidstone smoothing) and returns values in log2.
+
+#### Part of speech
+Utilizes nltk's part of speech tagger (which uses a tagset from Penn Treebank). 
+
+#### Sentence length
+Consists of two features: number of words (any) preceeding target word and number of lexical/content words preceeding target. Lexical words are here defined as nouns (including proper names), verbs, adjectives and adverbs.
+
 ### Required installments
 
-scikit scipy nltk bert-embedding numpy
+- scikit 
+- scipy 
+- nltk 
+- bert-embedding 
+- numpy
+- pickle
 
 
 
