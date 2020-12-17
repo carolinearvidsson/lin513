@@ -23,15 +23,25 @@ The following features are calculated for each entry (some features consist of m
 
 In total there are 783 feature values, but 
 
+#### Word length
+
+#### Syllable count
+
 #### Ngram
 
 Consists of three features; uni-, bi- and trigram probabilities on character level. Ngram models are trained with nltk language model (Lidstone smoothing) and returns values in log2.
 
+#### Sentence length
+Consists of two features: number of words (any) preceeding target word and number of lexical/content words preceeding target. Lexical words are here defined as nouns (including proper names), verbs, adjectives and adverbs.
+
 #### Part of speech
 Utilizes nltk's part of speech tagger (which uses a tagset from Penn Treebank). Represented by dummy variables for part of speech noun, verb
 
-#### Sentence length
-Consists of two features: number of words (any) preceeding target word and number of lexical/content words preceeding target. Lexical words are here defined as nouns (including proper names), verbs, adjectives and adverbs.
+
+
+#### Domain specificity
+
+#### Word frequency
 
 ### Required installments
 
