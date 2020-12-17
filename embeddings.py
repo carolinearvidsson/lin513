@@ -6,7 +6,7 @@ import numpy as np
 from matplotlib import pyplot
 from scipy.spatial.distance import pdist, squareform
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
-from sklearn.metrics import sil_score as sil_score
+from sklearn.metrics import silhouette_score as sil_score
 from nltk.stem import WordNetLemmatizer
 from bert_embedding import BertEmbedding
 
@@ -41,6 +41,7 @@ class Embeddings:
       '''
 
   def __init__(self, ws, embfile):
+    self.ws = ws
     self.all_targets = ws.target_types
     self.embfile = embfile
     self.wnl = WordNetLemmatizer()
@@ -343,8 +344,8 @@ class Embeddings:
       is_outlier = 1
     return [is_outlier]
 
-# if __name__ == "__main__":
-#   from wordspace import WS
-#   ws = WS('data/homemade_train.tsv')
-#   em = Embeddings(ws, '/Users/carolinearvidsson/homemade_embeddings_train_201214')
+if __name__ == "__main__":
+  from wordspace import WS
+  ws = WS('data/trainandtrial.tsv')
+  em = Embeddings(ws, '/Users/carolinearvidsson/embeddings_train_and_trial')
     
