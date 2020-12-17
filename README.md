@@ -20,7 +20,7 @@ All methods are called through main.py.
 
 \[unigram, bigram, trigram, wordlength, syllable count, pos * 4, sent len all, sent len lex, clusters, outliers, embeddings *768] == 781 features
 
-# Ngram
+#### Ngram
 
 ### Required installments
 
