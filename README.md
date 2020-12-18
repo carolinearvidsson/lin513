@@ -99,31 +99,35 @@ To test the model, enter the following:
 
 ### Output (CFS)
 
-The extracted features and complexities of the training data will be used to train regression models, at present using Bayesian ridge regression. Before training, the program will create a number of versions of the feature matrix with different combinations of features. These versions are, as program is written now (see further definition below in Features section):
+The extracted features and manually annotated complexities of the training data will be used to train regression models, at present using Bayesian ridge regression (through scikitlearn). Before training, the program will create a number of versions of the feature matrix with different combinations of features. At present, these versions are (see further definitions below in Features section):
 
-- All features
-- Only handcrafted 
-- Only features based on BERT-embeddings and the embeddings themselves
-- Only embeddings
-- Handcrafted, embeddings-based features and 50 embeddings
+- All features (783 features)
+- Only handcrafted (13 features)
+- Only features based on BERT-embeddings and the embeddings themselves (770 features)
+- Only embeddings (768 features)
+- Handcrafted, embeddings-based features and 50 embeddings (65 features)
 
-The incoming features from the test data goes through the same process of creating versions. The number of versions and how they are structured can easily be changed in the script (see regression.py). 
+The incoming feature matrix extracted from the test data goes through the same process of version creation. The number of versions and how they are structured can easily be changed in the script (see regression.py). 
 
-As final output the program prints statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target. The statistic measures used are the same (by type, not necessarily method) as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex). These are Pearson's R, Spearman's Rho, Mean Absolute Error (MAE), Mean Squared Error (MSE) and R-squared (R2). 
+As final output when running the program in test mode, the program prints statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target. The statistic measures used are the same as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex). These are Pearson's R, Spearman's Rho, Mean Absolute Error (MAE), Mean Squared Error (MSE) and R-squared (R2). 
 
 The program will execute these measures for each of the trained models. 
 
 ## Classes
 
+Below are all the classes used by the program, the majority of which are classes used to extract features from the data. 
+
 ### Basic data structure
+
+Upon running the program, in either training or test mode, the data will be structured as defined below.
 
 ##### WS (Wordspace) (CFS)
 
-The wordspace contains all entries from the given data. It collects unique Word objects (see below) in a set as well as stores all target types.  
+The wordspace contains all entries from the data. It collects unique Word objects (see below) in a set as well as stores all target types which will be used by some of the feature classes.  
 
 ##### Word (CFS)
 
-The Word object represents a single entry (i.e. row) from the data given when running the program. The content of each column (see section Data above) is used as an attribute. Word objects are later given to each feature method to extract features.
+The Word object represents a single entry (i.e. row) from the dataset. The content of each column (see Data section above) are used as attributes.
 
 ### Features
 
@@ -141,18 +145,20 @@ Returns the number of syllables in target word. Uses the [Carnegie Mellon Univer
 
 ##### Ngram (CFS)
 
-Returns (as code is presently written) three features; uni-, bi- and trigram probabilities on character level for target word. Pre-trained models can be found in the "data" folder (pickled file "ngram_models"), and the training script "ngram_train.py" can easily be modified to train fewer or more models. The training is done using nltk's language model with Lidstone smoothing.  
+Returns three features; uni-, bi- and trigram probabilities on character level for target word. Pre-trained models can be found in the "data" folder (pickled file `ngram_models`), and the training script `ngram_train.py` can easily be modified to train fewer or more models. The training is done using nltk's language model with Lidstone smoothing. NOTE: if the amount of models are changed from standard of three, the code in char_ngram.py must be modified accordingly.
 
 ##### Word frequency (CA)
 
-##### Part of speech (CFS)
-Returns five features that together indicate the part of speech of target word. The class utilizes nltk's part of speech tagger (which uses a tagset from Penn Treebank) to tag all sentences in data. 
+#### PosTagger
+Upon initialization, the class tags all sentences in data for PoS using a tagger from nltk with Penn Treebank PoS-tags. Class returns three features (one of which consists of five variables).
 
-Utilizes nltk's part of speech tagger (which uses a tagset from Penn Treebank). Represented by dummy variables for parts of speech noun, verb, adjective and adverbs – all other parts of speech are grouped together as other. Returns five features.
+##### Part of speech (CFS)
+Returns the part of speech of target word through five variables that together indicate the PoS. For each pre-tagged sentence and target word, the method used for the feature finds the target in sentence and thus the PoS. Not all PoS are included as its own variable and feature; nouns, verbs, adjectives and adverbs are classified separately by themselves while all other PoS are combined as 'other'. To represent these categorical features in a regression model, pandas dummy variable module is used using five binary categories/features.   
 
 ##### Domain specificity (CA)
 
 ##### Sentence length (CFS)
+Returns two features, both indicating number of words preceeding target word. The first feature counts all preceeding words. The second feature uses the pre-tagged sentences and counts only those words deemed to belong to a lexical/content PoS. This is here defined as nouns, verbs, adjectives  
 Consists of two features: number of words (any) preceeding target word and number of lexical/content words preceeding target. Lexical words are here defined as nouns (including proper names), verbs, adjectives and adverbs.
 
 #### Embeddings and word sense induction 
@@ -160,6 +166,10 @@ Consists of two features: number of words (any) preceeding target word and numbe
 ##### BERT embeddings (CA)
 
 ##### Clusters and outliers (CA)
+
+#### MultiLinear (CFS)
+
+The class is used both for training regression models as well as testing the models, depending on chosen mode. As described in section Output, it creates versions of the incoming feature matrix to train and test multiple models. Prints results per model from statistical measures. 
 
 ## Scripts
 
