@@ -20,9 +20,13 @@ All methods are called through main.py.
 
 ### Data
 
-##### Wordspace
+##### WS (Wordspace)
+
+The wordspace contains all entries from the given data. 
 
 ##### Word
+
+The Word object represents a single entry from the CompLex corpus (from the subset given to the program through WS). The content of each column is used as an additional attribute. The Word object is what every feature class gets as input. 
 
 ### Features
 
