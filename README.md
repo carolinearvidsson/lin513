@@ -17,7 +17,7 @@ a target word in context, and columns have the the following column structure:
 
 ### Setup
 
-**1.  Create the embedding file**
+**1.  Create the embedding file (CA)**
 
 In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in embeddings.py).
@@ -41,9 +41,11 @@ em = Embeddings(ws, 'embeddings_train_trial')
 
 The process of retrieving embeddings will take approximately 6 hours.
 
-All methods are called through main.py. 
+### Running the program (CA)
 
-### Output
+The execution of this program constists of two steps: training and testing. Both steps are done through main.py
+
+### Output (CFS)
 
 As final output the program prints results of statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target in the CompLex corpus.
 
@@ -53,11 +55,11 @@ The statistic measures used are the same (by type, not necessarily method) as th
 
 ### Basic data structure
 
-##### WS (Wordspace)
+##### WS (Wordspace) (CFS)
 
 The wordspace contains all entries from the given data. It collects unique Word objects (see below) in a set as well as stores all target types.  
 
-##### Word
+##### Word (CFS)
 
 The Word object represents a single entry (i.e. row) from the data given when running the program. The content of each column (see section Data above) is used as an attribute. Word objects are later given to each feature method to extract features.
 
