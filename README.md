@@ -17,7 +17,16 @@ a target word in context, and columns have the the following column structure:
 
 ### Setup
 
-**1. Get the embedding file (CA)**
+### Required installations
+
+- scikit 
+- scipy 
+- nltk 
+- bert-embedding 
+- numpy
+- pickle
+
+**Get the embedding file (CA)**
 
 In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in embeddings.py).
@@ -158,14 +167,7 @@ Consists of two features: number of words (any) preceeding target word and numbe
 
 
 
-### Required installments
 
-- scikit 
-- scipy 
-- nltk 
-- bert-embedding 
-- numpy
-- pickle
 
 
 
