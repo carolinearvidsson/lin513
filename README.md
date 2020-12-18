@@ -160,7 +160,7 @@ Upon initialization, the class tags all sentences in data for PoS using a tagger
 Returns the part of speech of target word through five variables that together indicate the PoS. For each pre-tagged sentence and target word, the method used for the feature finds the target in sentence and thus the PoS. Not all PoS are included as its own variable and feature; nouns, verbs, adjectives and adverbs are classified separately by themselves while all other PoS are combined as 'other'. To represent these categorical features in a regression model, pandas dummy variable module is used using five binary categories/features.   
 
 ##### Domain specificity (CA)
-Generates a set of words that only exist in one of the given domains/supcorpuses (bible, europarl or biomed) in the SemEval (Task 1) training data. During training, a file containing the domain specific word forms is created or overwritten if it already exists. This file will be used in the test mode.
+Generates a set of words that only exist in one of the given domains/supcorpuses (bible, europarl or biomed) in the SemEval (Task 1) training data. During training, a file (data/domainspecific.pickle) containing the domain specific word forms is loaded.
 
 Its public method returns one feature; if a given word object is domain specific or not.
 
