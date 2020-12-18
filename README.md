@@ -130,6 +130,7 @@ The wordspace contains all entries from the data. It collects unique Word object
 The Word object represents a single entry (i.e. row) from the dataset. The content of each column (see Data section above) are used as attributes.
 
 ##### FeatureMatrix (CA)
+A feature matrix where rows represent target tokens and columns represent their features to be used in predicting lexical complexity of single words in sentence context.
 
 ### Features
 
