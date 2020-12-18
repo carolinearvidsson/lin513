@@ -5,7 +5,8 @@ The aim of this program is to predict lexical complexity of single words in cont
 ## Data
 The dataset consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of SemEval 2021 (Task 1). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
 
-Training and test files are tab separated (.tsv) and follow the following column structure:
+Training and test files are tab separated (.tsv) in which each row represents 
+a target word in context, and columns have the the following column structure:
 1. Sentence/token ID
 2. Domain (e.g. bible, europarl, biomed)
 3. Sentence
@@ -13,6 +14,29 @@ Training and test files are tab separated (.tsv) and follow the following column
 5. Complexity
 
 ## Usage
+
+### Setup
+
+**1.  Create the embedding file**
+
+In order to run this program, a file containing embeddings for the target words is needed (for
+a detailed description of the structure of this file, see documentation in embeddings.py).
+For those with acess to the mumin server, the file is available for download at path: 
+
+`/home/lin205_caar5483/lin513/embeddings_train_and_trial`
+
+For those without access to this file, it can be created by first joining the training and test data.
+When joining the test and training files, remember to remove the first row of the file that gets appended (this is the row that does not contain a data point, just column labels).
+For example, if you append the test file to the train file, the first row in the test file containing column labels should be removed.
+
+Let's say you have a file named 'train_test.tsv', containing both the test and training data.
+To create an embedding file named 'embeddings_train_test', run the following code:
+
+```python
+from wordspace import WS
+ws = WS('train_test.tsv')
+em = Embeddings(ws, 'embeddings_train_trial')
+```
 
 All methods are called through main.py. 
 
@@ -30,7 +54,7 @@ The Word object represents a single entry from the CompLex corpus (from the subs
 
 ### Features
 
-The following features are calculated for each entry. In total there are 783 feature values spread over eight overarching features. 
+The following features are calculated for each entry. In total there are 783 feature values spread over eight overarching feature types. 
 
 #### Handcrafted
 

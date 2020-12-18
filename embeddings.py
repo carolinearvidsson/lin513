@@ -1,9 +1,7 @@
 # Caroline
-
 import pickle
 from os import path
 import numpy as np
-from matplotlib import pyplot
 from scipy.spatial.distance import pdist, squareform
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 from sklearn.metrics import silhouette_score as sil_score
@@ -21,8 +19,9 @@ class Embeddings:
   
   Parameters:
   
-    ws (worspace object)
-      A wordspace class object.
+    ws (WS-object) 
+      A collection of Word-objects, representing entries 
+      in the CompLex corpus.
       
     embfile (str)
       The path of a pickle format file holding the embeddings. If file 
@@ -38,7 +37,7 @@ class Embeddings:
 
     self.wnl (wordnet lemmatizer object)
       Will be used to lemmatize words.
-      '''
+  '''
 
   def __init__(self, ws, embfile):
     self.ws = ws
@@ -48,15 +47,16 @@ class Embeddings:
     self.__check_existing_file()
 
   def __check_existing_file(self):
-    '''Checks if the pickled file given as class parameter and
+    '''Checks if the pickle file (given as class parameter)
     containing the embedding dictionaries already exists. 
-    For a detailed description of the dictionaries,
-    see documentation of local method: __setup.
     If file does not exist, the retrievement of embeddings is initialized.
     If file already exists, the dicts are loaded into 
     their respective variables and the process of 
     forming clusters for each target word type in
     the data is initialized.
+
+    For a detailed description of the dictionaries,
+    see documentation of local method: __setup.
     '''
     if path.exists(self.embfile):
       self.lemma_embs, self.tID_emb = pickle.load(open(self.embfile, "rb"))
@@ -123,7 +123,7 @@ class Embeddings:
 
     Parameters:
 
-      __get_embddngs (funct)
+      __get_embddngs (method)
         Provides the following variables:
         tokens (list)
           A tokenized and lowered sentence.
@@ -255,7 +255,7 @@ class Embeddings:
         the flat clusters are well-defined. Values near 0 suggest overlapping
         clusters. Values near -1 indicate that samples within a cluster
         have been assigned to the wrong cluster. 
-        Using this program, no silhouette score
+        Using this program, no silhouette scores
         under 0 have been observed. This might be because the flat clusters
         are derived from hierarchical clusters created through
         agglomerative linkage.
@@ -343,9 +343,4 @@ class Embeddings:
     if embedding is not None and tuple(embedding) in self.cluster_outliers: 
       is_outlier = 1
     return [is_outlier]
-
-if __name__ == "__main__":
-  from wordspace import WS
-  ws = WS('data/trainandtrial.tsv')
-  em = Embeddings(ws, '/Users/carolinearvidsson/embeddings_train_and_trial')
     
