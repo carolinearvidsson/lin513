@@ -17,7 +17,7 @@ a target word in context, and columns have the the following column structure:
 
 ### Setup
 
-**1.  Create the embedding file (CA)**
+**1.0  Create the embedding file (CA)**
 
 In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in embeddings.py).
@@ -48,14 +48,25 @@ The process of retrieving embeddings will take approximately 6 hours.
 The execution of this program consists of two steps: training and testing. Both steps are done through main.py in the command line. Main takes five arguments as input.
 
 main.py arguments:
-1. `mode` 2. `model file path` 3. `data file path` 4. `embedding file path` 5. `frequency file path`
+1. `mode` 2. `modelfilepath` 3. `datafilepath` 4. `embeddingfilepath` 5. `frequencyfilepath`
 
-Arguments 2, 4 and 5 are identical in the train and test mode (that is if you have an embedding file containing both test and train data), 1 and 2 are not.
+Arguments 2, 4 and 5 are identical in the train and test mode (that is if you have an embedding file containing both test and train data), 1 and 3 are not.
 
-mode:
-either test or train (see section '2.0 Training the model' and '2.1 Testing the model' for explicit example)
+***mode:***
 
-datafilepath:
+Can be either `test` or `train` (see section '2.0 Training the model' and '2.1 Testing the model' for explicit examples).
+
+***modelfilepath:***
+
+Path to the file containing the model. If mode is train, this file will be created or overwritten. If mode is test, the model will be used to predict lexical complexity.
+
+***datafilepath:***
+
+Depending on mode, this will be the path to either the train or test data.
+
+***embeddingfilepath:***
+
+Path to the file containing the embeddings. To get this file, see section '1.0 Creating the embedding file'
 
 
 **1. Training the model**
