@@ -41,6 +41,8 @@ em = Embeddings(ws, 'embeddings_train_trial')
 
 The process of retrieving embeddings will take approximately 6 hours.
 
+**2. Train ngrams**
+
 All methods are called through main.py. 
 
 ### Output
