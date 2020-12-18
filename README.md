@@ -134,7 +134,7 @@ A feature matrix where rows represent target tokens and columns represent their 
 
 ### Features
 
-The following features are calculated for each entry. In total there are 783 feature values spread over eight overarching feature types. All public methods in the feature classes (i.e. not prefixed with leading underscore)  return one or more feature(s) of a given word object.
+The following features are calculated for each entry. In total there are 784 feature values spread over nine . All public methods in the feature classes (i.e. not prefixed with leading underscore)  return one or more feature(s) of a given word object.
 
 #### Handcrafted
 
