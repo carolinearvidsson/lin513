@@ -79,7 +79,7 @@ class PosTagger:
         self.pos_counter = {'NN': 0, 'JJ':0, 'RB':0, 'VB':0, 'OT':0 }
         
         # Create dummy variables for chosen PsoS.
-        dummy_matrix = pd.get_dummies(list(pos_counter.keys())) # Makes as many dummy variables as chosen PoS-tags to consider
+        dummy_matrix = pd.get_dummies(list(self.pos_counter.keys())) # Makes as many dummy variables as chosen PoS-tags to consider
         self.dummy_vars = {}
         for i, part in zip(range(len(self.pos_counter)), 
                            list(self.pos_counter.keys())):
