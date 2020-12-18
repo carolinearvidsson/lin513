@@ -39,6 +39,8 @@ ws = WS('train_test.tsv')
 em = Embeddings(ws, 'embeddings_train_trial')
 ```
 
+The process of retrieving embeddings will take approximately 6 hours.
+
 All methods are called through main.py. 
 
 **?.Output**
