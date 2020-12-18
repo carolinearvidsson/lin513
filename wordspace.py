@@ -41,7 +41,7 @@ class WS:
         '''
         # First line of CompLex files contains column info, thus skip_header=1. 
         # Further arguments in np.genfromtext as to avoid certain Errors and 
-        # Warnings that may loose certain attributes for Word-objects.
+        # Warnings that may result in loss of certain attributes for Word-objects.
         text = np.genfromtxt(open(file), delimiter='\t', skip_header=1, 
                                 dtype=None, encoding=None, invalid_raise=False, 
                                 comments='##')
