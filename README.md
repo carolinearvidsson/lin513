@@ -17,7 +17,7 @@ a target word in context, and columns have the the following column structure:
 
 ### Setup
 
-**1.0  Create the embedding file (CA)**
+**1. Get the embedding file (CA)**
 
 In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in embeddings.py).
@@ -48,7 +48,7 @@ The process of retrieving embeddings will take approximately 6 hours.
 The execution of this program consists of two steps: training and testing. Both steps are done through main.py in the command line. Main takes five arguments as input.
 
 main.py arguments:
-1. `mode` 2. `modelfilepath` 3. `datafilepath` 4. `embeddingfilepath` 5. `frequencyfilepath`
+1. `mode` 2. `modelfilepath` 3. `datafilepath` 4. `embeddingfilepath` 5. `frequencyfilespath`
 
 Arguments 2, 4 and 5 are identical in the train and test mode (that is if you have an embedding file containing both test and train data), 1 and 3 are not.
 
@@ -66,8 +66,15 @@ Depending on mode, this will be the path to either the train or test data.
 
 ***embeddingfilepath:***
 
-Path to the file containing the embeddings. To get this file, see section '1.0 Creating the embedding file'
+Path to the file containing the embeddings. To get this file, see section '1. Get the embedding file'
 
+***frequencyfilespath***
+
+Path the the files constituting the the Google Books 1gram frequencies.
+For those with access to the mumin server. These files are available for download at path:
+/home/lin205_caar5483/lin513/embeddings_train_and_trial
+
+For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html)
 
 **1. Training the model**
 
