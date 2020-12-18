@@ -21,7 +21,7 @@ a target word in context, and columns have the the following column structure:
     In order to run this program, a file containing embeddings for the target words id needed (for
     a detailed description of the structure of this file, see documentation in embeddings.py).
     For those with acess to the mumin server, the path to this file is as follows: 
-    ´/home/lin205_caar5483/lin513/embeddings_train_and_trial'
+    ´/home/lin205_caar5483/lin513/embeddings_train_and_trial´
 
 be created.
 
