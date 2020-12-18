@@ -63,9 +63,10 @@ class Embeddings:
       self.__get_average_embedding()
       self.__generate_clusters()
     else:
+      ''
       self.__setup()
       print('Embeddings have been created and are available \
-                      in pickle format at path:', self.embfile)
+      in pickle format at path:', self.embfile)
       print('Embeddings not available:', self.embeddings_na)
 
   def __setup(self):

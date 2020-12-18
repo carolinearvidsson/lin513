@@ -72,11 +72,11 @@ Path to the file containing the embeddings. To get this file, see section '1. Ge
 
 Path the the files constituting the the Google Books 1gram frequencies.
 For those with access to the mumin server. These files are available for download at path:
-/home/lin205_caar5483/lin513/embeddings_train_and_trial
+/home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt
 
-For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html)
+For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
 
-**1. Training the model**
+#### Training the model
 
 `python3 main.py train modelfile trainingdata embeddingfile frequencyfile`
 

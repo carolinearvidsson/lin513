@@ -53,7 +53,7 @@ class DomainSpecificity:
             self.__get_domain_specific(self.__get_domains())
             pickle.dump(self.domain_specific, open(self.dsfilepath, 'wb'))
             print('Domain specific word types have been dumped and are \
-                                available at path:', self.dsfilepath)
+            available at path:', self.dsfilepath)
 
     def __get_domain_specific(self, domains):
         '''Calculates the symmetric difference of sets in order to
