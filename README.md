@@ -41,11 +41,30 @@ em = Embeddings(ws, 'embeddings_train_trial')
 
 The process of retrieving embeddings will take approximately 6 hours.
 
+***ATTENTION:*** If you run main.py without having an embedding file at the given path, the retrievement of embeddings will initialize automatically. In this case, embeddings will only be created for the given data file (either test or train). This works, but is not recommended.
+
 ### Running the program (CA)
 
-The execution of this program consists of two steps: training and testing. Both steps are done through main.py in the command line. Main takes 5 arguments as input. Some of these arguments are identical in the train and test mode, some are not.
+The execution of this program consists of two steps: training and testing. Both steps are done through main.py in the command line. Main takes five arguments as input.
+
+main.py arguments:
+1. **mode**, 2. model file path, 3. **data file path**, 4. embedding file path, 5. frequency file path. 
+
+Arguments 2, 4 and 5 are identical in the train and test mode (that is if you have an embedding file containing both test and train data), 1 and 2 are not.
+
+mode:
+either test or train (see section '2.0 Training the model' and '2.1 Testing the model' for explicit example)
+
+datafilepath:
+
 
 **1. Training the model**
+
+`python3 main.py train modelfilepath datafilepath embeddingfilepath frequencyfilepath`
+
+
+
+
 The extracted features and complexities of the training data will be used to train regression models, at present using Bayesian ridge regression. Before training, the program will create a number of versions of the feature matrix with different combinations of features. These versions are, as program is written now (see further definition below in Features section):
 
 - All features
