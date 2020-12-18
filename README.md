@@ -14,7 +14,7 @@ a target word in context, and columns have the the following column structure:
 5. Complexity
 
 ### Supplementary data
-The folder 'data' in this repository contains different versions of the data set to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram-(cfs)) and Domain Specificity or read the documentation for these classes.
+The folder 'data' in this repository contains different versions of the data set to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#Ngram-(CFS)) and Domain Specificity or read the documentation for these classes.
 
 ## Usage
 
