@@ -1,5 +1,6 @@
 import pickle
 import nltk
+from nltk.lm.preprocessing import pad_both_ends
 
 class Ngram():
     '''Class is a character ngram-probability calculator. Utilizes 
