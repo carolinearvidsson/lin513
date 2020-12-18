@@ -88,7 +88,7 @@ To test the model, enter the following:
 `python3 main.py test trained_model test_data.tsv embeddings_train_test google1grams/*.txt`
 
 
-### Output
+### Output (CFS)
 
 The extracted features and complexities of the training data will be used to train regression models, at present using Bayesian ridge regression. Before training, the program will create a number of versions of the feature matrix with different combinations of features. These versions are, as program is written now (see further definition below in Features section):
 
