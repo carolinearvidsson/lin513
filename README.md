@@ -43,11 +43,13 @@ The process of retrieving embeddings will take approximately 6 hours.
 
 ### Running the program (CA)
 
-The execution of this program constists of two steps: training and testing. Both steps are done through main.py
+The execution of this program constists of two steps: training and testing. Both steps are done through main.py.
+
+
 
 ### Output (CFS)
 
-As final output the program prints results of statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target in the CompLex corpus.
+As final output the program prints statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target in the CompLex corpus.
 
 The statistic measures used are the same (by type, not necessarily method) as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex). These are Pearson's R, Spearman's Rho, Mean Absolute Error (MAE), Mean Squared Error (MSE) and R-squared (R2). 
 
@@ -65,17 +67,15 @@ The Word object represents a single entry (i.e. row) from the data given when ru
 
 ### Features
 
-The following features are calculated for each entry. In total there are 783 feature values spread over eight overarching classes. 
+The following features are calculated for each entry. In total there are 783 feature values spread over eight overarching feature types. 
 
 #### Handcrafted
 
-##### Length (CFS)
-
-###### Word length (CFS)
+##### Word length (CFS)
 
 Returns the number of characters in target word. 
 
-###### Syllable count (CFS)
+##### Syllable count (CFS)
 
 Returns the number of syllables in target word. Uses the [Carnegie Mellon University Pronounciation Dictionary](http://www.speech.cs.cmu.edu/cgi-bin/cmudict), CMUdict, accessed throguh nltk. Given a word, the dictionary returns a list of corresponding phonemes where vowels are marked with numbers, indicating potential lexical stress, which is taken to indicate syllabic status. 
 
@@ -85,19 +85,15 @@ Returns (as code is presently written) three features; uni-, bi- and trigram pro
 
 ##### Word frequency (CA)
 
-##### PosTagger (CFS)
-
-###### Part of speech
+##### Part of speech (CFS)
 Returns five features that together indicate the part of speech of target word. The class utilizes nltk's part of speech tagger (which uses a tagset from Penn Treebank) to tag all sentences in data. 
 
 Utilizes nltk's part of speech tagger (which uses a tagset from Penn Treebank). Represented by dummy variables for parts of speech noun, verb, adjective and adverbs – all other parts of speech are grouped together as other. Returns five features.
 
-###### Sentence length (CFS)
-Consists of two features: number of words (any) preceeding target word and number of lexical/content words preceeding target. Lexical words are here defined as nouns (including proper names), verbs, adjectives and adverbs.
-
 ##### Domain specificity (CA)
 
-
+##### Sentence length (CFS)
+Consists of two features: number of words (any) preceeding target word and number of lexical/content words preceeding target. Lexical words are here defined as nouns (including proper names), verbs, adjectives and adverbs.
 
 #### Embeddings and word sense induction 
 
