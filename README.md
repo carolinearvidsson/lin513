@@ -14,7 +14,7 @@ a target word in context, and columns have the the following column structure:
 5. Complexity
 
 ### Supplementary data
-The folder 'data' in this repository contains different versions of the data set to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram) and Domain Specificity or read the documentation for these classes.
+The folder 'data' in this repository contains different versions of the data set to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram) and [Domain Specificity](#ds) or read the documentation for these classes.
 
 ## Usage
 
@@ -162,7 +162,7 @@ Upon initialization, the class tags all sentences in data for PoS using a tagger
 ##### Part of speech (CFS)
 Returns the part of speech of target word through five variables that together indicate the PoS. For each pre-tagged sentence and target word, the method used for the feature finds the target in sentence and thus the PoS. Not all PoS are included as its own variable and feature; nouns, verbs, adjectives and adverbs are classified separately by themselves while all other PoS are combined as 'other'. To represent these categorical features in a regression model, pandas dummy variable module is used using five binary categories/features.   
 
-##### Domain specificity (CA)
+##### Domain specificity (CA) <a name='ds'></a>
 Generates a set of words that only exist in one of the given domains/supcorpuses (bible, europarl or biomed) in the SemEval (Task 1) training data. During training, a file (data/domainspecific.pickle) containing the domain specific word forms is loaded.
 
 Its public method returns one feature; if a given word object is domain specific or not.
