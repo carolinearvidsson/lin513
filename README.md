@@ -64,8 +64,9 @@ main.py arguments:
 
 Arguments 2, 4 and 5 are identical in the train and test mode (that is if you have an embedding file containing both test and train data), 1 and 3 are not.
 
+| Arguments         | Description |
+| ----------------- |------------:|
 ***mode:***
-
 Can be either `test` or `train` (see section '2.0 Training the model' and '2.1 Testing the model' for explicit examples).
 
 ***modelfilepath:***
