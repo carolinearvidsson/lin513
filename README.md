@@ -17,7 +17,7 @@ a target word in context, and columns have the the following column structure:
 
 ### Setup
 
-**1.  Create the embedding file**
+**1.  Create the embedding file** 
 
 In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in embeddings.py).
@@ -34,6 +34,7 @@ To create an embedding file named 'embeddings_train_test', run the following cod
 
 ```python
 from wordspace import WS
+from embeddings import Embeddings
 ws = WS('train_test.tsv')
 em = Embeddings(ws, 'embeddings_train_trial')
 ```
