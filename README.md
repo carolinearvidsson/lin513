@@ -60,12 +60,6 @@ As final output the program prints statistic measures from comparing the predict
 
 The program will execute these measures for each of the trained models. 
 
-### Output (CFS)
-
-As final output the program prints statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target in the CompLex corpus.
-
-The statistic measures used are the same (by type, not necessarily method) as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex). These are Pearson's R, Spearman's Rho, Mean Absolute Error (MAE), Mean Squared Error (MSE) and R-squared (R2). 
-
 ## Classes
 
 ### Basic data structure
