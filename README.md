@@ -55,6 +55,8 @@ The process of retrieving embeddings will take approximately 6 hours.
 
 ***ATTENTION:*** If you run main.py without having an embedding file at the given path, the retrievement of embeddings will initialize automatically. In this case, embeddings will only be created for the given data file (either test or train). This works, but is not recommended.
 
+
+
 ### Running the program (CA)
 
 The execution of this program consists of two steps: training and testing. Both steps are done through main.py in the command line. Main takes five arguments as input.
