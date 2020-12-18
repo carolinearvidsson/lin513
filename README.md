@@ -102,13 +102,13 @@ To test the model, enter the following:
 
 ### Output (CFS)
 
-The extracted features and manually annotated complexities of the training data will be used to train regression models, at present using Bayesian ridge regression (through scikitlearn). Before training, the program will create a number of versions of the feature matrix with different combinations of features. At present, these versions are (see further definitions below in Features section):
+The extracted features and manually annotated complexities of the training data will be used to train regression models, at present using Bayesian ridge regression (through scikitlearn). Before training, the program will create a number of versions of the feature matrix with different combinations of features. For this purpose, the features are grouped into two bigger categories, embeddings-based (770 features) and handcrafted (14 features). The embeddings-based features are all based on BERT-embeddings and consist of word vectors (768 dimensions) and two cluster-related features. The combinations of features used to build separate models are as follows:
 
-- All features (783 features)
-- Only handcrafted (13 features)
-- Only features based on BERT-embeddings and the embeddings themselves (770 features)
-- Only embeddings (768 features)
-- Handcrafted, embeddings-based features and 50 embeddings (65 features)
+- All features (784 features)
+- Only handcrafted (14 features)
+- Only embeddings-based (770 features)
+- Only handcrafted and cluster-related features (16 features)
+- Handcrafted, cluster-related features and 50 embeddings (66 features)
 
 The incoming feature matrix extracted from the test data goes through the same process of version creation. The number of versions and how they are structured can easily be changed in the script (see regression.py). 
 
@@ -137,7 +137,7 @@ A feature matrix where rows represent target tokens and columns represent their 
 
 ### Features
 
-The following features are calculated for each entry. In total there are 783 feature values spread over eight overarching feature types. All public methods in the feature classes (i.e. not prefixed with leading underscore)  return one or more feature(s) of a given word object.
+The following features are calculated for each entry. In total there are 784 feature values spread over nine . All public methods in the feature classes (i.e. not prefixed with leading underscore)  return one or more feature(s) of a given word object.
 
 #### Handcrafted
 
