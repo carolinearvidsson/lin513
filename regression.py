@@ -7,7 +7,7 @@ from scipy.stats import pearsonr, spearmanr
 class MultiLinear():
     '''Represents one (or more) Regression models, based on 
     scikitlearn's linear model. Utilizes Bayesian Ridge regression 
-    (part of scikitlearn module)
+    (part of scikitlearn module).
     
     '''
 
