@@ -42,15 +42,15 @@ All methods are called through main.py.
 
 ## Classes
 
-### Data
+### Basic data structure
 
 ##### WS (Wordspace)
 
-The wordspace contains all entries from the given data. 
+The wordspace contains all entries from the data given as argument to main.py.  
 
 ##### Word
 
-The Word object represents a single entry from the CompLex corpus (from the subset given to the program through WS). The content of each column is used as an additional attribute. The Word object is what every feature class gets as input. 
+The Word object represents a single entry from the CompLex corpus (from the subset given to the program through WS). The content of each column (see section Data above) is used as an additional attribute. The Word object is what every feature method gets assigned in order to extract features. 
 
 ### Features
 
@@ -60,16 +60,21 @@ The following features are calculated for each entry. In total there are 783 fea
 
 ##### Word length (CFS)
 
+Returns the number of characters in target word. 
+
 ##### Syllable count (CFS)
+
+Returns the number of syllables in target word. Uses the [Carnegie Mellon University Pronounciation Dictionary](http://www.speech.cs.cmu.edu/cgi-bin/cmudict), CMUdict, accessed throguh nltk. Given a word, the dictionary returns a list of phonemes where 
 
 ##### Ngram (CFS)
 
-Consists of three features; uni-, bi- and trigram probabilities on character level. Ngram models are trained with nltk language model (Lidstone smoothing) and returns values in log2.
+Consists of three features as the script is now written; uni-, bi- and trigram probabilities on character level. Pre-trained models can be found in the "data" folder (pickled file "ngram_models"), and the training script "ngram_train.py" can easily be modified to train less or more models. The training is done with nltk's language model with Lidstone smoothing. 
+
 
 ##### Word frequency (CFS)
 
 ##### Part of speech (CFS)
-Utilizes nltk's part of speech tagger (which uses a tagset from Penn Treebank). Represented by dummy variables for parts of speech noun, verb, adjective and adverbs – all other parts of speech are grouped together as other. 
+Utilizes nltk's part of speech tagger (which uses a tagset from Penn Treebank). Represented by dummy variables for parts of speech noun, verb, adjective and adverbs – all other parts of speech are grouped together as other. Returns five features.
 
 ##### Domain specificity (CA)
 
