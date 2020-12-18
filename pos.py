@@ -171,7 +171,7 @@ class PosTagger:
             list with two integers representing all words preceeding 
             target word and all lexical/content words preceeding target.
         '''
-        sentence_entry = self.tagged_sentences[sen_id]
+        sentence = self.tagged_sentences[sen_id]
         all_sen_len = sentence[1] # all_sen_len is same as target's index in sentence, see two lines down
         lex_sen_len = 0
         preceeding = sentence[0][:all_sen_len] # extract only preceeding tuples (containing word and PoS-tag) in sentence
