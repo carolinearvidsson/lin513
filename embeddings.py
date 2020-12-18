@@ -123,7 +123,7 @@ class Embeddings:
 
     Parameters:
 
-      __get_embddngs (funct)
+      __get_embddngs (method)
         Provides the following variables:
         tokens (list)
           A tokenized and lowered sentence.
