@@ -48,7 +48,7 @@ The process of retrieving embeddings will take approximately 6 hours.
 The execution of this program consists of two steps: training and testing. Both steps are done through main.py in the command line. Main takes five arguments as input.
 
 main.py arguments:
-1. **mode** 2. model file path 3. **data file path** 4. embedding file path 5. frequency file path
+1. `mode` 2. `model file path` 3. `data file path` 4. `embedding file path` 5. `frequency file path`
 
 Arguments 2, 4 and 5 are identical in the train and test mode (that is if you have an embedding file containing both test and train data), 1 and 2 are not.
 
@@ -60,7 +60,7 @@ datafilepath:
 
 **1. Training the model**
 
-`python3 main.py train modelfilepath datafilepath embeddingfilepath frequencyfilepath`
+`python3 main.py train modelfile trainingdata embeddingfile frequencyfile`
 
 
 
