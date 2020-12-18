@@ -40,11 +40,11 @@ em = Embeddings(ws, 'embeddings_train_trial')
 
 All methods are called through main.py. 
 
-**?.Output**
+### Output
 
 As final output the program prints statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target in the CompLex corpus.
 
-The statistic measures used are the same (by type, not necessarily method) as the task authors have published as expected baseline performance on the task's [website]()
+The statistic measures used are the same (by type, not necessarily method) as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex).
 
 ## Classes
 
