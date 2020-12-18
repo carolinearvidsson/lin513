@@ -46,7 +46,19 @@ The process of retrieving embeddings will take approximately 6 hours.
 The execution of this program consists of two steps: training and testing. Both steps are done through main.py in the command line. Main takes 5 arguments as input. Some of these arguments are identical in the train and test mode, some are not.
 
 **1. Training the model**
+The extracted features and complexities of the training data will be used to train regression models, at present using Bayesian ridge regression. Before training, the program will create a number of versions of the feature matrix with different combinations of features. These versions are, as program is written now (see further definition below in Features section):
 
+- All features
+- Only handcrafted 
+- Only features based on BERT-embeddings and the embeddings themselves
+- Only embeddings
+- Handcrafted, embeddings-based features and 50 embeddings
+
+The incoming features from the test data goes through the same process of creating versions. The number of versions and how they are structured can easily be changed in the script (see regression.py). 
+
+As final output the program prints statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target. The statistic measures used are the same (by type, not necessarily method) as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex). These are Pearson's R, Spearman's Rho, Mean Absolute Error (MAE), Mean Squared Error (MSE) and R-squared (R2). 
+
+The program will execute these measures for each of the trained models. 
 
 ### Output (CFS)
 
