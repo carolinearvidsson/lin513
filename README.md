@@ -43,8 +43,9 @@ The process of retrieving embeddings will take approximately 6 hours.
 
 ### Running the program (CA)
 
-The execution of this program constists of two steps: training and testing. Both steps are done through main.py.
+The execution of this program consists of two steps: training and testing. Both steps are done through main.py in the command line. Main takes 5 arguments as input. Some of these arguments are identical in the train and test mode, some are not.
 
+**1. Training the model**
 
 
 ### Output (CFS)
