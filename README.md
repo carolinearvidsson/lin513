@@ -14,7 +14,7 @@ a target word in context, and columns have the the following column structure:
 5. Complexity
 
 ### Supplementary data
-The folder 'data' in this repository contains different versions of the data set to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#Ngram-(CFS)) and Domain Specificity or read the documentation for these classes.
+The folder 'data' in this repository contains different versions of the data set to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram) and Domain Specificity or read the documentation for these classes.
 
 ## Usage
 
@@ -149,7 +149,7 @@ Returns the number of characters in target word.
 
 Returns the number of syllables in target word. Uses the [Carnegie Mellon University Pronounciation Dictionary](http://www.speech.cs.cmu.edu/cgi-bin/cmudict), CMUdict, accessed throguh nltk. Given a word, the dictionary returns a list of corresponding phonemes where vowels are marked with numbers, indicating potential lexical stress, which is taken to indicate syllabic status. 
 
-##### Ngram (CFS)
+##### Ngram (CFS) <a name='ngram'></a>
 
 Returns three features; uni-, bi- and trigram probabilities on character level for target word. Pre-trained models can be found in the "data" folder (pickled file `ngram_models`), and the training script `ngram_train.py` can easily be modified to train fewer or more models. The training is done using nltk's language model with Lidstone smoothing. NOTE: if the amount of models are changed from standard of three, the code in char_ngram.py must be modified accordingly.
 
