@@ -34,6 +34,7 @@ To create an embedding file named 'embeddings_train_test', run the following cod
 
 ```python
 from wordspace import WS
+from embeddings import Embeddings
 ws = WS('train_test.tsv')
 em = Embeddings(ws, 'embeddings_train_trial')
 ```
