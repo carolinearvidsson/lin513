@@ -17,14 +17,26 @@ a target word in context, and columns have the the following column structure:
 
 ### Setup
 
-1.  Create the embedding file
+**1.  Create the embedding file**
 
-In order to run this program, a file containing embeddings for the target words id needed (for
+In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in embeddings.py).
-For those with acess to the mumin server, the path to this file is as follows: 
+For those with acess to the mumin server, the file is available for download at path: 
 
 `/home/lin205_caar5483/lin513/embeddings_train_and_trial`
 
+For those without access to this file, it can be created by first joining the training and test data.
+When joining the test and training files, remember to remove the first row of the file that gets appended (this is the row that does not contain a data point, just column labels).
+For example, if you append the test file to the train file, the first row in the test file containing column labels should be removed.
+
+Let's say you have a file named 'train_test.tsv', containing both the test and training data.
+To create an embedding file named 'embeddings_train_test', run the following code:
+
+```python
+from wordspace import WS
+ws = WS('train_test.tsv')
+em = Embeddings(ws, 'embeddings_train_trial')
+```
 
 All methods are called through main.py. 
 

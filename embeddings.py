@@ -343,9 +343,4 @@ class Embeddings:
     if embedding is not None and tuple(embedding) in self.cluster_outliers: 
       is_outlier = 1
     return [is_outlier]
-
-# if __name__ == "__main__":
-#   from wordspace import WS
-#   ws = WS('data/trainandtrial.tsv')
-#   em = Embeddings(ws, '/Users/carolinearvidsson/embeddings_train_and_trial')
     
