@@ -76,9 +76,16 @@ For those with access to the mumin server. These files are available for downloa
 
 For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
 
-#### Training the model
+#### Testing and training
+Let's say you want to name your model file 'trained_model', you have a training data file named 'train_data.tsv', a testing data file named 'test_data.tsv', a file containing embeddings for test and training data named 'embeddings_train_test' and google 1gram frequency files at path 'google1grams/*.txt'.
 
-`python3 main.py train modelfile trainingdata embeddingfile frequencyfile`
+To train the model, enter the following in the command line:
+
+`python3 main.py train trained_model train_data.tsv embeddings_train_test google1grams/*.txt`
+
+To test the model, enter the following:
+
+`python3 main.py test trained_model test_data.tsv embeddings_train_test google1grams/*.txt`
 
 
 
