@@ -53,6 +53,8 @@ As final output the program prints statistic measures from comparing the predict
 
 The statistic measures used are the same (by type, not necessarily method) as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex). These are Pearson's R, Spearman's Rho, Mean Absolute Error (MAE), Mean Squared Error (MSE) and R-squared (R2). 
 
+The program will execute these measures for all the models trained (the number of models can be modified in the MultiLinear class, regression.py). 
+
 ## Classes
 
 ### Basic data structure
