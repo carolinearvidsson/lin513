@@ -86,7 +86,7 @@ For those with access to the mumin server. These files are available for downloa
 For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
 
 #### Testing and training
-Let's say you want to name your model file 'trained_model', you have a training data file named 'train_data.tsv', a testing data file named 'test_data.tsv', a file containing embeddings for test and training data named 'embeddings_train_test' and google 1gram frequency files at path 'google1grams/*.txt'.
+Let's say you want to name your model file 'trained_model' and you have a training data file named 'train_data.tsv', a testing data file named 'test_data.tsv', a file containing embeddings for test and training data named 'embeddings_train_test' and google 1gram frequency files at path 'google1grams/*.txt'.
 
 To train the model, enter the following in the command line:
 
@@ -129,9 +129,12 @@ The wordspace contains all entries from the data. It collects unique Word object
 
 The Word object represents a single entry (i.e. row) from the dataset. The content of each column (see Data section above) are used as attributes.
 
+##### FeatureMatrix (CA)
+A feature matrix where rows represent target tokens and columns represent their features to be used in predicting lexical complexity of single words in sentence context.
+
 ### Features
 
-The following features are calculated for each entry. In total there are 783 feature values spread over eight overarching feature types. 
+The following features are calculated for each entry. In total there are 783 feature values spread over eight overarching feature types. All public methods in the feature classes (i.e. not prefixed with leading underscore)  return one or more feature(s) of a given word object.
 
 #### Handcrafted
 
@@ -147,7 +150,8 @@ Returns the number of syllables in target word. Uses the [Carnegie Mellon Univer
 
 Returns three features; uni-, bi- and trigram probabilities on character level for target word. Pre-trained models can be found in the "data" folder (pickled file `ngram_models`), and the training script `ngram_train.py` can easily be modified to train fewer or more models. The training is done using nltk's language model with Lidstone smoothing. NOTE: if the amount of models are changed from standard of three, the code in char_ngram.py must be modified accordingly.
 
-##### Word frequency (CA)
+##### Frequency (CA)
+Represents a frequency lexicon. Its public method returns the logarithm of a word's frequency.
 
 #### PosTagger
 Upon initialization, the class tags all sentences in data for PoS using a tagger from nltk with Penn Treebank PoS-tags. Class returns three features (one of which consists of five variables).
@@ -156,16 +160,20 @@ Upon initialization, the class tags all sentences in data for PoS using a tagger
 Returns the part of speech of target word through five variables that together indicate the PoS. For each pre-tagged sentence and target word, the method used for the feature finds the target in sentence and thus the PoS. Not all PoS are included as its own variable and feature; nouns, verbs, adjectives and adverbs are classified separately by themselves while all other PoS are combined as 'other'. To represent these categorical features in a regression model, pandas dummy variable module is used using five binary categories/features.   
 
 ##### Domain specificity (CA)
+Generates a set of words that only exist in one of the given domains/supcorpuses (bible, europarl or biomed) in the SemEval (Task 1) training data. During training, a file containing the domain specific word forms is created or overwritten if it already exists. This file will be used in the test mode.
+
+Its public method returns one feature; if a given word object is domain specific or not.
 
 ##### Sentence length (CFS)
-Returns two features, both indicating number of words preceeding target word. The first feature counts all preceeding words. The second feature uses the pre-tagged sentences and counts only those words deemed to belong to a lexical/content PoS. This is here defined as nouns, verbs, adjectives  
-Consists of two features: number of words (any) preceeding target word and number of lexical/content words preceeding target. Lexical words are here defined as nouns (including proper names), verbs, adjectives and adverbs.
-
-#### Embeddings and word sense induction 
+Returns two features, both indicating number of words preceeding target word. The first feature counts all preceeding words. The second feature uses the pre-tagged sentences and counts only those words deemed to belong to a lexical/content PoS. This is here defined as nouns, verbs, adjectives.
 
 ##### BERT embeddings (CA)
+Generates BERT embeddings and uses them to perform word sense induction on observations belonging to the same word type.
 
-##### Clusters and outliers (CA)
+Its public methods return the following feature types:
+1. Token embeddings (each of the 768 dimensions constitutes a single feature)
+2. Word type's number of clusters 
+3. If token is a cluster outlier (single member of a cluster)
 
 #### MultiLinear (CFS)
 
