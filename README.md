@@ -47,15 +47,25 @@ The execution of this program constists of two steps: training and testing. Both
 
 
 
-### Output (CFS)
+### Training models and output (CFS)
 
-As final output the program prints statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target in the CompLex corpus.
+The extracted features and complexities of the training data will be used to train regression models, at present using Bayesian ridge regression. Before training, the program will create a number of versions of the feature matrix with different combinations of features. These versions are, as program is written now (see further definition below in Features section):
 
-The statistic measures used are the same (by type, not necessarily method) as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex). These are Pearson's R, Spearman's Rho, Mean Absolute Error (MAE), Mean Squared Error (MSE) and R-squared (R2). 
+- All features
+- Only handcrafted 
+- Only features based on BERT-embeddings and the embeddings themselves
+- Only embeddings
+- Handcrafted, embeddings-based features and 50 embeddings
 
-The program will execute these measures for all the models trained (the number of models can be modified in the MultiLinear class, regression.py). 
+The incoming features from the test data goes through the same process of creating versions. The number of versions and how they are structured can easily be changed in the script (see regression.py). 
+
+As final output the program prints statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target. The statistic measures used are the same (by type, not necessarily method) as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex). These are Pearson's R, Spearman's Rho, Mean Absolute Error (MAE), Mean Squared Error (MSE) and R-squared (R2). 
+
+The program will execute these measures for each of the trained models. 
 
 ## Classes
+
+Below lists all the classes used in the program. For more information on each class and/or feature, please see more detailed documentation in corresponding script files.  
 
 ### Basic data structure
 
@@ -87,15 +97,19 @@ Returns (as code is presently written) three features; uni-, bi- and trigram pro
 
 ##### Word frequency (CA)
 
+#### PosTagger(CFS)
+
 ##### Part of speech (CFS)
 Returns five features that together indicate the part of speech of target word. The class utilizes nltk's part of speech tagger (which uses a tagset from Penn Treebank) to tag all sentences in data. 
 
 Utilizes nltk's part of speech tagger (which uses a tagset from Penn Treebank). Represented by dummy variables for parts of speech noun, verb, adjective and adverbs – all other parts of speech are grouped together as other. Returns five features.
 
-##### Domain specificity (CA)
-
 ##### Sentence length (CFS)
 Consists of two features: number of words (any) preceeding target word and number of lexical/content words preceeding target. Lexical words are here defined as nouns (including proper names), verbs, adjectives and adverbs.
+
+##### Domain specificity (CA)
+
+
 
 #### Embeddings and word sense induction 
 
@@ -103,7 +117,9 @@ Consists of two features: number of words (any) preceeding target word and numbe
 
 ##### Clusters and outliers (CA)
 
+### Statistics
 
+#### MultiLinear
 
 
 
