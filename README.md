@@ -132,7 +132,7 @@ A feature matrix where rows represent target tokens and columns represent their 
 
 The class is used both for training regression models as well as testing the models, depending on chosen mode. As described in section [Output](#output), it creates versions of the incoming feature matrix to train and test multiple models. Its final output prints results from statistic measures per created model. 
 
----
+
 
 ### Features <a name='feat'></a> 
 
