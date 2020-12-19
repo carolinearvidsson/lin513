@@ -4,7 +4,7 @@ The aim of this program is to predict lexical complexity of single words in cont
 
 ---
 
-## 1. Data
+## 1. Data <a name='data'></a>
 The dataset consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
 
 Training and test files are tab separated (.tsv) in which each row represents 
@@ -122,7 +122,7 @@ The wordspace contains all entries from the given data per mode. It collects uni
 
 #### Word (CFS)
 
-The Word object represents a single entry (i.e. row) from the dataset. The content of each column (see Data section above) are used as attributes.
+The Word object represents a single entry (i.e. row) from the dataset. The content of each column (see [Data](#data) section) are used as attributes.
 
 #### FeatureMatrix (CA)
 A feature matrix where rows represent target tokens and columns represent their features to be used in predicting lexical complexity of single words in sentence context.
