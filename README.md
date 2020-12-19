@@ -163,7 +163,7 @@ The class expects that (3) ngram models are previously trained. These can be fou
 ***ATTENTION:*** if the amount of models are changed from the present standard of three, the code in char_ngram.py must be modified accordingly, as it is presently specifically written for three models. Also, see [attention note at beginning of Features section](#feat) about feature matrix versions.
 
 #### Frequency (CA)
-Represents a frequency lexicon. Its public method returns the logarithm of a word's frequency. 
+Represents a frequency lexicon. Its public method returns the logarithm of a word's absolute frequency. 
 
 Needs path to Google Books 1gram frequencies. For those with access to the mumin server. These files are available for download at path: /home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt. For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
 
