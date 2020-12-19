@@ -32,6 +32,7 @@ The folder 'data' in this repository contains different versions of the data set
 - bert-embedding 
 - numpy
 - pickle
+- pandas
 
 ### 2.2 Get the embedding file (CA) <a name='getembs'></a>
 
