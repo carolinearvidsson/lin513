@@ -129,7 +129,7 @@ The class is used both for training regression models as well as testing the mod
 
 The following features are calculated for each entry. In total there are 784 feature values spread over nine classes. All public methods in the feature classes (i.e. not prefixed with leading underscore) return one or more feature(s) of a given word object.
 
-***ATTENTION:*** it is easy to change the number of features by excluding/adding feature classes called in main.py. If this is done, make sure to check the indices used to create versions of the full feature matrix in regression.py. Otherwise, it will make versions of the matrix that may correspond to features as intended. 
+***ATTENTION:*** it is easy to change the number of features by excluding/adding feature classes called in main.py. If this is done, make sure to check the indices used to create versions of the full feature matrix in regression.py. Otherwise, it will make versions of the matrix that may not correspond to features as intended. 
 
 
 #### Length (CFS)
