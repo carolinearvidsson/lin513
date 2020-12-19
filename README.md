@@ -41,7 +41,7 @@ For those with access to the mumin server, an embedding file for all target word
 
 `/home/lin205_caar5483/lin513/embeddings_train_and_trial`
 
-For those without access to this file, it can be created by first joining the training and test data.
+For those without access to this file, it can be created by first joining the train and test data.
 When joining the test and training files, remember to remove the first row of the file that gets appended (this is the row that does not contain a data point, just column labels).
 For example, if you append the test file to the train file, the first row in the test file containing column labels should be removed.
 
