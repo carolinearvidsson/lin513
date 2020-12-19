@@ -151,7 +151,9 @@ The public method of the Ngram-class returns three features based on ngram proba
 2. Bigram probability
 3. Trigram probability 
 
-The class expects that (3) ngram models are previously trained. These can be found in the "data" folder (pickled file `ngram_models`). A training script, `ngram_train.py`, can be found in the same folder. The models are trained on the Brown corpus, using nltk's language model module with Lidstone smoothing. The training script is easily modified to train more (or fewer) ngram models. ***ATTENTION:*** if the amount of models are changed from the present standard of three, the code in char_ngram.py must be modified accordingly, as it is presently specifically written for three models. Also, see [attention note at beginning of Features section](#feat) about feature matrix versions.
+The class expects that (3) ngram models are previously trained. These can be found in the "data" folder (pickled file `ngram_models`). A training script, `ngram_train.py`, can be found in the same folder. The models are trained on the Brown corpus, using nltk's language model module with Lidstone smoothing. The training script is easily modified to train more (or fewer) ngram models. 
+
+***ATTENTION:*** if the amount of models are changed from the present standard of three, the code in char_ngram.py must be modified accordingly, as it is presently specifically written for three models. Also, see [attention note at beginning of Features section](#feat) about feature matrix versions.
 
 #### Frequency (CA)
 Represents a frequency lexicon. Its public method returns the logarithm of a word's frequency.
