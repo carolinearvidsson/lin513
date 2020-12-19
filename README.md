@@ -20,11 +20,11 @@ The folder 'data' in this repository contains different versions of the data set
 
 ---
 
-## Usage
+# Usage
 
-### 2.0 Setup
+## 2.0 Setup
 
-## 2.1 Required installations
+### 2.1 Required installations
 
 - scikit 
 - scipy 
@@ -33,7 +33,7 @@ The folder 'data' in this repository contains different versions of the data set
 - numpy
 - pickle
 
-## 2.2 Get the embedding file (CA)
+### 2.2 Get the embedding file (CA)
 
 In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in embeddings.py).
@@ -61,7 +61,7 @@ The process of retrieving embeddings will take approximately 6 hours.
 
 ---
 
-### 3.0 Running the program (CA)
+## 3.0 Running the program (CA)
 
 The execution of this program consists of two steps: training and testing. Both steps are done through main.py in the command line. Main takes five arguments as input.
 
@@ -78,7 +78,7 @@ Arguments         | Description
 ***embeddingfilepath:***|Path to the file containing the embeddings. To get this file, see section '1. Get the embedding file'
 ***frequencyfilespath***| Path to Google Books 1gram frequencies. For those with access to the mumin server. These files are available for download at path: /home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt. For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
 
-#### 3.1 Testing and training (CA)
+### 3.1 Testing and training (CA)
 Let's say you want to name your model file 'trained_model' and you have a training data file named 'train_data.tsv', a testing data file named 'test_data.tsv', a file containing embeddings for test and training data named 'embeddings_train_test' and google 1gram frequency files at path 'google1grams/*.txt'.
 
 To train the model, enter the following in the command line:
