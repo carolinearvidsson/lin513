@@ -34,7 +34,7 @@ The folder `data` in this repository contains different versions of the data set
 - pickle
 - pandas
 
-### 2.2 Get the embedding file (CA) <a name='getembs'></a>
+### 2.2 Getting the embedding file (CA) <a name='getembs'></a>
 
 In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in `embeddings.py`).
@@ -75,7 +75,7 @@ Arguments         | Description
 ***mode***        |Either `test` or `train`
 ***modelfilepath***|Path to the file containing the model. If mode is train, this file will be created or overwritten. If mode is test, the model will be used to predict lexical complexity.
 ***datafilepath***|Depending on mode, this will be the path to either the train or test data.
-***embeddingfilepath***|Path to the file containing the embeddings. To get this file, see section [2.2 Get the embedding file](#getembs)
+***embeddingfilepath***|Path to the file containing the embeddings. To get this file, see section [2.2 Getting the embedding file](#getembs)
 ***frequencyfilespath***| Path to Google Books 1gram frequencies. For those with access to the mumin server. These files are available for download at path: /home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt. For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
 
 ### 3.1 Testing and training (CA)
