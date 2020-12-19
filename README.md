@@ -46,7 +46,7 @@ For those without access to this file, it can be created by first joining the tr
 When joining the train and test files, remember to remove the first row of the file that gets appended (this is the row that does not contain a data point, just column labels).
 For example, if you append the test file to the train file, the first row in the test file containing column labels should be removed.
 
-Let's say you have a file named 'train_test.tsv', containing both the test and training data.
+Let's say you have a file named 'train_test.tsv', containing both the test and train data.
 To create an embedding file named 'embeddings_train_test', run the following code:
 
 ```python
