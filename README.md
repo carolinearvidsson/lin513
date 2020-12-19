@@ -133,7 +133,7 @@ The class is used both for training regression models as well as testing the mod
 
 
 
-### 4.2 Features <a name='feat'></a> 
+### 4.2 Features <a name='feat'></a> (CFS)
 
 The following features are calculated for each entry's target word. In total there are 784 feature values spread over nine classes. Some of the features are solely based on the target word itself, while some of them take the surrounding sentence context into consideration. All public methods in the feature classes (i.e. not prefixed with leading underscore) return one or more feature(s) of a given word object.
 
