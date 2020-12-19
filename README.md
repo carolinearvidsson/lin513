@@ -72,7 +72,7 @@ Arguments 2, 4 and 5 are identical in the train and test mode (that is if you ha
 
 Arguments         | Description
 ----------------- | ----------------- 
-***mode***        |Can be either `test` or `train` (see section '2.0 Training the model' and '2.1 Testing the model' for explicit examples).
+***mode***        |Either `test` or `train`
 ***modelfilepath***|Path to the file containing the model. If mode is train, this file will be created or overwritten. If mode is test, the model will be used to predict lexical complexity.
 ***datafilepath***|Depending on mode, this will be the path to either the train or test data.
 ***embeddingfilepath***|Path to the file containing the embeddings. To get this file, see section [2.2 Get the embedding file](#getembs)
