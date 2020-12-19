@@ -100,7 +100,7 @@ The extracted features and manually annotated complexities of the training data 
 - Only handcrafted and cluster-related features (16 features)
 - Handcrafted, cluster-related features and 50 embeddings (66 features)
 
-The incoming feature matrix extracted from the test data goes through the same process of version creation. The number of versions and how they are structured can easily be changed in the script (see `regression.py`). 
+The incoming feature matrix extracted from the test data goes through the same process of version creation. The number of versions and how they are structured can easily be changed in the script (see [`regression.py`](https://github.com/carolinearvidsson/lin513/blob/main/regression.py)). 
 
 As final output when running the program in test mode, the program prints statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target. The statistic measures used are the same as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex). These are Pearson's R, Spearman's Rho, Mean Absolute Error (MAE), Mean Squared Error (MSE) and R-squared (R2). 
 
