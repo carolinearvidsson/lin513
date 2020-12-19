@@ -5,7 +5,7 @@ The aim of this program is to predict lexical complexity of single words in cont
 ---
 
 ## 1. Data <a name='data'></a>
-The dataset consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
+A subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
 
 Training and test files are tab separated (.tsv) in which each row represents 
 a target word in context, and columns have the the following column structure:
@@ -23,6 +23,8 @@ The folder `data` in this repository contains different versions of the data set
 # Usage
 
 ## 2. Setup
+
+The program is implemented with Python.
 
 ### 2.1 Required installations
 
