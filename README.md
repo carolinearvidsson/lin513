@@ -104,15 +104,15 @@ The program will execute these measures for each of the trained models.
 
 ## Classes
 
-Below are all the classes used by the program, the majority of which are classes used to extract features from the data. 
+Below are all the classes used by the program, the majority of which are classes used to extract features from the data. For more detailed descriptions, please refer to the in-file documentation for each class. 
 
 ### Basic data structure
 
-Upon running the program, in either training or test mode, the data will be structured by the classes WS and Word. The class FeatureMatrix collects and organizes extracted features and calls on the class MultiLinear to train (train mode) regression models and predict and test (test mode) said models. 
+Upon running the program, in either training or test mode, the data will be structured by the classes WS and Word. The class FeatureMatrix collects and organizes extracted features and calls on the class MultiLinear to train (train mode) regression models and predict complexities and test (test mode) said models. 
 
 #### WS (Wordspace) (CFS)
 
-The wordspace contains all entries from the data. It collects unique Word objects (see below) in a set as well as stores all target types which will be used by some of the feature classes.  
+The wordspace contains all entries from the given data per mode. It collects unique Word objects (see below) in a set as well as stores all target types which will be used by some of the feature classes.  
 
 #### Word (CFS)
 
@@ -123,11 +123,11 @@ A feature matrix where rows represent target tokens and columns represent their 
 
 #### MultiLinear (CFS)
 
-The class is used both for training regression models as well as testing the models, depending on chosen mode. As described in section [Output](#output), it creates versions of the incoming feature matrix to train and test multiple models. Its final output prints results per model from statistic measures. 
+The class is used both for training regression models as well as testing the models, depending on chosen mode. As described in section [Output](#output), it creates versions of the incoming feature matrix to train and test multiple models. Its final output prints results from statistic measures per created model. 
 
-### Features
+### Features <a name='feat'></a> 
 
-The following features are calculated for each entry. In total there are 784 feature values spread over nine classes. All public methods in the feature classes (i.e. not prefixed with leading underscore) return one or more feature(s) of a given word object.
+The following features are calculated for each entry's target word. In total there are 784 feature values spread over nine classes. Some of the features are solely based on the target word itself, while some of them take the surrounding sentence context into consideration. All public methods in the feature classes (i.e. not prefixed with leading underscore) return one or more feature(s) of a given word object.
 
 ***ATTENTION:*** it is easy to change the number of features by excluding/adding feature classes called in main.py. If this is done, make sure to check the indices used to create versions of the full feature matrix in regression.py. Otherwise, it will make versions of the matrix that may not correspond to features as intended. 
 
@@ -145,24 +145,34 @@ The public methods of the Length-class returns two features:
 
 #### Ngram (CFS) <a name='ngram'></a>
 
-Returns three features; uni-, bi- and trigram probabilities on character level for target word. Pre-trained models can be found in the "data" folder (pickled file `ngram_models`), and the training script `ngram_train.py` can easily be modified to train fewer or more models. The training is done using nltk's language model with Lidstone smoothing. ***NOTE:*** if the amount of models are changed from standard of three, the code in char_ngram.py must be modified accordingly.
+The public method of the Ngram-class returns three features based on ngram probabilities (on character level):
+
+1. Unigram probability
+2. Bigram probability
+3. Trigram probability 
+
+The class expects that (3) ngram models are previously trained. These can be found in the "data" folder (pickled file `ngram_models`). A training script, `ngram_train.py`, can be found in the same folder. The models are trained on the Brown corpus, using nltk's language model module with Lidstone smoothing. The training script is easily modified to train more (or fewer) ngram models. ***ATTENTION:*** if the amount of models are changed from the present standard of three, the code in char_ngram.py must be modified accordingly, as it is presently specifically written for three models. Also, see [attention note at beginning of Features section](#feat) about feature matrix versions.
 
 #### Frequency (CA)
 Represents a frequency lexicon. Its public method returns the logarithm of a word's frequency.
 
 #### PosTagger (CFS)
-Upon initialization, the class tags all sentences in data for PoS using a tagger from nltk with Penn Treebank PoS-tags. Class returns three features (one of which consists of five variables).
+Upon initialization, the class tags all sentences in data for part of speech (PoS) using a tagger from nltk with Penn Treebank PoS-tags. When called, PosTagger class's public methods returns three features (one of which consists of five variables):
 
-#### Part of speech (CFS)
-Returns the part of speech of target word through five variables that together indicate the PoS. For each pre-tagged sentence and target word, the method used for the feature finds the target in sentence and thus the PoS. Not all PoS are included as its own variable and feature; nouns, verbs, adjectives and adverbs are classified separately by themselves while all other PoS are combined as 'other'. To represent these categorical features in a regression model, pandas dummy variable module is used using five binary categories/features.   
+1. Part of speech 
+2. Sentence length (all words)
+3. Sentence length (lexical/content words)
+
+*Part of speech* returns the PoS of target word through five variables that together indicate the PoS. For each pre-tagged sentence and target word, the method used for the feature finds the target in sentence and thus the PoS. Not all PoS are included as its own variable and feature; nouns, verbs, adjectives and adverbs are classified separately by themselves while all other PoS are combined as 'other'. To represent these categorical features in a regression model, pandas dummy variable module is used using five binary categories/features. 
+
+*Sentence length (all words)* returns the number of words preceeding the target word.
+
+*Sentence length (lexical/content words)* returns the number of lexical/content words preceeding the target word. The definition of lexical/content PoS is similar to the Part of speech feature's categorization of PoS; the PoS deemed lexical are nouns, verbs, adjectives and adverbs. 
 
 #### Domain specificity (CA) <a name='ds'></a>
 Generates a set of words that only exist in one of the given domains/supcorpuses (bible, europarl or biomed) in the SemEval (Task 1) training data. During training, a file (data/domainspecific.pickle) containing the domain specific word forms is loaded.
 
 Its public method returns one feature; if a given word object is domain specific or not.
-
-#### Sentence length (CFS)
-Returns two features, both indicating number of words preceeding target word. The first feature counts all preceeding words. The second feature uses the pre-tagged sentences and counts only those words deemed to belong to a lexical/content PoS. This is here defined as nouns, verbs, adjectives.
 
 #### BERT embeddings (CA)
 Generates BERT embeddings and uses them to perform word sense induction on observations belonging to the same word type.
