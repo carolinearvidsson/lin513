@@ -326,7 +326,7 @@ class Embeddings:
   def n_clusters(self, wobj):
     '''Returns the number of clusters (int) of a given word object's
     lemma. If the number of clusters cannot be retrieved
-    due to the absence of the word object's embedding, an average
+    due to absence of the word object's embedding, an average
     number of clusters is returned
     '''
     try:
