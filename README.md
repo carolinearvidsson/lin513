@@ -16,7 +16,7 @@ a target word in context, and columns have the the following column structure:
 5. Complexity
 
 ### 1.1 Supplementary data
-The folder 'data' in this repository contains different versions of the data sets to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram) and [Domain Specificity](#ds) or read the in-file documentation for these classes.
+The folder 'data' in this repository contains different versions of the data sets to be used for training and/or testing. It also contains files (`ngram_models`, `ngram_train.py` and `domainspecific.pickle`) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram) and [Domain Specificity](#ds) or read the in-file documentation for these classes.
 
 ---
 
@@ -37,7 +37,7 @@ The folder 'data' in this repository contains different versions of the data set
 ### 2.2 Get the embedding file (CA) <a name='getembs'></a>
 
 In order to run this program, a file containing embeddings for the target words is needed (for
-a detailed description of the structure of this file, see documentation in embeddings.py).
+a detailed description of the structure of this file, see documentation in `embeddings.py`).
 For those with access to the mumin server, an embedding file for all target words is available for download at path: 
 
 `/home/lin205_caar5483/lin513/embeddings_train_and_trial`
@@ -100,7 +100,7 @@ The extracted features and manually annotated complexities of the training data 
 - Only handcrafted and cluster-related features (16 features)
 - Handcrafted, cluster-related features and 50 embeddings (66 features)
 
-The incoming feature matrix extracted from the test data goes through the same process of version creation. The number of versions and how they are structured can easily be changed in the script (see regression.py). 
+The incoming feature matrix extracted from the test data goes through the same process of version creation. The number of versions and how they are structured can easily be changed in the script (see `regression.py`). 
 
 As final output when running the program in test mode, the program prints statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target. The statistic measures used are the same as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex). These are Pearson's R, Spearman's Rho, Mean Absolute Error (MAE), Mean Squared Error (MSE) and R-squared (R2). 
 
@@ -166,7 +166,7 @@ The class expects that (3) ngram models are previously trained. These can be fou
 #### Frequency (CA)
 Represents a frequency lexicon. Its public method returns the logarithm of a word's absolute frequency. 
 
-Needs path to Google Books 1gram frequencies. For those with access to the mumin server. These files are available for download at path: /home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt. For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
+Needs path to Google Books 1gram frequencies. For those with access to the mumin server. These files are available for download at path: `/home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt`. For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
 
 #### PosTagger (CFS)
 Upon initialization, the class tags all sentences in data for part of speech (PoS) using a tagger from nltk with Penn Treebank PoS-tags. When called, PosTagger class's public methods returns three features (one of which consists of five variables):
@@ -182,7 +182,7 @@ Upon initialization, the class tags all sentences in data for part of speech (Po
 *Sentence length (lexical/content words)* returns the number of lexical/content words preceeding the target word. The definition of lexical/content PoS is similar to the Part of speech feature's categorization of PoS; the PoS deemed lexical are nouns, verbs, adjectives and adverbs. 
 
 #### Domain specificity (CA) <a name='ds'></a>
-Generates a set of words that only exist in one of the given domains/supcorpuses (bible, europarl or biomed) in the SemEval (Task 1) training data. During training, a file (data/domainspecific.pickle) containing the domain specific word forms is loaded.
+Generates a set of words that only exist in one of the given domains/subcorpuses (bible, europarl or biomed) in the SemEval (Task 1) training data. During training, a file (`data/domainspecific.pickle`) containing the domain specific word forms is loaded.
 
 Its public method returns one feature; if a given word object is domain specific or not.
 
