@@ -24,7 +24,7 @@ The folder 'data' in this repository contains different versions of the data set
 
 - scikit 
 - scipy 
-- nltk 
+- nltk (please note that nltk may require some further installations, in such a case, instructions are given in the command line)
 - bert-embedding 
 - numpy
 - pickle
