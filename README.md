@@ -4,7 +4,7 @@ The aim of this program is to predict lexical complexity of single words in cont
 
 ---
 
-## 1.0 Data
+## 1. Data
 The dataset consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
 
 Training and test files are tab separated (.tsv) in which each row represents 
@@ -22,7 +22,7 @@ The folder 'data' in this repository contains different versions of the data set
 
 # Usage
 
-## 2.0 Setup
+## 2. Setup
 
 ### 2.1 Required installations
 
@@ -62,7 +62,7 @@ The process of retrieving embeddings will take approximately 6 hours.
 
 ---
 
-## 3.0 Running the program (CA)
+## 3. Running the program (CA)
 
 The execution of this program consists of two steps; training and testing. Both steps are done through main.py in the command line. Main takes five arguments as input:
 
@@ -108,7 +108,7 @@ The program will execute these measures for each of the trained models.
 
 ---
 
-## 4.0 Classes
+## 4. Classes
 
 Below are all the classes used by the program, the majority of which are classes used to extract features from the data. For more detailed descriptions, please refer to the in-file documentation for each class. 
 
