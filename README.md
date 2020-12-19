@@ -16,7 +16,7 @@ a target word in context, and columns have the the following column structure:
 5. Complexity
 
 ### 1.1 Supplementary data
-The folder 'data' in this repository contains different versions of the data set to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram) and [Domain Specificity](#ds) or read the in-file documentation for these classes.
+The folder 'data' in this repository contains different versions of the data sets to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram) and [Domain Specificity](#ds) or read the in-file documentation for these classes.
 
 ---
 
@@ -37,7 +37,7 @@ The folder 'data' in this repository contains different versions of the data set
 
 In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in embeddings.py).
-For those with acess to the mumin server, the file is available for download at path: 
+For those with access to the mumin server, the file is available for download at path: 
 
 `/home/lin205_caar5483/lin513/embeddings_train_and_trial`
 
@@ -57,7 +57,7 @@ em = Embeddings(ws, 'embeddings_train_trial')
 
 The process of retrieving embeddings will take approximately 6 hours.
 
-***ATTENTION:*** If you run main.py without having an embedding file at the given path, the retrievement of embeddings will initialize automatically. In this case, embeddings will only be created for the given data file (either test or train). This works, but is not recommended.
+***ATTENTION:*** If you run main.py without having an embedding file at the given path, the retrievement of embeddings will initialize automatically. In this case, embeddings will only be created for the given data file (either test or train), which means you need one embedding file for the train data and one for the test data. This works, but is not recommended.
 
 ---
 
