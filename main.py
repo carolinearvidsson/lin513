@@ -12,7 +12,7 @@ If mode is train, modelfile will be created or overwritten if it exists.
 If mode is test, modelfile will be loaded and used to predict lexical complexity.
 
 modelfile:
-Path to the model file. This file will, depending on mode, be created or
+Path to the model file. This file will, depending on mode, be created or be
 used to predict lexical complexity.
 
 data:
@@ -32,7 +32,8 @@ File containing embeddings for both train and trial data
 is available for download on mumin (RECOMMENDED):
 /home/lin205_caar5483/lin513/embeddings_train_and_trial
 
-If path does not exist, this file will be created and the 
+If file at the path given as parameter does not exist, 
+a file will be created at this path and the 
 process of getting embeddings from the given data will 
 be initialized (NOT RECOMMENDED).
 
@@ -46,7 +47,7 @@ The data structure of the file is a list holding two dictionaries:
             any occurence of the lemma's base forms or inflections.
 
 frequencyfile:
-Google ngram files (available for download on the mumin server).
+Google ngram files path (available for download on the mumin server).
 Path to files on mumin: 
 /home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt
 Files consist of tab separated values where each line represents a word type
@@ -95,4 +96,5 @@ if __name__ == "__main__":
         pickle.dump(train_model, open(model, 'wb'))
     elif mode == 'test':
         model = pickle.load(open(model, 'rb'))
+
         reg.predict(model, matrix)

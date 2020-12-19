@@ -76,7 +76,7 @@ Arguments         | Description
 ***modelfilepath:***|Path to the file containing the model. If mode is train, this file will be created or overwritten. If mode is test, the model will be used to predict lexical complexity.
 ***datafilepath:***|Depending on mode, this will be the path to either the train or test data.
 ***embeddingfilepath:***|Path to the file containing the embeddings. To get this file, see section '1. Get the embedding file'
-***frequencyfilespath***|Path the the files constituting the the Google Books 1gram frequencies. For those with access to the mumin server. These files are available for download at path: /home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt. For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
+***frequencyfilespath***| Path to Google Books 1gram frequencies. For those with access to the mumin server. These files are available for download at path: /home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt. For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
 
 #### Testing and training
 Let's say you want to name your model file 'trained_model' and you have a training data file named 'train_data.tsv', a testing data file named 'test_data.tsv', a file containing embeddings for test and training data named 'embeddings_train_test' and google 1gram frequency files at path 'google1grams/*.txt'.
@@ -165,7 +165,9 @@ The class expects that (3) ngram models are previously trained. These can be fou
 ***ATTENTION:*** if the amount of models are changed from the present standard of three, the code in char_ngram.py must be modified accordingly, as it is presently specifically written for three models. Also, see [attention note at beginning of Features section](#feat) about feature matrix versions.
 
 #### Frequency (CA)
-Represents a frequency lexicon. Its public method returns the logarithm of a word's frequency.
+Represents a frequency lexicon. Its public method returns the logarithm of a word's frequency. 
+
+Needs path to Google Books 1gram frequencies. For those with access to the mumin server. These files are available for download at path: /home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt. For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
 
 #### PosTagger (CFS)
 Upon initialization, the class tags all sentences in data for part of speech (PoS) using a tagger from nltk with Penn Treebank PoS-tags. When called, PosTagger class's public methods returns three features (one of which consists of five variables):
