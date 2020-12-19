@@ -89,7 +89,6 @@ To test the model, enter the following:
 
 `python3 main.py test trained_model test_data.tsv embeddings_train_test google1grams/*.txt`
 
----
 
 ### 3.2 Output (CFS) <a name='output'></a>
 
