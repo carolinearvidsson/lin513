@@ -37,7 +37,7 @@ The folder 'data' in this repository contains different versions of the data set
 
 In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in embeddings.py).
-For those with access to the mumin server, the file is available for download at path: 
+For those with access to the mumin server, an embedding file for all target words is available for download at path: 
 
 `/home/lin205_caar5483/lin513/embeddings_train_and_trial`
 
