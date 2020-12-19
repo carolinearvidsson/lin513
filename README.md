@@ -63,7 +63,7 @@ The process of retrieving embeddings will take approximately 6 hours.
 
 ## 3.0 Running the program (CA)
 
-The execution of this program consists of two steps: training and testing. Both steps are done through main.py in the command line. Main takes five arguments as input:
+The execution of this program consists of two steps; training and testing. Both steps are done through main.py in the command line. Main takes five arguments as input:
 
 1. `mode` 2. `modelfilepath` 3. `datafilepath` 4. `embeddingfilepath` 5. `frequencyfilespath`
 
