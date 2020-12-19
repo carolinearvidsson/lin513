@@ -58,7 +58,7 @@ em = Embeddings(ws, 'embeddings_train_trial')
 
 The process of retrieving embeddings will take approximately 6 hours.
 
-***ATTENTION:*** If you run main.py without having an embedding file at the given path, the retrievement of embeddings will initialize automatically. In this case, embeddings will only be created for the given data file (either test or train), which means you need one embedding file for the train data and one for the test data. This works, but is not recommended.
+***ATTENTION:*** If you run [`main.py`](https://github.com/carolinearvidsson/lin513/blob/main/main.py) without having an embedding file at the given path, the retrievement of embeddings will initialize automatically. In this case, embeddings will only be created for the given data file (either test or train), which means you need one embedding file for the train data and one for the test data. This works, but is not recommended.
 
 ---
 
