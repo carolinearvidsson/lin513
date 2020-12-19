@@ -4,7 +4,7 @@ The aim of this program is to predict lexical complexity of single words in cont
 
 ---
 
-## Data
+## 1.0 Data
 The dataset consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
 
 Training and test files are tab separated (.tsv) in which each row represents 
@@ -15,16 +15,16 @@ a target word in context, and columns have the the following column structure:
 4. Target word
 5. Complexity
 
-### Supplementary data
+### 1.1 Supplementary data
 The folder 'data' in this repository contains different versions of the data set to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram) and [Domain Specificity](#ds) or read the in-file documentation for these classes.
 
 ---
 
 ## Usage
 
-### Setup
+### 2.0 Setup
 
-### Required installations
+## 2.1 Required installations
 
 - scikit 
 - scipy 
@@ -33,7 +33,7 @@ The folder 'data' in this repository contains different versions of the data set
 - numpy
 - pickle
 
-**Get the embedding file (CA)**
+## 2.2 Get the embedding file (CA)
 
 In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in embeddings.py).
@@ -61,7 +61,7 @@ The process of retrieving embeddings will take approximately 6 hours.
 
 ---
 
-### Running the program (CA)
+### 3.0 Running the program (CA)
 
 The execution of this program consists of two steps: training and testing. Both steps are done through main.py in the command line. Main takes five arguments as input.
 
@@ -78,7 +78,7 @@ Arguments         | Description
 ***embeddingfilepath:***|Path to the file containing the embeddings. To get this file, see section '1. Get the embedding file'
 ***frequencyfilespath***| Path to Google Books 1gram frequencies. For those with access to the mumin server. These files are available for download at path: /home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt. For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
 
-#### Testing and training
+#### 3.1 Testing and training (CA)
 Let's say you want to name your model file 'trained_model' and you have a training data file named 'train_data.tsv', a testing data file named 'test_data.tsv', a file containing embeddings for test and training data named 'embeddings_train_test' and google 1gram frequency files at path 'google1grams/*.txt'.
 
 To train the model, enter the following in the command line:
@@ -91,7 +91,7 @@ To test the model, enter the following:
 
 ---
 
-### Output (CFS) <a name='output'></a>
+### 3.2 Output (CFS) <a name='output'></a>
 
 The extracted features and manually annotated complexities of the training data will be used to train regression models, at present using Bayesian ridge regression (through scikitlearn). Before training, the program will create a number of versions of the feature matrix with different combinations of features. For this purpose, the features are grouped into two larger categories, embeddings-based (770 features) and handcrafted (14 features). The embeddings-based features are all based on BERT-embeddings and consist of word vectors (768 dimensions) and two cluster-related features. The combinations of features used to build separate models are as follows:
 
@@ -109,11 +109,11 @@ The program will execute these measures for each of the trained models.
 
 ---
 
-## Classes
+## 4.0 Classes
 
 Below are all the classes used by the program, the majority of which are classes used to extract features from the data. For more detailed descriptions, please refer to the in-file documentation for each class. 
 
-### Basic data structure
+### 4.1 Basic data structure
 
 Upon running the program, in either training or test mode, the data will be structured by the classes WS and Word. The class FeatureMatrix collects and organizes extracted features and calls on the class MultiLinear to train (train mode) regression models and predict complexities and test (test mode) said models. 
 
@@ -134,7 +134,7 @@ The class is used both for training regression models as well as testing the mod
 
 
 
-### Features <a name='feat'></a> 
+### 4.2 Features <a name='feat'></a> 
 
 The following features are calculated for each entry's target word. In total there are 784 feature values spread over nine classes. Some of the features are solely based on the target word itself, while some of them take the surrounding sentence context into consideration. All public methods in the feature classes (i.e. not prefixed with leading underscore) return one or more feature(s) of a given word object.
 
