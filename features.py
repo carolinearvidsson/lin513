@@ -2,7 +2,7 @@
 class FeatureMatrix:
     '''A feature matrix where rows represent target tokens and 
     columns represent their features to be used in predicting
-    lexical complexity of single words in sentence context.
+    lexical complexity of target tokens.
     
     Parameters:
 
@@ -21,7 +21,7 @@ class FeatureMatrix:
             for a specific target word.
 
         self.complexities (list)
-            Each value (float) is the annoteted complexity
+            Each element (float) is the annoteted complexity
             for a specific target word.
       ''' 
 
