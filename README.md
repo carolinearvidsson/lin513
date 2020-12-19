@@ -3,7 +3,7 @@
 The aim of this program is to predict lexical complexity of single words in context. It collects a series of features per target word and trains a regression model to predict complexities of words in context.
 
 ## Data
-The dataset consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of SemEval 2021 (Task 1). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
+The dataset consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
 
 Training and test files are tab separated (.tsv) in which each row represents 
 a target word in context, and columns have the the following column structure:
@@ -14,7 +14,7 @@ a target word in context, and columns have the the following column structure:
 5. Complexity
 
 ### Supplementary data
-The folder 'data' in this repository contains different versions of the data set to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram) and [Domain Specificity](#ds) or read the documentation for these classes.
+The folder 'data' in this repository contains different versions of the data set to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram) and [Domain Specificity](#ds) or read the in-file documentation for these classes.
 
 ## Usage
 
@@ -86,9 +86,9 @@ To test the model, enter the following:
 `python3 main.py test trained_model test_data.tsv embeddings_train_test google1grams/*.txt`
 
 
-### Output (CFS)
+### Output (CFS) <a name='output'></a>
 
-The extracted features and manually annotated complexities of the training data will be used to train regression models, at present using Bayesian ridge regression (through scikitlearn). Before training, the program will create a number of versions of the feature matrix with different combinations of features. For this purpose, the features are grouped into two bigger categories, embeddings-based (770 features) and handcrafted (14 features). The embeddings-based features are all based on BERT-embeddings and consist of word vectors (768 dimensions) and two cluster-related features. The combinations of features used to build separate models are as follows:
+The extracted features and manually annotated complexities of the training data will be used to train regression models, at present using Bayesian ridge regression (through scikitlearn). Before training, the program will create a number of versions of the feature matrix with different combinations of features. For this purpose, the features are grouped into two larger categories, embeddings-based (770 features) and handcrafted (14 features). The embeddings-based features are all based on BERT-embeddings and consist of word vectors (768 dimensions) and two cluster-related features. The combinations of features used to build separate models are as follows:
 
 - All features (784 features)
 - Only handcrafted (14 features)
@@ -108,27 +108,31 @@ Below are all the classes used by the program, the majority of which are classes
 
 ### Basic data structure
 
-Upon running the program, in either training or test mode, the data will be structured as defined below.
+Upon running the program, in either training or test mode, the data will be structured by the classes WS and Word. The class FeatureMatrix collects and organizes extracted features and calls on the class MultiLinear to train (train mode) regression models and predict and test (test mode) said models. 
 
-##### WS (Wordspace) (CFS)
+#### WS (Wordspace) (CFS)
 
 The wordspace contains all entries from the data. It collects unique Word objects (see below) in a set as well as stores all target types which will be used by some of the feature classes.  
 
-##### Word (CFS)
+#### Word (CFS)
 
 The Word object represents a single entry (i.e. row) from the dataset. The content of each column (see Data section above) are used as attributes.
 
-##### FeatureMatrix (CA)
+#### FeatureMatrix (CA)
 A feature matrix where rows represent target tokens and columns represent their features to be used in predicting lexical complexity of single words in sentence context.
 
 #### MultiLinear (CFS)
 
-The class is used both for training regression models as well as testing the models, depending on chosen mode. As described in section Output, it creates versions of the incoming feature matrix to train and test multiple models. Prints results per model from statistical measures. 
+The class is used both for training regression models as well as testing the models, depending on chosen mode. As described in section [Output](#output), it creates versions of the incoming feature matrix to train and test multiple models. Its final output prints results per model from statistic measures. 
 
 ### Features
 
-The following features are calculated for each entry. In total there are 784 feature values spread over nine . All public methods in the feature classes (i.e. not prefixed with leading underscore)  return one or more feature(s) of a given word object.
+The following features are calculated for each entry. In total there are 784 feature values spread over nine classes. All public methods in the feature classes (i.e. not prefixed with leading underscore) return one or more feature(s) of a given word object.
 
+***ATTENTION:*** it is easy to change the number of features by excluding/adding feature classes called in main.py. If this is done, make sure to check the indices used to create versions of the full feature matrix in regression.py. Otherwise, it will make versions of the matrix that may correspond to features as intended. 
+
+
+#### Length (CFS)
 #### Word length (CFS)
 
 Returns the number of characters in target word. 
@@ -139,12 +143,12 @@ Returns the number of syllables in target word. Uses the [Carnegie Mellon Univer
 
 #### Ngram (CFS) <a name='ngram'></a>
 
-Returns three features; uni-, bi- and trigram probabilities on character level for target word. Pre-trained models can be found in the "data" folder (pickled file `ngram_models`), and the training script `ngram_train.py` can easily be modified to train fewer or more models. The training is done using nltk's language model with Lidstone smoothing. NOTE: if the amount of models are changed from standard of three, the code in char_ngram.py must be modified accordingly.
+Returns three features; uni-, bi- and trigram probabilities on character level for target word. Pre-trained models can be found in the "data" folder (pickled file `ngram_models`), and the training script `ngram_train.py` can easily be modified to train fewer or more models. The training is done using nltk's language model with Lidstone smoothing. ***NOTE:*** if the amount of models are changed from standard of three, the code in char_ngram.py must be modified accordingly.
 
 #### Frequency (CA)
 Represents a frequency lexicon. Its public method returns the logarithm of a word's frequency.
 
-#### PosTagger
+#### PosTagger (CFS)
 Upon initialization, the class tags all sentences in data for PoS using a tagger from nltk with Penn Treebank PoS-tags. Class returns three features (one of which consists of five variables).
 
 #### Part of speech (CFS)
