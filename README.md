@@ -114,7 +114,7 @@ Below are all the classes used by the program, the majority of which are classes
 
 ### 4.1 Basic data structure
 
-Upon running the program, in either training or test mode, the data will be structured by the classes WS and Word. The class FeatureMatrix collects and organizes extracted features and calls on the class MultiLinear to train (train mode) regression models and predict complexities and test (test mode) said models. 
+Upon running the program, in either training or test mode, the data will be structured by the classes WS and Word. The class FeatureMatrix collects and organizes extracted features and calls on the class MultiLinear to train (train mode) regression models and predict complexities and test said models with a set of statistic measures (test mode). 
 
 #### WS (Wordspace) (CFS)
 
