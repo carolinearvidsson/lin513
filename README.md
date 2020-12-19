@@ -16,6 +16,8 @@ a target word in context, and columns have the the following column structure:
 ### Supplementary data
 The folder 'data' in this repository contains different versions of the data set to be used for training and/or testing. It also contains files (ngram_models, ngram_train.py and domainspecific.pickle) needed for running this program. For more information on these files, see sections about feature classes [Ngram](#ngram) and [Domain Specificity](#ds) or read the documentation for these classes.
 
+---
+
 ## Usage
 
 ### Setup
@@ -55,7 +57,7 @@ The process of retrieving embeddings will take approximately 6 hours.
 
 ***ATTENTION:*** If you run main.py without having an embedding file at the given path, the retrievement of embeddings will initialize automatically. In this case, embeddings will only be created for the given data file (either test or train). This works, but is not recommended.
 
-
+---
 
 ### Running the program (CA)
 
@@ -85,6 +87,7 @@ To test the model, enter the following:
 
 `python3 main.py test trained_model test_data.tsv embeddings_train_test google1grams/*.txt`
 
+---
 
 ### Output (CFS)
 
@@ -101,6 +104,8 @@ The incoming feature matrix extracted from the test data goes through the same p
 As final output when running the program in test mode, the program prints statistic measures from comparing the predicted complexities and the manually annotated complexities found for each target. The statistic measures used are the same as the task authors have published as expected baseline performance on the task's [website](https://github.com/MMU-TDMLab/CompLex). These are Pearson's R, Spearman's Rho, Mean Absolute Error (MAE), Mean Squared Error (MSE) and R-squared (R2). 
 
 The program will execute these measures for each of the trained models. 
+
+---
 
 ## Classes
 
