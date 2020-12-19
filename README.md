@@ -62,7 +62,7 @@ The process of retrieving embeddings will take approximately 6 hours.
 
 ---
 
-## 3. Running the program (CA)
+## 3. Running the program (CA) <a name='mode'></a>
 
 The execution of this program consists of two steps; training and testing. Both steps are done through main.py in the command line. Main takes five arguments as input:
 
@@ -129,7 +129,7 @@ A feature matrix where rows represent target tokens and columns represent their 
 
 #### MultiLinear (CFS)
 
-The class is used both for training regression models as well as testing the models, depending on chosen mode. As described in section [Output](#output), it creates versions of the incoming feature matrix to train and test multiple models. Its final output prints results from statistic measures per created model. 
+The class is used both for training regression models as well as testing the models, depending on chosen [mode](#mode). As described in section [Output](#output), it creates versions of the incoming feature matrix to train and test multiple models. Its final output prints results from statistic measures per created model. 
 
 
 
@@ -193,9 +193,3 @@ Its public methods return the following feature types:
 1. Token embeddings (each of the 768 dimensions constitutes a single feature)
 2. Word type's number of clusters 
 3. If token is a cluster outlier (single member of a cluster)
-
-
-
-## Scripts
-
-#### ngram_train.py
