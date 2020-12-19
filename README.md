@@ -133,13 +133,15 @@ The following features are calculated for each entry. In total there are 784 fea
 
 
 #### Length (CFS)
-#### Word length (CFS)
 
-Returns the number of characters in target word. 
+The public methods of the Length-class returns two features:
 
-#### Syllable count (CFS)
+1. Word length.
+2. Syllable count. 
 
-Returns the number of syllables in target word. Uses the [Carnegie Mellon University Pronounciation Dictionary](http://www.speech.cs.cmu.edu/cgi-bin/cmudict), CMUdict, accessed throguh nltk. Given a word, the dictionary returns a list of corresponding phonemes where vowels are marked with numbers, indicating potential lexical stress, which is taken to indicate syllabic status. 
+*Word length* returns the number of characters in target word. 
+
+*Syllable count* returns the number of syllables in target word. The method uses the [Carnegie Mellon University Pronounciation Dictionary](http://www.speech.cs.cmu.edu/cgi-bin/cmudict), CMUdict, accessed throguh nltk. Given a word, the dictionary returns a list of corresponding phonemes where vowels are marked with numbers, indicating potential lexical stress, which is taken to indicate syllabic status. 
 
 #### Ngram (CFS) <a name='ngram'></a>
 
