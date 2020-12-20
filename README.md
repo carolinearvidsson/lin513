@@ -41,7 +41,7 @@ The program is implemented with Python.
 ### 2.2 Getting the embedding file (CA) <a name='getembs'></a>
 
 In order to run this program, a file containing embeddings for the target words is needed (for
-a detailed description of the structure of this file, see documentation in `embeddings.py`).
+a detailed description of the structure of this file, see documentation in [`embeddings.py`](https://github.com/carolinearvidsson/lin513/blob/main/embeddings.py)).
 For those with access to the mumin server, an embedding file for all target words is available for download at path: 
 
 `/home/lin205_caar5483/lin513/embeddings_train_and_trial`
