@@ -5,7 +5,7 @@ The aim of this program is to predict lexical complexity of single words in cont
 ---
 
 ## 1. Data <a name='data'></a>
-The dataset consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
+The data used for the program consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
 
 Training and test files are tab separated (.tsv) in which each row represents 
 a target word in context, and columns have the the following column structure:
@@ -24,6 +24,8 @@ The folder `data` in this repository contains different versions of the data set
 
 ## 2. Setup
 
+The program is implemented with Python.
+
 ### 2.1 Required installations
 
 - scikit 
@@ -36,7 +38,7 @@ The folder `data` in this repository contains different versions of the data set
 - pickle
 - pandas
 
-### 2.2 Get the embedding file (CA) <a name='getembs'></a>
+### 2.2 Getting the embedding file (CA) <a name='getembs'></a>
 
 In order to run this program, a file containing embeddings for the target words is needed (for
 a detailed description of the structure of this file, see documentation in `embeddings.py`).
@@ -45,10 +47,10 @@ For those with access to the mumin server, an embedding file for all target word
 `/home/lin205_caar5483/lin513/embeddings_train_and_trial`
 
 For those without access to this file, it can be created by first joining the train and test data.
-When joining the test and train files, remember to remove the first row of the file that gets appended (this is the row that does not contain a data point, just column labels).
+When joining the train and test files, remember to remove the first row of the file that gets appended (this is the row that does not contain a data point, just column labels).
 For example, if you append the test file to the train file, the first row in the test file containing column labels should be removed.
 
-Let's say you have a file named 'train_test.tsv', containing both the test and training data.
+Let's say you have a file named 'train_test.tsv', containing both the test and train data.
 To create an embedding file named 'embeddings_train_test', run the following code:
 
 ```python
@@ -68,7 +70,7 @@ The process of retrieving embeddings will take approximately 6 hours.
 
 The execution of this program consists of two steps; training and testing. Both steps are done through [`main.py`](https://github.com/carolinearvidsson/lin513/blob/main/main.py) in the command line. Main takes five arguments as input:
 
-1. `mode` 2. `modelfilepath` 3. `datafilepath` 4. `embeddingfilepath` 5. `frequencyfilespath`
+1 `mode` 2 `modelfilepath` 3 `datafilepath` 4 `embeddingfilepath` 5 `frequencyfilespath`
 
 Arguments 2, 4 and 5 are identical in the train and test mode (that is if you have an embedding file containing both test and train data), 1 and 3 are not.
 
@@ -77,7 +79,7 @@ Arguments         | Description
 ***mode***        |Either `test` or `train`
 ***modelfilepath***|Path to the file containing the model. If mode is train, this file will be created or overwritten. If mode is test, the model will be used to predict lexical complexity.
 ***datafilepath***|Depending on mode, this will be the path to either the train or test data.
-***embeddingfilepath***|Path to the file containing the embeddings. To get this file, see section [2.2 Get the embedding file](#getembs)
+***embeddingfilepath***|Path to the file containing the embeddings. To get this file, see section [2.2 Getting the embedding file](#getembs)
 ***frequencyfilespath***| Path to Google Books 1gram frequencies. For those with access to the mumin server. These files are available for download at path: /home/corpora/books-ngrams/english/postwar/googlebooks-eng-all-1gram-20090715-*.txt. For those without access to mumin, you can get [the data sets here](http://storage.googleapis.com/books/ngrams/books/datasetsv2.html).
 
 ### 3.1 Testing and training (CA)

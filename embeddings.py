@@ -96,7 +96,7 @@ class Embeddings:
 
       self.embeddings_na (list):
         Holds the ID:s (str) of tokens that could not be retrieved.
-        This can happen when the sentence is longer than 200
+        This happens when the sentence is longer than 200
         tokens (BERT's max sequence length) and the target token 
         index > 199.
         In the training data of 7000+ target tokens, 
