@@ -5,7 +5,7 @@ The aim of this program is to predict lexical complexity of single words in cont
 ---
 
 ## 1. Data <a name='data'></a>
-The data used for the program consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
+The data used for the program consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
 
 Training and test files are tab separated (.tsv) in which each row represents 
 a target word in context, and columns have the the following column structure:
@@ -24,15 +24,15 @@ The folder `data` in this repository contains different versions of the data set
 
 ## 2. Setup
 
-The program is implemented with Python.
+The program is implemented with Python. 
 
 ### 2.1 Required installations
 
 - scikit 
 - scipy 
-- nltk, which also requires the further package donwloads (use `nltk.download('package_name')`):
+- nltk, which also further requires the following downloads (use `nltk.download(package_name)`):
     - cmudict
-    - averaged_perceptron_tagger
+    - averaged perceptron tagger
 - bert-embedding 
 - numpy
 - pickle
@@ -50,7 +50,7 @@ For those without access to this file, it can be created by first joining the tr
 When joining the train and test files, remember to remove the first row of the file that gets appended (this is the row that does not contain a data point, just column labels).
 For example, if you append the test file to the train file, the first row in the test file containing column labels should be removed.
 
-Let's say you have a file named 'train_test.tsv', containing both the test and train data.
+Let's say you have a file named 'train_test.tsv', containing both the test and training data.
 To create an embedding file named 'embeddings_train_test', run the following code:
 
 ```python
