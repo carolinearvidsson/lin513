@@ -30,7 +30,7 @@ The program is implemented with Python.
 
 - scikit 
 - scipy 
-- nltk, which also further requires the following downloads (use `nltk.download(package_name)`):
+- nltk, which also further requires the following downloads (use `nltk.download('package_name')`):
     - cmudict
     - averaged perceptron tagger
 - bert-embedding 
