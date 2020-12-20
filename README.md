@@ -196,4 +196,4 @@ Generates BERT embeddings and uses them to perform word sense induction on obser
 Its public methods return the following feature types:
 1. Token embeddings (each of the 768 dimensions constitutes a single feature)
 2. Word type's number of clusters 
-3. If token is a cluster outlier (single member of a cluster)
+3. If token is a cluster outlier (i.e. single member of a cluster)
