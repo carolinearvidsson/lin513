@@ -28,7 +28,9 @@ The folder `data` in this repository contains different versions of the data set
 
 - scikit 
 - scipy 
-- nltk (note that nltk may require some further installations, such instructions are given in the command line)
+- nltk, which also requires the further package donwloads (use `nltk.download('package_name')`):
+    - cmudict
+    - averaged_perceptron_tagger
 - bert-embedding 
 - numpy
 - pickle
