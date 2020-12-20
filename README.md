@@ -1,13 +1,13 @@
 # lin513
 
-The aim of this program is to predict lexical complexity of single words in context. It collects a series of features per target word and trains a regression model to predict complexities of words in context.
+The aim of this program is to predict lexical complexity of single words in context by collecting a series of features per target word and training a regression model.
 
 ---
 
 ## 1. Data <a name='data'></a>
-The data used for the program consists of a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). The data consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
+The data used for the program is a subset of the CompLex corpus ([Shardlow, Cooper and Zampieri, 2020](https://arxiv.org/pdf/2003.07008.pdf)) and was provided as part of [SemEval 2021 (Task 1)](https://sites.google.com/view/lcpsharedtask2021). It consists of a collection of sentences from multiple domains and for each sentence there is a chosen target word. The sentences' target words are annotated using a 5-point Likert scale (1 very easy – 5 very difficult), and then normalized to a 0 – 1 scale (0 being the least difficult). 
 
-Training and test files are tab separated (.tsv) in which each row represents 
+Train and test files are tab separated (.tsv) in which each row represents 
 a target word in context, and columns have the the following column structure:
 1. Sentence/token ID
 2. Domain (e.g. bible, europarl, biomed)
