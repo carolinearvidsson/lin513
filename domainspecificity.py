@@ -34,7 +34,7 @@ class DomainSpecificity:
 
     def is_domain_specific(self, wordobj):
         '''Takes a word object as argument and returns 1 if its token
-        is domain specific and 0 if its not.'''
+        is domain specific and 0 if it's not.'''
         is_specific = 0
         if wordobj.token.lower() in self.domain_specific:
             is_specific = 1
@@ -44,8 +44,7 @@ class DomainSpecificity:
         '''Checks if the file containing the set of domain specific words 
         exists. If it exists, it will be loaded and used to
         retrieve features in self.is_domain_specific. If it does not exist,
-        it will be created using the word space object 
-        given as class parameter.
+        it will be created.
         '''
         if path.exists(self.dsfilepath):
             self.domain_specific = pickle.load(open(self.dsfilepath, "rb"))
@@ -88,4 +87,3 @@ class DomainSpecificity:
             for word in sentence:
                 domains.setdefault(domain, set()).add(word.lower())
         return domains
-        

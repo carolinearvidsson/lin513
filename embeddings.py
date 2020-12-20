@@ -13,7 +13,7 @@ class Embeddings:
   '''Generates BERT embeddings and uses them to perform word sense induction
   on observations belonging to the same word type.
 
-  All public methods (these are not prefixed with leading underscore) are used to 
+  All public methods (these are not prefixed with leading underscore) 
   return one or more feature(s) of a given word object. These features
   are used to predict lexical complexity of a word in context.
   
@@ -27,7 +27,7 @@ class Embeddings:
       The path of a pickle format file holding the embeddings. If file 
       does not exist, it will be created and the process of generating
       embeddings will be initialized.
-      For a detailed rescription of the contents of the embedding file,
+      For a detailed description of the contents of the embedding file,
       see the documentation for local method: __setup.
       
   Attributes:
@@ -73,7 +73,7 @@ class Embeddings:
     '''Iterates through all sentences in the data in order to 
     get BERT embeddings for every target word instance.
     When all embeddings have been retrieved, they are dumped into
-    a pickle format file (path given as class parameter.)
+    a pickle format file (path given as class parameter).
     
     Attributes:
 
