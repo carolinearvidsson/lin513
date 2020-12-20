@@ -99,7 +99,7 @@ class Embeddings:
         This happens when the sentence is longer than 200
         tokens (BERT's max sequence length) and the target token 
         index > 199.
-        In the training data of 7000+ target tokens, 
+        In the training data of 7600+ target tokens, 
         this happened with a total of 5 tokens.
     '''
     self.tID_emb, self.lemma_embs,  = {}, {}
@@ -157,7 +157,7 @@ class Embeddings:
         A tokenized sentence. All tokens (str) are lower cased.
       
       sen_emb (list)
-        Each element is a token embedding (1D ndarray). These embedding have the same 
+        Each element is a token embedding (ndarray). These embeddings have the same 
         list indices as their correspondent tokens in the 'tokens'-list.
       
       target_emb (ndarray)
