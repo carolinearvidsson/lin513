@@ -202,7 +202,7 @@ class Embeddings:
         Holds lemmatized word types (str) as keys and their estimated
         number of clusters as values. The number of clusters will be 
         greater than 1 only if the 'optimal clustering' 
-        generated a silhouette score above 0.25. 
+        generated a silhouette score above 0.25.
         Number of clusters is defined as the total number of clusters, 
         excluding the number of cluster outliers.
       
@@ -217,8 +217,8 @@ class Embeddings:
         A hierarchical linkage matrix.
     '''
     self.n_clusters, self.cluster_outliers = {}, set()
-    n_clusters = 1
     for wtype in self.lemma_embs:
+      n_clusters = 1
       if len(self.lemma_embs[wtype]) > 1:
         pdist_matrx = pdist(self.lemma_embs[wtype], metric='cosine')
         link_matrx = linkage(pdist_matrx, method='complete', metric='cosine')
@@ -234,7 +234,16 @@ class Embeddings:
   def __optimal_clusters(self, pdist_matrx, link_matrx):
     '''Cuts hierarchical clusters at various thresholds and computes
     the silhouette score of the resulting flat clusters in order to find
-    the optimal number of clusters. 
+    the optimal number of clusters. The silhouette score is a value between 
+    -1 and 1. Values near 1 indicate that the flat clusters are well-defined. 
+    Values near 0 suggest overlapping clusters. 
+    Values near -1 indicate that samples within a cluster have been
+    assigned to the wrong cluster. 
+    Using this program, no silhouette scores under 0 have been observed. 
+    This might be because the flat clusters are derived from hierarchical 
+    clusters created through agglomerative linkage.
+    The silhouette score can by definition only be calculated if:
+    1 < number of clusters > number of observations.
     
     Parameters:
 
@@ -247,21 +256,11 @@ class Embeddings:
     Attributes:
 
       fc (ndarray)
-        An array of length N where N is the number of observations.
+        A 1D array of length N where N is the number of observations.
         C[o] is the cluster number (np.uint64) to which observation o belongs.
 
       score (float)
         The silhouette score of flattened clusters.
-        This is a value between -1 and 1. Values near 1 indicate that
-        the flat clusters are well-defined. Values near 0 suggest overlapping
-        clusters. Values near -1 indicate that samples within a cluster
-        have been assigned to the wrong cluster. 
-        Using this program, no silhouette scores
-        under 0 have been observed. This might be because the flat clusters
-        are derived from hierarchical clusters created through
-        agglomerative linkage.
-        The silhouette score can by definition only be calculated if:
-        1 < number of clusters > number of observations.
 
     Returns:
 
@@ -269,8 +268,9 @@ class Embeddings:
         The highest of all silhouette scores computed
         at the given thresholds.
 
-      best_clusters (ndarray)
+      best_clusters (1D ndarray)
         The flat clusters that generated the highest silhouette score.
+        C[o] is the cluster number (np.uint64) to which observation o belongs.
     '''
     max_score = -1 # Start at lowest possible silhouette score.
     best_clusters = []
