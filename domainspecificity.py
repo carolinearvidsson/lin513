@@ -3,6 +3,7 @@ import pickle
 from os import path
 from nltk import word_tokenize
 
+# Murathan: Good! instead of making it binary, would it make sense (be more informative) to return the number of domains the target word occurs?
 class DomainSpecificity:
     '''Generates a set of words that only exist in 
     one of the given domains/supcorpuses (bible, europarl or biomed)
@@ -38,7 +39,7 @@ class DomainSpecificity:
         is_specific = 0
         if wordobj.token.lower() in self.domain_specific:
             is_specific = 1
-        return [is_specific]
+        return [is_specific] # Murathan: shorter version would be return [int(wordobj.token.lower() in self.domain_specific)]
 
     def __if_file_exists(self):
         '''Checks if the file containing the set of domain specific words 

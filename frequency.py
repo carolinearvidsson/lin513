@@ -51,7 +51,7 @@ class Frequency:
                 Represents a single entry in the CompLex corpus.
         '''
         word = wordobj.token.lower()
-        pseudocount = 0.5
+        pseudocount = 0.5 # Murathan: could have been a class attribute.
         abs_freq = self.frequencies[word]
         return [math.log(pseudocount + abs_freq)]
 
@@ -68,7 +68,8 @@ class Frequency:
                     if line[0] in self.target_types:
                         self.frequencies[line[0]] = int(line[1])
         self.__not_in_external_corpus()
-
+    # Murathan: minor point, if you make self.frequencies a defaultdict(int), then it would automatically assign 0 to all words which are not in the keys
+    # Murathan: so you can skip this function.
     def __not_in_external_corpus(self):
         '''Sets the frequency of words missing 
         in the external frequency corpus to 0

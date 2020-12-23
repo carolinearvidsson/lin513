@@ -1,6 +1,10 @@
 # Christoffer
 from nltk.corpus import cmudict
 
+# Murathan: I dont see any problems with the functions below but do you think it is necessary to make Length() a class? it has one attribute cmudict.dict() which is same
+# Murathan: for the every instance of that class. I may be missing something but you could make these functions static. Moreover, you could make length a word attribute.
+
+
 class Length():
     '''Class is a word length (character) and syllable count calculator. 
     Utilizes the Carnegie Mellon University Pronouncing Dictionary (CMUdict),

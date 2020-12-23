@@ -10,7 +10,7 @@ from bert_embedding import BertEmbedding
 
 
 class Embeddings:
-  '''Generates BERT embeddings and uses them to perform word sense induction
+    '''Generates BERT embeddings and uses them to perform word sense induction
   on observations belonging to the same word type.
 
   All public methods (these are not prefixed with leading underscore) 
@@ -39,15 +39,15 @@ class Embeddings:
       Will be used to lemmatize words.
   '''
 
-  def __init__(self, ws, embfile):
-    self.ws = ws
-    self.all_targets = ws.target_types
-    self.embfile = embfile
-    self.wnl = WordNetLemmatizer()
-    self.__check_existing_file()
+    def __init__(self, ws, embfile):
+        self.ws = ws
+        self.all_targets = ws.target_types
+        self.embfile = embfile
+        self.wnl = WordNetLemmatizer()
+        self.__check_existing_file()
 
-  def __check_existing_file(self):
-    '''Checks if the pickle file (given as class parameter)
+    def __check_existing_file(self):
+        '''Checks if the pickle file (given as class parameter)
     containing the embedding dictionaries already exists. 
     If file does not exist, the retrievement of embeddings is initialized.
     If file already exists, the dicts are loaded into 
@@ -58,19 +58,19 @@ class Embeddings:
     For a detailed description of the dictionaries,
     see documentation of local method: __setup.
     '''
-    if path.exists(self.embfile):
-      self.lemma_embs, self.tID_emb = pickle.load(open(self.embfile, "rb"))
-      self.__get_average_embedding()
-      self.__generate_clusters()
-    else:
-      ''
-      self.__setup()
-      print('Embeddings have been created and are available \
+        if path.exists(self.embfile):
+            self.lemma_embs, self.tID_emb = pickle.load(open(self.embfile, "rb"))
+            self.__get_average_embedding()
+            self.__generate_clusters()
+        else:
+            ''
+            self.__setup()
+            print('Embeddings have been created and are available \
       in pickle format at path:', self.embfile)
-      print('Embeddings not available:', self.embeddings_na)
+            print('Embeddings not available:', self.embeddings_na)
 
-  def __setup(self):
-    '''Iterates through all sentences in the data in order to 
+    def __setup(self):
+        '''Iterates through all sentences in the data in order to
     get BERT embeddings for every target word instance.
     When all embeddings have been retrieved, they are dumped into
     a pickle format file (path given as class parameter).
@@ -102,17 +102,21 @@ class Embeddings:
         In the training data of 7600+ target tokens, 
         this happened with a total of 5 tokens.
     '''
-    self.tID_emb, self.lemma_embs,  = {}, {}
-    self.sentences, self.embeddings_na = set(), []
-    self.bert = BertEmbedding(max_seq_length=200)
-    for wobj in self.ws.single_word:
-      sen, tokn, tID = wobj.sentence, wobj.token.lower(), wobj.id
-      print('Getting embeddings for sentence ' + tID + '...')
-      self.__populate_embdicts(self.__get_embddngs(sen.split('\n'), tokn, tID))
-    pickle.dump([self.lemma_embs, self.tID_emb], open(self.embfile, 'wb'))
+        self.tID_emb, self.lemma_embs, = {}, {}
+        self.sentences, self.embeddings_na = set(), []
+        self.bert = BertEmbedding(max_seq_length=200)  # Murathan: It could have been better to make "max_seq_length" a class attribute with the defaul value of 200.
+        for i, wobj in enumerate(self.ws.single_word):
+            if i > 200: break
+            print(i, "/", len(self.ws.single_word))
+            sen, tokn, tID = wobj.sentence, wobj.token.lower(), wobj.id
+            print('Getting embeddings for sentence ' + tID + '...')
+            self.__populate_embdicts(self.__get_embddngs(sen.split('\n'), tokn, tID))
+        pickle.dump([self.lemma_embs, self.tID_emb], open(self.embfile, 'wb'))
 
-  def __populate_embdicts(self, __get_embddngs):
-    '''A method that populates the tID_emb dictionary with a sentence's
+    # Murathan: "__get_embddngs" here is not a method but the output of the self.__get_embddngs(sen.split('\n') which you call at line 111.
+    # Murathan: As you can also see, you do not call the _get_embeddngs function but merely split it in three different variables
+    def __populate_embdicts(self, __get_embddngs):
+        '''A method that populates the tID_emb dictionary with a sentence's
     particular target token embedding.
     Furthermore, embeddings of all target tokens in the sentence
     (not just the target token of that particular sentence),
@@ -135,21 +139,24 @@ class Embeddings:
         tID (str)
           ID number for sentence's target token.
     '''
-    tokens, sen_emb, target_emb, tID = __get_embddngs
-    self.tID_emb[tID] = target_emb
+        tokens, sen_emb, target_emb, tID = __get_embddngs
+        self.tID_emb[tID] = target_emb
 
-    if ''.join(tokens) not in self.sentences:
-      self.sentences.add(''.join(tokens))
-      for wtype in self.all_targets:
-        if wtype in tokens:
-          # Get index of all target words in the sentence.
-          type_indices = [i for i, tokn in enumerate(tokens) if tokn == wtype]
-          wtype = self.wnl.lemmatize(wtype)
-          for index in type_indices:
-            self.lemma_embs.setdefault(wtype, []).append(sen_emb[index])
+        if ''.join(tokens) not in self.sentences:  # Murathan: Would not it be better to join the tokens with a space?
+            self.sentences.add(''.join(
+                tokens))  # Murathan: output of the print(list(self.sentences)[0]) -> 'thesecondlineofevidencederivesfromacomparisonoftheexpressionpatternofmanytypeigenesinrd7andnrl‚ai/‚aimutantbackgrounds.'
+            # Murathan: You probably dont use self.sentences but storing them just in case (which is okay) but use space to merge a list of tokens into a string.
+            for wtype in self.all_targets:  # Murathan: Would not it be better to iterate tokens instead of all_targets? The tokens list would be many times smaller than self.all_targets
+                # Murathan: Alternatively, you could get intersection of all_targets and tokens, then iterate that set.
+                if wtype in tokens:
+                    # Get index of all target words in the sentence.
+                    type_indices = [i for i, tokn in enumerate(tokens) if tokn == wtype]
+                    wtype = self.wnl.lemmatize(wtype)
+                    for index in type_indices:
+                        self.lemma_embs.setdefault(wtype, []).append(sen_emb[index])  # Murathan: Good that you are using lemmas as the keys!
 
-  def __get_embddngs(self, sentence, token, tID):
-    '''Generates BERT embeddings for a given sentence.
+    def __get_embddngs(self, sentence, token, tID):
+        '''Generates BERT embeddings for a given sentence.
     
     Returns:
     
@@ -171,27 +178,27 @@ class Embeddings:
       tID (str)
         The token's ID number.
     '''
-    result = self.bert(sentence)
-    tokens, sen_emb = result[0][0], result[0][1]
-    try:
-      target_emb = sen_emb[tokens.index(token)]
-    except ValueError:
-      self.embeddings_na.append(token + ' is not in sentence ' + tID)
-      target_emb = None
-    return tokens, sen_emb, target_emb, tID
+        result = self.bert(sentence)
+        tokens, sen_emb = result[0][0], result[0][1]
+        try:
+            target_emb = sen_emb[tokens.index(token)]  ## Murathan: I know we discussed about this but just for the sake of completeness, what if the target word occurs several times in the sentence?
+        except ValueError:
+            self.embeddings_na.append(token + ' is not in sentence ' + tID)
+            target_emb = None
+        return tokens, sen_emb, target_emb, tID
 
-  def __get_average_embedding(self):
-    '''Computes the mean of each column in all the target tokens' 
+    def __get_average_embedding(self):
+        '''Computes the mean of each column in all the target tokens'
     embeddings in order to get an "average embedding".
     These dimension means will be returned as features of target tokens
     whose embeddings could not be retrieved during setup.
     '''
-    all_target_embeddings = [self.tID_emb[token] for token in \
-                self.tID_emb if self.tID_emb[token] is not None]
-    self.average_embedding = np.mean(np.array(all_target_embeddings), axis=0)
+        all_target_embeddings = [self.tID_emb[token] for token in \
+                                 self.tID_emb if self.tID_emb[token] is not None]
+        self.average_embedding = np.mean(np.array(all_target_embeddings), axis=0)
 
-  def __generate_clusters(self):
-    '''Uses the embeddings in self.lemma_embs to generate clusters for 
+    def __generate_clusters(self):
+        '''Uses the embeddings in self.lemma_embs to generate clusters for
     each target word type. Stores cluster data (number of clusters and 
     if an embedding is an outlier) to be used 
     as target token features. 
@@ -216,23 +223,23 @@ class Embeddings:
       link_matrx (ndarray)
         A hierarchical linkage matrix.
     '''
-    self.n_clusters, self.cluster_outliers = {}, set()
-    for wtype in self.lemma_embs:
-      n_clusters = 1
-      if len(self.lemma_embs[wtype]) > 1:
-        pdist_matrx = pdist(self.lemma_embs[wtype], metric='cosine')
-        link_matrx = linkage(pdist_matrx, method='complete', metric='cosine')
+        self.n_clusters, self.cluster_outliers = {}, set()
+        for wtype in self.lemma_embs:
+            n_clusters = 1
+            if len(self.lemma_embs[wtype]) > 1:
+                pdist_matrx = pdist(self.lemma_embs[wtype], metric='cosine')
+                link_matrx = linkage(pdist_matrx, method='complete', metric='cosine')
 
-        sil_score, clusters = self.__optimal_clusters(pdist_matrx, link_matrx)
-        if sil_score > 0.25:
-          n_outliers, outlier_indices = self.__get_outliers(clusters)
-          n_clusters = max(clusters) - n_outliers
-          for i in outlier_indices:
-            self.cluster_outliers.add(tuple(self.lemma_embs[wtype][i]))
-      self.n_clusters[wtype] = n_clusters
+                sil_score, clusters = self.__optimal_clusters(pdist_matrx, link_matrx)
+                if sil_score > 0.25:
+                    n_outliers, outlier_indices = self.__get_outliers(clusters)
+                    n_clusters = max(clusters) - n_outliers
+                    for i in outlier_indices:
+                        self.cluster_outliers.add(tuple(self.lemma_embs[wtype][i]))
+            self.n_clusters[wtype] = n_clusters
 
-  def __optimal_clusters(self, pdist_matrx, link_matrx):
-    '''Cuts hierarchical clusters at various thresholds and computes
+    def __optimal_clusters(self, pdist_matrx, link_matrx):
+        '''Cuts hierarchical clusters at various thresholds and computes
     the silhouette score of the resulting flat clusters in order to find
     the optimal number of clusters. The silhouette score is a value between 
     -1 and 1. Values near 1 indicate that the flat clusters are well-defined. 
@@ -272,19 +279,19 @@ class Embeddings:
         The flat clusters that generated the highest silhouette score.
         C[o] is the cluster number (np.uint64) to which observation o belongs.
     '''
-    max_score = -1 # Start at lowest possible silhouette score.
-    best_clusters = []
-    for threshold in np.arange(0.0, 1.0, 0.05):
-      fc = fcluster(link_matrx, t=threshold, criterion='distance')
-      n_clusters = max(fc)
-      if n_clusters != 1 and n_clusters < len(link_matrx):
-        score = sil_score(squareform(pdist_matrx), fc, metric='precomputed')
-        if score > max_score:
-          max_score, best_clusters = score, fc
-    return max_score, best_clusters
+        max_score = -1  # Start at lowest possible silhouette score.
+        best_clusters = []
+        for threshold in np.arange(0.0, 1.0, 0.05):
+            fc = fcluster(link_matrx, t=threshold, criterion='distance')
+            n_clusters = max(fc)
+            if n_clusters != 1 and n_clusters < len(link_matrx):
+                score = sil_score(squareform(pdist_matrx), fc, metric='precomputed')
+                if score > max_score:
+                    max_score, best_clusters = score, fc
+        return max_score, best_clusters
 
-  def __get_outliers(self, clusters):
-    '''Finds if any observation in flat clustering
+    def __get_outliers(self, clusters):
+        '''Finds if any observation in flat clustering
     is an only member of its cluster. These observations are
     regarded as outliers.
 
@@ -307,41 +314,44 @@ class Embeddings:
       outlier_indices (list)
         The index (int) of each cluster outlier
     '''
-    clusters = clusters.tolist()
-    outlier_indices = [clusters.index(obs) for obs in set(clusters) \
-                                            if clusters.count(obs) == 1]
-    n_outliers = len(outlier_indices)
-    return n_outliers, outlier_indices
+        clusters = clusters.tolist()
+        outlier_indices = [clusters.index(obs) for obs in set(clusters) \
+                           if clusters.count(obs) == 1]
+        n_outliers = len(outlier_indices)
+        return n_outliers, outlier_indices
 
-  def target_emb(self, wobj):
-    '''Returns the embedding (list) of a given word object.
+    def target_emb(self, wobj):
+        '''Returns the embedding (list) of a given word object.
     If the embedding could not be retrieved during setup, an
     average embedding is returned
     '''
-    embedding = self.tID_emb[wobj.id]
-    if embedding is None:
-      embedding = self.average_embedding
-    return embedding.tolist()
+        embedding = self.tID_emb[wobj.id]
+        if embedding is None:
+            embedding = self.average_embedding
+        return embedding.tolist()
 
-  def n_clusters(self, wobj):
-    '''Returns the number of clusters (int) of a given word object's
+    def n_clusters(self, wobj):
+        '''Returns the number of clusters (int) of a given word object's
     lemma. If the number of clusters cannot be retrieved
     due to absence of the word object's embedding, an average
     number of clusters is returned
     '''
-    try:
-      lemma = self.wnl.lemmatize(wobj.token.lower())
-      return [int(self.n_clusters[lemma])]
-    except KeyError:
-      all_n_clusters = [self.n_clusters[wtype] for wtype in self.n_clusters]
-      average_n_clusters = sum(all_n_clusters) / len(all_n_clusters)
-      return [float(average_n_clusters)]
+        try:
+            lemma = self.wnl.lemmatize(wobj.token.lower())
+            return [int(self.n_clusters[lemma])]
+        except KeyError:
+            all_n_clusters = [self.n_clusters[wtype] for wtype in self.n_clusters]
+            average_n_clusters = sum(all_n_clusters) / len(all_n_clusters)
+            return [float(average_n_clusters)]
 
-  def is_cluster_outlier(self, wobj):
-    '''Returns 1 if a wordobject is a cluster outlier and 0 if it is not.'''
-    is_outlier = 0
-    embedding = self.tID_emb[wobj.id]
-    if embedding is not None and tuple(embedding) in self.cluster_outliers: 
-      is_outlier = 1
-    return [is_outlier]
-    
+    def is_cluster_outlier(self, wobj):
+        '''Returns 1 if a wordobject is a cluster outlier and 0 if it is not.'''
+        is_outlier = 0
+        try:
+            embedding = self.tID_emb[wobj.id]
+        except:
+            embedding = np.zeros(768)
+            self.tID_emb[wobj.id] = embedding
+        if embedding is not None and tuple(embedding) in self.cluster_outliers:
+            is_outlier = 1
+        return [is_outlier]

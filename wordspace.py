@@ -2,7 +2,7 @@
 
 from word import Word
 import numpy as np
-
+# Murathan: Great!
 class WS:
     '''Represents a collection of Word-objects, which are entries from 
     the whole CompLex corpus.
@@ -47,7 +47,8 @@ class WS:
                                 comments='##')
         for row in text: 
             self.single_word.add(Word(row))
-            self.target_types.add(row[3].lower())
+            self.target_types.add(row[3].lower()) # Murathan: I assume this list is needed frequently so you create this class attribute to access this list efficiently.
+                                                  # Murathan: Otherwise, it can be recovered from single_words easily? (e.g. set([word.token.lower() for word in self.ws.single_word]))
 
 
 

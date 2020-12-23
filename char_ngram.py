@@ -3,6 +3,10 @@ import pickle
 import nltk
 from nltk.lm.preprocessing import pad_both_ends
 
+# Murathan: This looks good overall. My only criticism would be the hardcoding of uni, bi and tri grams. I believe it could be made more dynamic/flexible
+# Murathan: e.g. It should not be hard to merge __uni_prob, __bi_prob, __tri_prob functions into one function with an additional parameter (which will be N of the target N-gram)s.
+
+
 class Ngram():
     '''Class is a character ngram-probability calculator. Utilizes 
     ngram-models previously trained on the Brown corpus with Lidstone 
@@ -34,7 +38,7 @@ class Ngram():
 
         self.ngram_models = pickle.load(open('data/ngram_models', 'rb'))
         self.uni, self.bi, self.tri = self.ngram_models.values()
-        self.observed_tokens = {}
+        self.observed_tokens = {} # Murathan: Great!
     
     def ngram_probs(self, word_object):
         '''Calculate uni-, bi- and trigram probabilities for target token. 

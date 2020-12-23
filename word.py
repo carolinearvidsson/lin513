@@ -1,5 +1,5 @@
 # Christoffer
-
+# Murathan: Great!
 class Word:
     '''Represents an entry in the CompLex corpus.
     
@@ -35,4 +35,3 @@ class Word:
         self.sentence = entry[2]
         self.token = entry[3]
         self.complexity = entry[4]
-       

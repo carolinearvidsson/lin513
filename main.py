@@ -83,18 +83,22 @@ if __name__ == "__main__":
     freqdata = sys.argv[5]
 
     ws = WS(data)
+    '''
     fclsses = ( Ngram(), Length(), 
                 PosTagger(ws), DomainSpecificity(ws), 
                 Frequency(ws, freqdata), Embeddings(ws, embeddings)
                 )
+    '''
+    fclsses = (  Frequency(ws, freqdata), )
     matrix = FeatureMatrix(ws, fclsses)
-    matrix.populate_matrix()
+    matrix.populate_matrix() # Murathan: Is there a reason for not calling this function inside the FeatureMatrix' constructor but here?
     reg = MultiLinear()
 
     if mode == 'train':
         train_model = reg.train_linear_model(matrix)
         pickle.dump(train_model, open(model, 'wb'))
+    # Murathan: When you switch the test mode, you do not check if the features selected by the user are among the ones used during the training.
+    # Murathan: e.g. one can train the model with fclsses = ( Length(), ) then change fclasses to ( Ngram(),) and try to test the model which should not be allowed.
     elif mode == 'test':
         model = pickle.load(open(model, 'rb'))
-
         reg.predict(model, matrix)

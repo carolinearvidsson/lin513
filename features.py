@@ -1,4 +1,8 @@
 # Caroline
+# Murathan: I loved this! However, it feels like you can only have one public method in the feature classes and that has to be used to generate features.
+# Murathan: would not it be better to have a certain prefix for those functions (generate_feat_*) which you can use at line 46 so you can freely have other public methods.
+# Murathan: It is a minor point, tho. Good work!
+
 class FeatureMatrix:
     '''A feature matrix where rows represent target tokens and 
     columns represent their features to be used in predicting
@@ -42,8 +46,7 @@ class FeatureMatrix:
                 Each element is a public method in one of the feature classes.
         '''
         self.fmethods = [getattr(clss, m) for clss in self.fclsses for \
-                    m in dir(clss) if callable(getattr(clss, m)) and not \
-                                                            m.startswith('_')]
+                    m in dir(clss) if callable(getattr(clss, m)) and not  m.startswith('_')]
 
     def populate_matrix(self):
         '''Executes the feature methods one by one on each

@@ -1,7 +1,7 @@
 # Christoffer
 import nltk
 import pandas as pd
-
+# Murathan: Good, I do not have many complains :)
 class PosTagger:
     '''Class is a collection of part of speech (PoS) tagged sentences 
     and sentence index and PoS of target words. Utilizes nltk's PoS-tagger. 
@@ -79,6 +79,8 @@ class PosTagger:
         self.pos_counter = {'NN': 0, 'JJ':0, 'RB':0, 'VB':0, 'OT':0 }
         
         # Create dummy variables for chosen PsoS.
+        # Murathan: The typical way of representing a categorical variable as a vector is through one-hot encoding where you create vectors of size N with all 0s except only one slot.
+        # Murathan: E.g., given 5 classes, as in your case, the first class would be [1,0,0,0,0]; 2nd class [0,1,0,0,0] and so on.
         dummy_matrix = pd.get_dummies(list(self.pos_counter.keys())) # Makes as many dummy variables as chosen PoS-tags to consider
         self.dummy_vars = {}
         for i, part in zip(range(len(self.pos_counter)), 
@@ -104,8 +106,7 @@ class PosTagger:
                 if tok_index not in self.token_index_counter: # If index of target word in sentence have not previously been seen, create dictionary entry for index
                     self.token_index_counter[tok_index] = 0
                 self.token_index_counter[tok_index] += 1 
-                self.tagged_sentences[entry.id] = [tagged_sent, tok_index, 
-                                                   tok_pos[:2]]
+                self.tagged_sentences[entry.id] = [tagged_sent, tok_index, tok_pos[:2]] # Murathan: minor thing, you can do tok_pos = tok_pos[:2] in the if above because you never use tok_pos as it is.
                 total_index += tok_index
                 n += 1
             except: # If target word cannot be found in sentence, set all values of entry as None
@@ -135,6 +136,8 @@ class PosTagger:
         '''
 
         if self.tagged_sentences[wordobject.id] == None:
+            # Murathan: You dont have to compute these every time you encounter such a sentence. You can compute it once
+            # Murathan: in tag_text and save as class attribute so it will be more efficient.
             max_pos = max(self.pos_counter, key = self.pos_counter.get)
             pos_len = self.dummy_vars[max_pos] + [self.average_index, 
                                                   self.average_index]
