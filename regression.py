@@ -42,7 +42,6 @@ class MultiLinear():
         # Iterate through feature matrix versions, train regression models
         # and append to models list.
         for train_matrix in train_matrices:
-            if len(train_matrix[0]) == 0: continue
             regr = linear_model.BayesianRidge(verbose=True) # Murathan: set verbose=True
             regr.fit(train_matrix, train_compl) # Murathan: Why is there no option to control the # of iterations?
             models.append(regr)
@@ -88,7 +87,6 @@ class MultiLinear():
         # Print results.
         for test_matrix, regr, features in zip(test_matrices, regr_models,
                                                feature_versions):
-            if len(test_matrix[0]) == 0: continue
             compl_pred = regr.predict(test_matrix)
             print('\nFeatures: ', features)
             for stat, statname in stat_functions:
@@ -122,4 +120,4 @@ class MultiLinear():
         new_matrices = [matrix, handcrafted, embeddings, handcrafted_senses,
                         handcrafted_senses_50_emb]
 
-        return [matrix]
+        return new_matrices

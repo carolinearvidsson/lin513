@@ -83,13 +83,10 @@ if __name__ == "__main__":
     freqdata = sys.argv[5]
 
     ws = WS(data)
-    '''
-    fclsses = ( Ngram(), Length(), 
+    fclsses = ( Ngram(), Length(),
                 PosTagger(ws), DomainSpecificity(ws), 
                 Frequency(ws, freqdata), Embeddings(ws, embeddings)
                 )
-    '''
-    fclsses = (  Frequency(ws, freqdata), )
     matrix = FeatureMatrix(ws, fclsses)
     matrix.populate_matrix() # Murathan: Is there a reason for not calling this function inside the FeatureMatrix' constructor but here?
     reg = MultiLinear()
