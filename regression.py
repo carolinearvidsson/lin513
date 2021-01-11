@@ -34,18 +34,24 @@ class MultiLinear():
         # Murathan: This (____make_versions) is great thinking but I am not sure this is how you would want to do this. Among other things (see below for the other things),
         # Murathan: this should be optional, most of the time I would not be interested in the performance of the subsets of the features I specified
         # Murathan: but want to see the end result directly.
-        train_matrices = self.__make_versions(train_features.matrix)  # Gets multiple versions of the full matrix, with different sets of features included
+        
+        #train_matrices = self.__make_versions(train_features.matrix)  # Gets multiple versions of the full matrix, with different sets of features included
+        train_matrices = train_features.matrix
         train_compl = train_features.complexities  # Murathan: minor thing, I think a more conventional variable name would be "labels"
         models = []  # Murathan: It is not straightforward to understand which model is at which index? One needs to check the __make_versions method to see in which order you
                     # Murathan: add models to this list. I think it would be better to make this variable a dictionary (e.g. model["handcrafted"]=handcrafted_model)
 
         # Iterate through feature matrix versions, train regression models
         # and append to models list.
-        for train_matrix in train_matrices:
-            regr = linear_model.BayesianRidge(verbose=True) # Murathan: set verbose=True
-            regr.fit(train_matrix, train_compl) # Murathan: Why is there no option to control the # of iterations?
-            models.append(regr)
-        return models
+        # for train_matrix in train_matrices:
+        #     regr = linear_model.BayesianRidge(verbose=True) # Murathan: set verbose=True
+        #     regr.fit(train_matrix, train_compl) # Murathan: Why is there no option to control the # of iterations?
+        #     models.append(regr)
+        # return models
+
+        regr = linear_model.BayesianRidge(verbose=True) # Murathan: set verbose=True
+        regr.fit(train_matrix, train_compl) # Murathan: Why is there no option to control the # of iterations?
+        models.append(regr)
 
     # Murathan: This method could have been static (a stand alone method) as its only connection to this class is the .__make_version function.
     def predict(self, regr_models, test_features):
@@ -121,3 +127,19 @@ class MultiLinear():
                         handcrafted_senses_50_emb]
 
         return new_matrices
+
+    # def cross_validate(self, feature_matrix):
+    #     feat_ind_dict = {}
+    #     feat_ind_list = []
+    #     for feature, n in zip(feature_matrix, range(len(feature_matrix))):
+    #         feat_ind_dict[n] = feature
+    #         feat_ind_list.append(n)
+    #     final_matrix = []
+    #     ver_matrix = []
+    #     loo = LeaveOneOut()
+    #     for train, test in loo.split(feat_ind_list):
+    #         this_version = []
+    #         for index in train.tolist():
+    #             this_version = this_version + feat_ind_dict[index]
+    #         final_matrix.append(this_version)
+    #     print(final_matrix)
