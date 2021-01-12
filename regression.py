@@ -3,6 +3,7 @@
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from scipy.stats import pearsonr, spearmanr
+import csv
 
 
 class MultiLinear():
@@ -36,7 +37,7 @@ class MultiLinear():
         # Murathan: but want to see the end result directly.
         
         #train_matrices = self.__make_versions(train_features.matrix)  # Gets multiple versions of the full matrix, with different sets of features included
-        train_matrices = train_features.matrix
+        train_matrix = train_features.matrix
         train_compl = train_features.complexities  # Murathan: minor thing, I think a more conventional variable name would be "labels"
         models = []  # Murathan: It is not straightforward to understand which model is at which index? One needs to check the __make_versions method to see in which order you
                     # Murathan: add models to this list. I think it would be better to make this variable a dictionary (e.g. model["handcrafted"]=handcrafted_model)
@@ -51,7 +52,8 @@ class MultiLinear():
 
         regr = linear_model.BayesianRidge(verbose=True) # Murathan: set verbose=True
         regr.fit(train_matrix, train_compl) # Murathan: Why is there no option to control the # of iterations?
-        models.append(regr)
+        return regr
+        #models.append(regr)
 
     # Murathan: This method could have been static (a stand alone method) as its only connection to this class is the .__make_version function.
     def predict(self, regr_models, test_features):
@@ -72,13 +74,14 @@ class MultiLinear():
                 corresponding lexical complexities per entry, based on
                 test data from the ComPlex corpus. 
         '''
-        test_matrices = self.__make_versions(test_features.matrix)  # Gets multiple versions of the full matrix, with different sets of features included
+        # test_matrices = self.__make_versions(test_features.matrix)  # Gets multiple versions of the full matrix, with different sets of features included
+        test_matrix = test_features.matrix
         test_compl = test_features.complexities
 
         # Names of versions of feature matrices.
-        feature_versions = ['all', 'handcrafted', 'clusters + outliers + embeddings',
-                            'handcrafted + clusters + outliers',
-                            'handcrafted + clusters + outliers + 50 dimensions']
+        # feature_versions = ['all', 'handcrafted', 'clusters + outliers + embeddings',
+        #                     'handcrafted + clusters + outliers',
+        #                     'handcrafted + clusters + outliers + 50 dimensions']
         # Murathan: Great! you compute lots of different metrics. You could also print the feature set with the best performance on a certain metric separately at the end.
         # Create tuples of statistic measure and corresponding name 
         # to iterate and print results with.
@@ -91,13 +94,17 @@ class MultiLinear():
         # Iterate through matrices and corresponding trained regression models.
         # For each model, predict complexities and apply (5) statistic measures.
         # Print results.
-        for test_matrix, regr, features in zip(test_matrices, regr_models,
-                                               feature_versions):
-            compl_pred = regr.predict(test_matrix)
-            print('\nFeatures: ', features)
-            for stat, statname in stat_functions:
-                result = stat(test_compl, compl_pred)
-                print(statname, result)
+        # for test_matrix, regr, features in zip(test_matrices, regr_models,
+        #                                        feature_versions):
+        #     compl_pred = regr.predict(test_matrix)
+        #     print('\nFeatures: ', features)
+        #     for stat, statname in stat_functions:
+        #         result = stat(test_compl, compl_pred)
+        #         print(statname, result)
+        compl_pred = predict(test_matrix)
+        for stat, statname in stat_functions:
+            result = stat(test_compl, compl_pred)
+            print(statname, result)
 
     # Murathan: This function asssumes that *all* features exist in the matrix. What will happen if I initialize the feature matrix with only "handcrafted_senses" in the main.py?
     # Murathan: Then, each row of the matrix will have only one feature (hence, will be of len 1), and your hardcoded indices below would not mean anything.
@@ -143,3 +150,16 @@ class MultiLinear():
     #             this_version = this_version + feat_ind_dict[index]
     #         final_matrix.append(this_version)
     #     print(final_matrix)
+
+        def write_results(self, regr, test_features):
+
+            test_matrix = test_features.matrix
+            test_ids = test_features.id
+            compl_pred = regr.predict(test_matrix)
+
+            
+            with open('results.csv', 'w', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=',')
+                for idn, prediction in zip(test_ids, compl_pred):
+                    writer.writerow([idn, prediction])
+
