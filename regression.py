@@ -56,7 +56,7 @@ class MultiLinear():
         #models.append(regr)
 
     # Murathan: This method could have been static (a stand alone method) as its only connection to this class is the .__make_version function.
-    def predict(self, regr_models, test_features):
+    def predict(self, regr, test_features):
         '''Method predicts complexity values from features in test data, 
         using previously trained regression models. Prints correlation 
         and error measures of comparison with manually annotated complexitiees
@@ -102,7 +102,7 @@ class MultiLinear():
         #         result = stat(test_compl, compl_pred)
         #         print(statname, result)
         trial_ids = test_features.ids
-        compl_pred = predict(test_matrix)
+        compl_pred = regr.predict(test_matrix)
         self.__write_csv('trial', test_ids, compl_pred)
         for stat, statname in stat_functions:
             result = stat(test_compl, compl_pred)
