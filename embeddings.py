@@ -106,7 +106,6 @@ class Embeddings:
         self.sentences, self.embeddings_na = set(), []
         self.bert = BertEmbedding(max_seq_length=200)  # Murathan: It could have been better to make "max_seq_length" a class attribute with the defaul value of 200.
         for i, wobj in enumerate(self.ws.single_word):
-            if i > 200: break
             print(i, "/", len(self.ws.single_word))
             sen, tokn, tID = wobj.sentence, wobj.token.lower(), wobj.id
             print('Getting embeddings for sentence ' + tID + '...')

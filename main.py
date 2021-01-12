@@ -99,3 +99,7 @@ if __name__ == "__main__":
     elif mode == 'test':
         model = pickle.load(open(model, 'rb'))
         reg.predict(model, matrix)
+    
+    elif mode == 'sharp':
+        model = pickle.load(open(model, 'rb'))
+        reg.write_results(model, matrix)

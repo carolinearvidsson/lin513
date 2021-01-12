@@ -27,6 +27,9 @@ class FeatureMatrix:
         self.complexities (list)
             Each element (float) is the annoteted complexity
             for a specific target word.
+
+        self.id (list)
+            Word object id
       ''' 
 
     def __init__(self, ws, fclasses):
@@ -34,6 +37,7 @@ class FeatureMatrix:
         self.fclsses = fclasses
         self.matrix = []
         self.complexities = []
+        self.ids = []
         self.__get_feature_methods()
         
     def __get_feature_methods(self):
@@ -60,6 +64,8 @@ class FeatureMatrix:
         '''
         for wobj in self.ws.single_word:
             feats = [feat for mthd in self.fmethods for feat in mthd(wobj)]
-            self.complexities.append(wobj.complexity)
+            try:
+                self.complexities.append(wobj.complexity)
+            self.ids.append(wobj.id)
             self.matrix.append(feats)
 
