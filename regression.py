@@ -101,7 +101,9 @@ class MultiLinear():
         #     for stat, statname in stat_functions:
         #         result = stat(test_compl, compl_pred)
         #         print(statname, result)
+        trial_ids = test_features.ids
         compl_pred = predict(test_matrix)
+        self.__write_csv('trial', test_ids, compl_pred)
         for stat, statname in stat_functions:
             result = stat(test_compl, compl_pred)
             print(statname, result)
@@ -154,11 +156,14 @@ class MultiLinear():
         def write_results(self, regr, test_features):
 
             test_matrix = test_features.matrix
-            test_ids = test_features.id
+            test_ids = test_features.ids
             compl_pred = regr.predict(test_matrix)
-
+            self.__write_csv('test', test_ids, compl_pred)
             
-            with open('results.csv', 'w', newline='') as csvfile:
+            
+
+        def __write_csv(self, mode, ids, pred):
+            with open('results' + mode +'.csv', 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
                 for idn, prediction in zip(test_ids, compl_pred):
                     writer.writerow([idn, prediction])
