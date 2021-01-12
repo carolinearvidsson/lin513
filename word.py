@@ -34,4 +34,5 @@ class Word:
         self.subcorpus = entry[1]
         self.sentence = entry[2]
         self.token = entry[3]
-        self.complexity = entry[4]
+        if len(entry) == 5:
+            self.complexity = entry[4]
