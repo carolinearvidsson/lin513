@@ -4,6 +4,7 @@ from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from scipy.stats import pearsonr, spearmanr
 import csv
+from check_corr import every_corr
 
 
 class MultiLinear():
@@ -41,7 +42,7 @@ class MultiLinear():
         train_compl = train_features.complexities  # Murathan: minor thing, I think a more conventional variable name would be "labels"
         models = []  # Murathan: It is not straightforward to understand which model is at which index? One needs to check the __make_versions method to see in which order you
                     # Murathan: add models to this list. I think it would be better to make this variable a dictionary (e.g. model["handcrafted"]=handcrafted_model)
-
+        every_corr(train_matrix, train_compl)
         # Iterate through feature matrix versions, train regression models
         # and append to models list.
         # for train_matrix in train_matrices:
@@ -136,22 +137,6 @@ class MultiLinear():
                         handcrafted_senses_50_emb]
 
         return new_matrices
-
-    # def cross_validate(self, feature_matrix):
-    #     feat_ind_dict = {}
-    #     feat_ind_list = []
-    #     for feature, n in zip(feature_matrix, range(len(feature_matrix))):
-    #         feat_ind_dict[n] = feature
-    #         feat_ind_list.append(n)
-    #     final_matrix = []
-    #     ver_matrix = []
-    #     loo = LeaveOneOut()
-    #     for train, test in loo.split(feat_ind_list):
-    #         this_version = []
-    #         for index in train.tolist():
-    #             this_version = this_version + feat_ind_dict[index]
-    #         final_matrix.append(this_version)
-    #     print(final_matrix)
 
     def write_results(self, regr, test_features):
 
