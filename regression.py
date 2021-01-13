@@ -50,7 +50,7 @@ class MultiLinear():
         #     models.append(regr)
         # return models
 
-        regr = linear_model.BayesianRidge(verbose=True) # Murathan: set verbose=True
+        regr = linear_model.BayesianRidge() # Murathan: set verbose=True
         regr.fit(train_matrix, train_compl) # Murathan: Why is there no option to control the # of iterations?
         return regr
         #models.append(regr)
@@ -103,7 +103,7 @@ class MultiLinear():
         #         print(statname, result)
         trial_ids = test_features.ids
         compl_pred = regr.predict(test_matrix)
-        self.__write_csv('trial', test_ids, compl_pred)
+        self.__write_csv('trial', trial_ids, compl_pred)
         for stat, statname in stat_functions:
             result = stat(test_compl, compl_pred)
             print(statname, result)
@@ -153,18 +153,18 @@ class MultiLinear():
     #         final_matrix.append(this_version)
     #     print(final_matrix)
 
-        def write_results(self, regr, test_features):
+    def write_results(self, regr, test_features):
 
-            test_matrix = test_features.matrix
-            test_ids = test_features.ids
-            compl_pred = regr.predict(test_matrix)
-            self.__write_csv('test', test_ids, compl_pred)
-            
-            
+        test_matrix = test_features.matrix
+        test_ids = test_features.ids
+        compl_pred = regr.predict(test_matrix)
+        self.__write_csv('test', test_ids, compl_pred)
+        
+        
 
-        def __write_csv(self, mode, ids, pred):
-            with open('results' + mode +'.csv', 'w', newline='') as csvfile:
-                writer = csv.writer(csvfile, delimiter=',')
-                for idn, prediction in zip(test_ids, compl_pred):
-                    writer.writerow([idn, prediction])
+    def __write_csv(self, mode, ids, pred):
+        with open('results' + mode +'.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            for idn, prediction in zip(ids, pred):
+                writer.writerow([idn, prediction])
 

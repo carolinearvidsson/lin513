@@ -66,6 +66,8 @@ class FeatureMatrix:
             feats = [feat for mthd in self.fmethods for feat in mthd(wobj)]
             try:
                 self.complexities.append(wobj.complexity)
-            self.ids.append(wobj.id)
+                self.ids.append(wobj.id)
+            except:
+                self.ids.append(wobj.id)
             self.matrix.append(feats)
 
